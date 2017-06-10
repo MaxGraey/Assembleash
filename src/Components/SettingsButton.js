@@ -29,6 +29,17 @@ export default class SettingsButton extends Component {
         }
     }
 
+    static defaultProps = {
+        requireStdLib: false
+    }
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            requireStdLib: props.requireStdLib
+        }
+    }
+
     onChange = (key, value) => {
         const { onOptionChange } = this.props;
         onOptionChange && onOptionChange(key, value);
@@ -36,6 +47,7 @@ export default class SettingsButton extends Component {
 
     render() {
         const options = SettingsButton.Options;
+        const requireStdLib = this.props.requireStdLib;
 
         return (
             <OverlayTrigger
@@ -63,6 +75,7 @@ export default class SettingsButton extends Component {
                             defaultActive={ options[key].default }
                             name={ `option-${key}` }
                             label={ options[key].label }
+                            active={ key === 'stdlib' && requireStdLib }
                             onChange={
                                 value => { this.onChange(key, value) }
                             }

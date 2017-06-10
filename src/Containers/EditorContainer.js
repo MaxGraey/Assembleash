@@ -13,6 +13,7 @@ import Editor           from '../Components/Editor'
 import Footer           from '../Components/Footer'
 
 import {
+    isRequreStdlib,
     getCompilerVersion,
     CompilerDescriptions,
     CompileModes,
@@ -21,13 +22,6 @@ import {
 } from '../Common/Common'
 
 import { OrderedSet } from 'immutable';
-
-/*
-const input = `
-export function helloWorld(num: int): int {
-    return num + 1;
-}
-`;*/
 
 const input =
 `export function fib(num: int32): int32 {
@@ -117,13 +111,19 @@ export default class EditorContainer extends Component {
 
         this.removeAllNotification();
 
-        const { compiler, stdlib, validate, optimize, longMode } = this.state;
+        let stdlib = this.state.stdlib;
+        const { compiler, validate, optimize, longMode } = this.state;
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton)
             this.toolbar.compileButton.startCompile();
 
         setImmediate(() => {
+            if (isRequreStdlib(inputCode)) {
+                stdlib = true;
+                this.setState({ stdlib });
+            }
+
             try {
                 if (compiler === 'AssemblyScript') {
                     this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
@@ -292,7 +292,8 @@ export default class EditorContainer extends Component {
             editorsHeight,
             output,
             outputType,
-            notifications
+            notifications,
+            stdlib
         } = this.state;
 
         function notificationStyle(index, style, notification) {
@@ -334,6 +335,7 @@ export default class EditorContainer extends Component {
                     ref={ self => this.toolbar = self }
                     version={ version }
                     compiler={ compiler }
+                    requireStdLib={ stdlib }
                     compileDisabled={ !compilerReady }
                     onCompilerChange={ compiler => this.setState({ compiler }) }
                     onCompileClick={ this.onCompileButtonClick }

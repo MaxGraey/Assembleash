@@ -7,10 +7,15 @@ import React, { Component } from "react"
 import Toggle from 'react-toggle'
 
 export default class ToggledOption extends Component {
+    static defualtProps = {
+        active: false,
+        defaultActive: false
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            active: props.defaultActive || false
+            active: props.active || props.defaultActive
         };
     }
 
@@ -26,16 +31,9 @@ export default class ToggledOption extends Component {
     }
 
     render() {
-        const { label, defaultActive } = this.props;
+        const { label, defaultActive, checked } = this.props;
+        const { active } = this.state;
         return (
-            // <label style={{ display: 'block', paddingLeft: '15px' }}>
-            //     <h4>{ label }</h4>
-            //     <Toggle
-            //         id="toggle"
-            //         defaultChecked={ defaultActive }
-            //         onChange={ this.handleChange }
-            //     />
-            // </label>
             <label
                 className="label"
                 style={{
@@ -48,6 +46,7 @@ export default class ToggledOption extends Component {
                 <h4><span style={{ paddingRight: '10px', lineHeight: '3rem' }}>{ label }</span>
                     <Toggle
                         aria-labelledby="toggle"
+                        checked={ active }
                         defaultChecked={ defaultActive }
                         onChange={ this.handleChange }
                     />

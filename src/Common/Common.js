@@ -20,6 +20,21 @@ export const CompilerDescriptions = {
 
 export const CompilerList = Object.keys(CompilerDescriptions);
 
+const LibStdKeywords = [
+    'new',
+    'malloc',
+    'free',
+    'memcpy',
+    'memset',
+    'memcmp'
+];
+
+const LibStdKeywordsRegex = new RegExp(LibStdKeywords.join("|"), "g");
+
+export function isRequreStdlib(code) {
+    return LibStdKeywordsRegex.test(code);
+}
+
 export function anyExists(array, value) {
     if (Array.isArray(value)) {
         for (let j = 0, len = array.length; j < len; j++) {
