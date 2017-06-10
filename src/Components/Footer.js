@@ -38,7 +38,7 @@ export default class Footer extends Component {
                 </Button>
                 <div className="pull-right label">
                     <h4>{ sizeUnits[0] }
-                        <span style={{ color: '#afafaf', paddingRight: '2rem' }}>{ ' ' + sizeUnits[1] }</span>
+                        <span style={{ color: '#bbb', paddingRight: '2rem', fontWeight: 100 }}>{ ' ' + sizeUnits[1] }</span>
                     </h4>
                 </div>
             </ButtonToolbar>

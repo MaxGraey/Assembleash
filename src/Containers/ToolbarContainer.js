@@ -69,10 +69,10 @@ export default class ToolbarContainer extends Component {
                         position: 'absolute',
                         right: 0,
                         marginTop: '-1.3rem',
-                        marginRight: '23.5rem',
+                        marginRight: '21.0rem',
                         textAlign: 'center'
                     }}>
-                        <h2>Assembleash</h2>
+                        <h2>Assembleash <sup style={{ fontWeight: 100, fontSize: '1.9rem', color: '#bbb' }}>BETA</sup></h2>
                 </div>
 
                 <ButtonGroup>
