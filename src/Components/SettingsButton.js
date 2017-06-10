@@ -40,7 +40,7 @@ export default class SettingsButton extends Component {
         return (
             <OverlayTrigger
                 rootClose
-                placement="left"
+                placement="bottom"
                 trigger={[ "hover" ]}
                 overlay={ tooltip('Settings') }
             >

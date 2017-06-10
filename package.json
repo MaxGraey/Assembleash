@@ -27,7 +27,6 @@
     "react-split-pane": "^0.1.63",
     "react-switch-button": "^2.2.2",
     "react-toggle": "^4.0.1",
-    "styled-components": "next",
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
