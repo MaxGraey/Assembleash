@@ -161,6 +161,7 @@ export default class EditorContainer extends Component {
 
             for (let i = 0; i < diagnostics.length; i++) {
                 const errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
+                console.error(errorMessage);
                 this.addNotification(errorMessage);
             }
 
