@@ -12,9 +12,9 @@ ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module)
             "current_memory|grow_memory|get_local|set_local|tee_local|get_global|set_global",
             "load|load8_s|load8_u|load16_s|load16_u|load32_s|load32_u|store|store8|store16|store32",
             "eqz|eq|ne|lt_s|lt_u|lt|gt_s|gt_u|gt|le_s|le_u|le|ge_s|ge_u|ge|clz|ctz|popcnt|add|sub",
-			"mul|div_s|div_u|div|rem_s|rem_u|and|xor|or|shl|shr_s|shr_u|rotl|rotr|abs|neg|ceil|floor",
-			"trunc|nearest|sqrt|min|max|copysign|wrap|trunc_s|trunc_u|extend_s|extend_u|convert_s",
-			"convert_u|demote|promote|reinterpret|unreachable|nop"
+            "mul|div_s|div_u|div|rem_s|rem_u|and|xor|or|shl|shr_s|shr_u|rotl|rotr|abs|neg|ceil|floor",
+            "trunc|nearest|sqrt|min|max|copysign|wrap|trunc_s|trunc_u|extend_s|extend_u|convert_s",
+            "convert_u|demote|promote|reinterpret|unreachable|nop"
         ].join("|");
 
         var keywordMapper = this.createKeywordMapper({
