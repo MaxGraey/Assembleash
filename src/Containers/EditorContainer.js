@@ -119,7 +119,7 @@ export default class EditorContainer extends Component {
             this.toolbar.compileButton.startCompile();
 
         setImmediate(() => {
-            if (isRequreStdlib(inputCode)) {
+            if (!stdlib && isRequreStdlib(inputCode)) {
                 stdlib = true;
                 this.setState({ stdlib });
             }

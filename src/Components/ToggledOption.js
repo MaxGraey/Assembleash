@@ -31,7 +31,7 @@ export default class ToggledOption extends Component {
     }
 
     render() {
-        const { label, defaultActive, checked } = this.props;
+        const { label, defaultActive } = this.props;
         const { active } = this.state;
         return (
             <label
