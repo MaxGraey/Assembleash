@@ -2,7 +2,7 @@
   "name": "assembleash-playground",
   "version": "1.0.0",
   "description": "WebAssembly and Typescript-like languages playground",
-  "homepage" : "http://MaxGraey.github.io/assembleash",
+  "homepage" : "http://MaxGraey.github.io/Assembleash",
   "author": "Max Graey <maxgraey@gmail.com>",
   "license": "Apache-2",
   "keywords": [
