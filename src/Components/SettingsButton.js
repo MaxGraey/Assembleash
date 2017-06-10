@@ -9,27 +9,34 @@ import ToggledOption from './ToggledOption'
 import tooltip from './Tooltip'
 
 export default class SettingsButton extends Component {
-    onStdlibChange = value => {
-        const { onOptionChange } = this.props;
-        onOptionChange && onOptionChange('stdlib', value);
+
+    static Options = {
+        'stdlib': {
+            label: 'Library',
+            default: false
+        },
+        'longMode': {
+            label: 'Use 64 bits',
+            default: false
+        },
+        'validate': {
+            label: 'Validate',
+            default: true
+        },
+        'optimize': {
+            label: 'Optimize',
+            default: true
+        }
     }
 
-    onValidateChange = value => {
+    onChange = (key, value) => {
         const { onOptionChange } = this.props;
-        onOptionChange && onOptionChange('validate', value);
-    }
-
-    onOptimizeChange = value => {
-        const { onOptionChange } = this.props;
-        onOptionChange && onOptionChange('optimize', value);
-    }
-
-    onLongPointersChange = value => {
-        const { onOptionChange } = this.props;
-        onOptionChange && onOptionChange('longMode', value);
+        onOptionChange && onOptionChange(key, value);
     }
 
     render() {
+        const options = SettingsButton.Options;
+
         return (
             <OverlayTrigger
                 rootClose
@@ -38,7 +45,6 @@ export default class SettingsButton extends Component {
                 overlay={ tooltip('Settings') }
             >
                 <DropdownButton
-                    //open
                     noCaret
                     pullRight
                     id="settings-button"
@@ -51,32 +57,17 @@ export default class SettingsButton extends Component {
                         paddingRight: '0.9em'
                     }}
                 >
-                    <ToggledOption
-                        name="option-stdlib"
-                        style={{ width: '500px' }}
-                        label="Library"
-                        onChange={ this.onStdlibChange }
-                    />
-                    <ToggledOption
-                        name="option-64bits"
-                        style={{ width: '500px' }}
-                        label="Use 64 bits"
-                        onChange={ this.onLongPointersChange }
-                    />
-                    <ToggledOption
-                        defaultActive
-                        name="option-validate"
-                        style={{ width: '500px' }}
-                        label="Validate"
-                        onChange={ this.onValidateChange }
-                    />
-                    <ToggledOption
-                        defaultActive
-                        name="option-optimize"
-                        style={{ width: '500px' }}
-                        label="Optimize"
-                        onChange={ this.onOptimizeChange }
-                    />
+                    { Object.keys(options).map((key, index) =>
+                        <ToggledOption
+                            key={ index }
+                            defaultActive={ options[key].default }
+                            name={ `option-${key}` }
+                            label={ options[key].label }
+                            onChange={
+                                value => { this.onChange(key, value) }
+                            }
+                        />)
+                    }
                 </DropdownButton>
             </OverlayTrigger>
         );
