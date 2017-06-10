@@ -37,7 +37,9 @@ export default class AboutButton extends Component {
                 style={{ minWidth: '280px' }}
             >
         		<div className="label" style={{ padding: 0 }}>
-                    <a href={ github } target="_blank"><h5>Project on Github</h5></a>
+                    <a href={ github } target="_blank" rel="noopener noreferrer">
+                        <h5>Project on Github</h5>
+                    </a>
                 </div>
         	</Popover>
         );
