@@ -1,4 +1,4 @@
-### Assembleash Playground
+### [Assembleash Playground](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 
 Playground for WebAssembly and Typescript-like languages.
 
