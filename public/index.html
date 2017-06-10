@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <!--
+      manifest.json provides metadata used when your web app is added to the
+      homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
+    -->
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="screen">
+    <link rel="stylesheet" href="%PUBLIC_URL%/bootstrap.theme.css" media="screen">
+    <link rel="stylesheet" href="%PUBLIC_URL%/toggle.button.css" media="screen">
+    <style>
+        @font-face {
+            font-family: 'icomoon';
+            src: url('%PUBLIC_URL%/fonts/icomoon.eot?dbkoep');
+            src: url('%PUBLIC_URL%/fonts/icomoon.eot?dbkoep#iefix') format('embedded-opentype'),
+                 url('%PUBLIC_URL%/fonts/icomoon.ttf?dbkoep') format('truetype'),
+                 url('%PUBLIC_URL%/fonts/icomoon.woff?dbkoep') format('woff'),
+                 url('%PUBLIC_URL%/fonts/icomoon.svg?dbkoep#icomoon') format('svg');
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        [class^="icon-"], [class*=" icon-"] {
+            font-family: 'icomoon' !important;
+            speak: none;
+            font-style: normal;
+            font-weight: normal;
+            font-variant: normal;
+            text-transform: none;
+            line-height: 1;
+
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .icon-binary-code:before {
+            content: "\e900";
+            color: #fff;
+        }
+    </style>
+    <!--
+      Notice the use of %PUBLIC_URL% in the tags above.
+      It will be replaced with the URL of the `public` folder during the build.
+      Only files inside the `public` folder can be referenced from the HTML.
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+    -->
+    <title>Assembleash Playground</title>
+  </head>
+  <body>
+    <noscript>
+      You need to enable JavaScript to run this app.
+    </noscript>
+    <!-- <script src="%PUBLIC_URL%/compilers/assemblyscript.min.js"></script> -->
+    <!-- <script src="%PUBLIC_URL%/compilers/bundle.js"></script> -->
+    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/systemjs/0.20.10/system.src.js"></script> -->
+    <!-- <script src="%PUBLIC_URL%/compilers/turbo/common.js"></script> -->
+    <!-- <script src="%PUBLIC_URL%/compilers/turbo/turbo.js"></script> -->
+    <script>
+        // console.log(assemblyscript.Compiler.compileString);
+
+        /*loadLibrary(function (libs) {
+            SystemJS.import("main").then(function (exports) {
+                var compiledJavaScript = compileJavaScript(exports, libs);
+
+                var sources = [{
+                    name: '<stdin>',
+                    contents: 'var a: int32 = 10;',
+                }];
+
+                var compiled = compiledJavaScript(sources, 'WebAssembly', 'compiled');
+                console.log(compiled.stdout);
+            });
+        });*/
+
+    </script>
+    <div id="root"></div>
+    <!--
+      This HTML file is a template.
+      If you open it directly in the browser, you will see an empty page.
+
+      You can add webfonts, meta tags, or analytics to this file.
+      The build step will place the bundled scripts into the <body> tag.
+
+      To begin the development, run `npm start` or `yarn start`.
+      To create a production bundle, use `npm run build` or `yarn build`.
+    -->
+  </body>
+</html>
