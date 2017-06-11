@@ -2,7 +2,7 @@
   "name": "assembleash-playground",
   "version": "1.0.0-beta",
   "description": "WebAssembly and Typescript-like languages playground",
-  "homepage" : "http://MaxGraey.github.io/Assembleash",
+  "homepage": "http://MaxGraey.github.io/Assembleash",
   "author": "Max Graey <maxgraey@gmail.com>",
   "license": "Apache-2",
   "keywords": [
@@ -15,12 +15,12 @@
     "compiler"
   ],
   "dependencies": {
+    "file-saver": "^1.3.3",
     "immutable": "^3.8.1",
     "react": "^15.5.4",
     "react-ace": "^5.0.1",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
-    "react-file-download": "^0.3.4",
     "react-live": "^1.5.3",
     "react-load-script": "^0.0.4",
     "react-notification": "^6.7.0",

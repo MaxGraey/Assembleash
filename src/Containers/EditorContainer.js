@@ -6,7 +6,7 @@ import SplitPane             from 'react-split-pane'
 import Script                from 'react-load-script'
 import { NotificationStack } from 'react-notification'
 import { throttle }          from 'throttle-debounce'
-import download              from 'react-file-download'
+import FileSaver             from 'file-saver'
 
 import ToolbarContainer from './ToolbarContainer'
 import Editor           from '../Components/Editor'
@@ -198,7 +198,8 @@ export default class EditorContainer extends Component {
 
     onDownloadBinary = () => {
         const { output, compiler } = this.state;
-        download(output.binary, `${compiler.toLowerCase()}.module.wasm`);
+        var blob = new Blob([output.binary], { type: "pplication/octet-stream" });
+        FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
     }
 
     onScriptError = () => {
