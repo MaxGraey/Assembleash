@@ -35,7 +35,7 @@ ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module)
                 regex: '\\b(\\+|-)?(?i:infinity|nan)\\b'
             }, {
                 token: keywordMapper,
-                regex: "\$[a-zA-Z_][a-zA-Z_0-9.]*\\b"
+                regex: "[a-zA-Z_$][a-zA-Z_0-9.]*\\b"
             }, {
                 token: "lparen",
                 regex: "[[({]"
