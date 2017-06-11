@@ -8,6 +8,179 @@
       manifest.json provides metadata used when your web app is added to the
       homescreen on Android. See https://developers.google.com/web/fundamentals/engage-and-retain/web-app-manifest/
     -->
+    <style>
+    	.cssload-triangles {
+    		transform: translate(-50%, -50%);
+    		-o-transform: translate(-50%, -50%);
+    		-ms-transform: translate(-50%, -50%);
+    		-webkit-transform: translate(-50%, -50%);
+    		-moz-transform: translate(-50%, -50%);
+    		height: 101px;
+    		width: 113px;
+    		position: absolute;
+            top: 50%;
+    		left: 50%;
+    	}
+
+    	.cssload-tri {
+    		position: absolute;
+    		animation: cssload-pulse 862.5ms ease-in infinite;
+    		-o-animation: cssload-pulse 862.5ms ease-in infinite;
+    		-ms-animation: cssload-pulse 862.5ms ease-in infinite;
+    		-webkit-animation: cssload-pulse 862.5ms ease-in infinite;
+    		-moz-animation: cssload-pulse 862.5ms ease-in infinite;
+    		border-top: 34px solid rgb(44, 103, 199);
+    		border-left: 19px solid transparent;
+    		border-right: 19px solid transparent;
+    		border-bottom: 0px;
+    	}
+
+    	.cssload-tri.cssload-invert {
+    		border-top: 0px;
+    		border-bottom: 34px solid rgb(44, 103, 199);
+    		border-left: 19px solid transparent;
+    		border-right: 19px solid transparent;
+    	}
+
+    	.cssload-tri:nth-child(1) {
+    		left: 38px;
+    	}
+
+    	.cssload-tri:nth-child(2) {
+    		left: 19px;
+    		top: 34px;
+    		animation-delay: -143.75ms;
+    		-o-animation-delay: -143.75ms;
+    		-ms-animation-delay: -143.75ms;
+    		-webkit-animation-delay: -143.75ms;
+    		-moz-animation-delay: -143.75ms;
+    	}
+
+    	.cssload-tri:nth-child(3) {
+    		left: 38px;
+    		top: 34px;
+    	}
+
+    	.cssload-tri:nth-child(4) {
+    		left: 56px;
+    		top: 34px;
+    		animation-delay: -718.75ms;
+    		-o-animation-delay: -718.75ms;
+    		-ms-animation-delay: -718.75ms;
+    		-webkit-animation-delay: -718.75ms;
+    		-moz-animation-delay: -718.75ms;
+    	}
+
+    	.cssload-tri:nth-child(5) {
+    		top: 68px;
+    		animation-delay: -287.5ms;
+    		-o-animation-delay: -287.5ms;
+    		-ms-animation-delay: -287.5ms;
+    		-webkit-animation-delay: -287.5ms;
+    		-moz-animation-delay: -287.5ms;
+    	}
+
+    	.cssload-tri:nth-child(6) {
+    		top: 68px;
+    		left: 19px;
+    		animation-delay: -287.5ms;
+    		-o-animation-delay: -287.5ms;
+    		-ms-animation-delay: -287.5ms;
+    		-webkit-animation-delay: -287.5ms;
+    		-moz-animation-delay: -287.5ms;
+    	}
+
+    	.cssload-tri:nth-child(7) {
+    		top: 68px;
+    		left: 38px;
+    		animation-delay: -431.25ms;
+    		-o-animation-delay: -431.25ms;
+    		-ms-animation-delay: -431.25ms;
+    		-webkit-animation-delay: -431.25ms;
+    		-moz-animation-delay: -431.25ms;
+    	}
+
+    	.cssload-tri:nth-child(8) {
+    		top: 68px;
+    		left: 56px;
+    		animation-delay: -575ms;
+    		-o-animation-delay: -575ms;
+    		-ms-animation-delay: -575ms;
+    		-webkit-animation-delay: -575ms;
+    		-moz-animation-delay: -575ms;
+    	}
+
+    	.cssload-tri:nth-child(9) {
+    		top: 68px;
+    		left: 75px;
+    		animation-delay: -575ms;
+    		-o-animation-delay: -575ms;
+    		-ms-animation-delay: -575ms;
+    		-webkit-animation-delay: -575ms;
+    		-moz-animation-delay: -575ms;
+    	}
+
+
+    	@keyframes cssload-pulse {
+    		0% {
+    			opacity: 1;
+    		}
+    		16.666% {
+    			opacity: 1;
+    		}
+    		100% {
+    			opacity: 0;
+    		}
+    	}
+
+    	@-o-keyframes cssload-pulse {
+    		0% {
+    			opacity: 1;
+    		}
+    		16.666% {
+    			opacity: 1;
+    		}
+    		100% {
+    			opacity: 0;
+    		}
+    	}
+
+    	@-ms-keyframes cssload-pulse {
+    		0% {
+    			opacity: 1;
+    		}
+    		16.666% {
+    			opacity: 1;
+    		}
+    		100% {
+    			opacity: 0;
+    		}
+    	}
+
+    	@-webkit-keyframes cssload-pulse {
+    		0% {
+    			opacity: 1;
+    		}
+    		16.666% {
+    			opacity: 1;
+    		}
+    		100% {
+    			opacity: 0;
+    		}
+    	}
+
+    	@-moz-keyframes cssload-pulse {
+    		0% {
+    			opacity: 1;
+    		}
+    		16.666% {
+    			opacity: 1;
+    		}
+    		100% {
+    			opacity: 0;
+    		}
+    	}
+    </style>
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" media="screen">
@@ -58,6 +231,18 @@
     <noscript>
       You need to enable JavaScript to run this app.
     </noscript>
+
+    <div id="load-spinner" class="cssload-triangles">
+        <div class="cssload-tri cssload-invert"></div>
+        <div class="cssload-tri cssload-invert"></div>
+        <div class="cssload-tri"></div>
+        <div class="cssload-tri cssload-invert"></div>
+        <div class="cssload-tri cssload-invert"></div>
+        <div class="cssload-tri"></div>
+        <div class="cssload-tri cssload-invert"></div>
+        <div class="cssload-tri"></div>
+        <div class="cssload-tri cssload-invert"></div>
+    </div>
 
     <!-- <script src="%PUBLIC_URL%/compilers/assemblyscript.min.js"></script> -->
     <!-- <script src="%PUBLIC_URL%/compilers/bundle.js"></script> -->

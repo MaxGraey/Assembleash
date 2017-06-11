@@ -12,6 +12,10 @@ export default class App extends Component {
     }
 
     componentWillMount() {
+        // remove spinner
+        let spinner = document.getElementById('load-spinner');
+        document.body.removeChild(spinner);
+
         let url = window.location.href;
         let compiler = url.split('#')[1];
         if (compiler) {
