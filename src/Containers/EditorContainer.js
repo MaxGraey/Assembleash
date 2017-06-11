@@ -21,7 +21,7 @@ import {
     formatSize
 } from '../Common/Common'
 
-import { OrderedSet } from 'immutable';
+import { OrderedSet } from 'immutable'
 
 const input =
 `export function fib(num: int32): int32 {
@@ -351,6 +351,7 @@ export default class EditorContainer extends Component {
                     onSettingsOptionChange={ this.onSettingsOptionChange }
                     onOutputSelect={ type => this.setState({ outputType: type }) }
                 />
+
                 <SplitPane
                     ref={ self => this.splitEditor = self }
                     split="vertical"
@@ -380,6 +381,7 @@ export default class EditorContainer extends Component {
                         code={ formatCode(output[outputType]) }
                     />
                 </SplitPane>
+
                 <Footer
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }

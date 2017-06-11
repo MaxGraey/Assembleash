@@ -7,6 +7,8 @@ import {
     ButtonGroup
 } from 'react-bootstrap';
 
+//const Logo = require('react-svg-loader!../logo.svg');
+
 import CompilerButton    from '../Components/CompilerButton'
 import AboutButton       from '../Components/AboutButton'
 import CompileButton     from '../Components/CompileButton'
