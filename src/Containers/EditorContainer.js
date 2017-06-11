@@ -84,15 +84,6 @@ export default class EditorContainer extends Component {
         this.handleSize();
     }
 
-    onScriptLoad = () => {
-        this.setState({
-            compilerReady: true,
-            version: getCompilerVersion(this.state.compiler)
-        });
-
-        this.updateCompilation();
-    }
-
     _clearCompileTimeout() {
         this._compileTimerDelay && clearTimeout(this._compileTimerDelay);
         this._compileTimerDelay = null;
@@ -200,6 +191,15 @@ export default class EditorContainer extends Component {
         const { output, compiler } = this.state;
         var blob = new Blob([output.binary], { type: "application/octet-stream" });
         FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
+    }
+
+    onScriptLoad = () => {
+        this.setState({
+            compilerReady: true,
+            version: getCompilerVersion(this.state.compiler)
+        });
+
+        this.updateCompilation();
     }
 
     onScriptError = () => {

@@ -232,6 +232,8 @@
       You need to enable JavaScript to run this app.
     </noscript>
 
+    <div id="root"></div>
+
     <div id="load-spinner" class="cssload-triangles">
         <div class="cssload-tri cssload-invert"></div>
         <div class="cssload-tri cssload-invert"></div>
@@ -244,39 +246,15 @@
         <div class="cssload-tri cssload-invert"></div>
     </div>
 
-    <!-- <script src="%PUBLIC_URL%/compilers/assemblyscript.min.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/compilers/bundle.js"></script> -->
-    <!-- <script src="//cdnjs.cloudflare.com/ajax/libs/systemjs/0.20.10/system.src.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/compilers/turbo/common.js"></script> -->
-    <!-- <script src="%PUBLIC_URL%/compilers/turbo/turbo.js"></script> -->
     <script>
-        // console.log(assemblyscript.Compiler.compileString);
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-        /*loadLibrary(function (libs) {
-            SystemJS.import("main").then(function (exports) {
-                var compiledJavaScript = compileJavaScript(exports, libs);
-
-                var sources = [{
-                    name: '<stdin>',
-                    contents: 'var a: int32 = 10;',
-                }];
-
-                var compiled = compiledJavaScript(sources, 'WebAssembly', 'compiled');
-                console.log(compiled.stdout);
-            });
-        });*/
+        ga('create', 'UA-100807291-1', 'auto');
+        ga('send', 'pageview');
 
     </script>
-    <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>
