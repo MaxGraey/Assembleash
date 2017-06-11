@@ -198,7 +198,7 @@ export default class EditorContainer extends Component {
 
     onDownloadBinary = () => {
         const { output, compiler } = this.state;
-        var blob = new Blob([output.binary], { type: "pplication/octet-stream" });
+        var blob = new Blob([output.binary], { type: "application/octet-stream" });
         FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
     }
 
