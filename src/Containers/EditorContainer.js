@@ -30,6 +30,8 @@ const input =
 }`;
 
 
+const MaxPrintingErrors = 8;
+
 export default class EditorContainer extends Component {
     static defaultProps = {
         compiler: 'AssemblyScript'
@@ -92,7 +94,7 @@ export default class EditorContainer extends Component {
         this._compileTimerDelay = null;
     }
 
-    updateCompilationWithDelay = (delay = 2000) => {
+    updateCompilationWithDelay = (delay = 5000) => {
         this._clearCompileTimeout();
         this._compileTimerDelay = setTimeout(() => {
             this.updateCompilation();
@@ -166,9 +168,17 @@ export default class EditorContainer extends Component {
             this._errorCounts = diagnostics.length;
 
             for (let i = 0; i < diagnostics.length; i++) {
-                const errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
-                console.error(errorMessage);
-                this.addNotification(errorMessage);
+                let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
+
+                if (i <= MaxPrintingErrors) {
+                    console.error(errorMessage);
+                    this.addNotification(errorMessage);
+                } else {
+                    errorMessage = `Too many errors (${diagnostics.length})`;
+                    console.error(errorMessage);
+                    this.addNotification(errorMessage);
+                    break;
+                }
             }
 
         } else {
