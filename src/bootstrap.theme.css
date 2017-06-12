@@ -35,9 +35,14 @@ body {
     width: 100%;
     height: 100%;
     background-color: #323c49 !important;
-    background: linear-gradient(0deg, #323c49 0%, #2b343f 100%) no-repeat border-box !important;
-    background-size: auto !important;
-    background-origin: padding-box, padding-box;
+    background: -webkit-linear-gradient(top, #2b343f, #323c49) no-repeat border-box border-box !important;
+    background: -moz-linear-gradient(top, #2b343f, #323c49) no-repeat border-box border-box !important;
+    background: -o-linear-gradient(top, #2b343f, #323c49) no-repeat border-box border-box !important;
+    background: linear-gradient(top, #2b343f, #323c49) no-repeat border-box border-box !important;
+    -webkit-background-size: cover !important;
+    -moz-background-size: cover !important;
+    -o-background-size: cover !important;
+    background-size: cover !important;
 }
 
 article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
