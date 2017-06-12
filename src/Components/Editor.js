@@ -11,6 +11,8 @@ import 'brace/mode/typescript'
 import 'brace/snippets/typescript'
 import 'brace/theme/tomorrow_night_eighties'
 
+import '../ace.editor.css'
+
 export default class Editor extends Component {
     static propTypes = {
         focus:    PropTypes.bool,
