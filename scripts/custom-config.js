@@ -35,7 +35,7 @@ switch (process.argv[2]) {
 function loadCustomizer(module) {
     try {
         return require(module);
-	} catch (e) {
+    } catch (e) {
         if (e.code !== "MODULE_NOT_FOUND") throw e;
     }
 
