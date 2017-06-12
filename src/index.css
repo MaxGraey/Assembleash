@@ -1,5 +1,6 @@
 
 .icon-binary-code:before {
+    -webkit-font-smoothing: antialiased;
     content: "\e900";
     color: #fff;
 }
@@ -45,25 +46,70 @@
     -moz-animation: spin 2s infinite linear;
 	animation: spin 2s infinite linear;
 }
+/*
+.busy-signal {
+    font-family: 'Octicons Regular';
+    -webkit-font-smoothing: antialiased;
+}
+
+.busy-signal-busy {
+    -webkit-animation-name: spin 700ms infinite linear;
+    -moz-animation-name: spin 700ms infinite linear;
+    animation-name: spin 700ms infinite linear;
+    color: #ff0;
+}
+
+.busy-signal-idle {
+    visibility: hidden;
+}*/
+
+
+.busy-signal {
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    width: 26px;
+    height: 26px;
+    margin: -14px 0 0 -14px;
+}
+
+.busy-signal .busy-signal-symbol {
+    font-size: 10px;
+    color: #5bb85d;
+    position: relative;
+    text-align: center;
+    line-height: 24px;
+}
+
+.busy-signal .busy-signal-maskedCircle {
+    width: 18px;
+    height: 18px;
+    border-radius: 10px;
+    border: 1pt solid #5bb85d;
+}
+
+.busy-signal .busy-signal-mask {
+    width: 10px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.busy-signal .busy-signal-spinner {
+    position: absolute;
+    left: 1px;
+    top: 1px;
+    width: 24px;
+    height: 24px;
+    animation: spin 700ms infinite linear;
+}
+
 
 @-webkit-keyframes spin {
-	0%   {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-    }
-	100% {
-        -webkit-transform: rotate(359deg);
-        transform: rotate(359deg);
-    }
+    from { -webkit-transform: rotate(0deg); }
+    to { -webkit-transform: rotate(360deg); }
 }
 
 @keyframes spin {
-	0% {
-        -webkit-transform: rotate(0deg);
-        transform: rotate(0deg);
-	}
-	100% {
-		-webkit-transform: rotate(359deg);
-		transform: rotate(359deg);
-	}
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }

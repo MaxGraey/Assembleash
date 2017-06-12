@@ -66,6 +66,7 @@ export default class EditorContainer extends Component {
              notificationCount: 0
          };
 
+         this._lastTextInput     = input;
          this._compileTimerDelay = null;
          this._cachedClientRect  = null;
     }
@@ -131,7 +132,7 @@ export default class EditorContainer extends Component {
                 let message = '<' + compiler + '> internal error:\n';
                 this.addNotification(message + e.message);
                 console.error(message, e);
-                
+
             } finally {
                 if (this.toolbar && this.toolbar.compileButton)
                     this.toolbar.compileButton.endCompile();
@@ -181,6 +182,13 @@ export default class EditorContainer extends Component {
     }
 
     onInputChange = value => {
+        // skip compilation if possible
+        value = value.trim();
+        if (this._lastTextInput === value) {
+            return;
+        }
+
+        this._lastTextInput = value;
         const mode = this.state.compileMode;
 
         if (mode === CompileModes[0]) { // Auto
