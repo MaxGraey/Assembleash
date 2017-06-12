@@ -26,13 +26,26 @@ export default class Footer extends Component {
             binarySize,
             onDownloadPressed,
             downloadDisabled,
-            busyState
+            busyState,
+            errorCount
         } = this.props;
 
         const sizeUnits = binarySize.split(' ');
 
         if (!sizeUnits[0]) sizeUnits[0] = '';
         if (!sizeUnits[1]) sizeUnits[1] = '';
+
+        let statusBarMessage = '';
+        let messageClass = 'busy-success-color';
+
+        if (busyState === 'busy') {
+            statusBarMessage = 'Processing...';
+        } else if (busyState === 'success') {
+            statusBarMessage = 'Compiled successfully';
+        } else if (busyState === 'failure') {
+            messageClass = 'busy-filure-color';
+            statusBarMessage = `(${errorCount})  Error${errorCount > 1 ? 's' : ''}`;
+        }
 
         return (
             <ButtonToolbar className="navbar-fixed-bottom" style={{ padding: '0', margin: '20px 20px 7px 15px' }}>
@@ -44,7 +57,15 @@ export default class Footer extends Component {
                         <span style={{ color: '#bbb', paddingRight: '2rem', fontWeight: 100 }}>{ ' ' + sizeUnits[1] }</span>
                     </h4>
                 </div>
-                <BusySignal state={ busyState }/>
+                <BusySignal state={ busyState }>
+                </BusySignal>
+                <label style={{
+                    marginLeft: '55px',
+                    float: 'left',
+                    display: 'block'
+                }}>
+                    <h4 className={ messageClass } style={{ fontWeight: 300 }} >{ statusBarMessage }</h4>
+                </label>
             </ButtonToolbar>
         );
     }

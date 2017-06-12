@@ -14,10 +14,6 @@ export default class BusySignal extends Component {
         state: 'busy'
     }
 
-	constructor(props) {
-		super(props);
-	}
-
     _renderSpinner() {
         const state = this.props.state;
         return state === 'busy' ? (
@@ -38,7 +34,6 @@ export default class BusySignal extends Component {
 
     _renderReadyState() {
         const state = this.props.state;
-
         if (state === 'success') {
             return <Glyphicon glyph="ok" className="busy-success-color"/>;
         } else if (state === 'failure') {
@@ -55,6 +50,7 @@ export default class BusySignal extends Component {
                 { this._renderSpinner() }
                 { this._renderDot() }
                 { this._renderReadyState() }
+                { this.props.children }
             </div>
         );
 	}

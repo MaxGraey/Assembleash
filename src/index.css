@@ -67,18 +67,18 @@
 .busy-signal {
     position: absolute;
     top: 50%;
-    left: 20px;
+    left: 26px;
     width: 26px;
     height: 26px;
     margin: -14px 0 0 -14px;
 }
 
-.busy-signal .busy-success-color {
+.busy-success-color {
     color: #5bb85d;
     border-color: #5bb85d;
 }
 
-.busy-signal .busy-filure-color {
+.busy-filure-color {
     color: #f00;
     border-color: #f00;
 }

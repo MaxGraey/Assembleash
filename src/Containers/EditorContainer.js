@@ -67,6 +67,7 @@ export default class EditorContainer extends Component {
              notificationCount: 0
          };
 
+         this._errorCounts       = 0;
          this._lastTextInput     = input;
          this._compileTimerDelay = null;
          this._cachedClientRect  = null;
@@ -109,6 +110,7 @@ export default class EditorContainer extends Component {
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton) {
+            this._errorCounts = 0;
             this.toolbar.compileButton.startCompile();
             this.setState({
                 compileSuccess: false,
@@ -136,6 +138,8 @@ export default class EditorContainer extends Component {
                     compileFailure: true
                 });
 
+                this._errorCounts = 1;
+
                 let message = '<' + compiler + '> internal error:\n';
                 this.addNotification(message + e.message);
                 console.error(message, e);
@@ -159,6 +163,7 @@ export default class EditorContainer extends Component {
             });
 
             const diagnostics = as.Compiler.lastDiagnostics;
+            this._errorCounts = diagnostics.length;
 
             for (let i = 0; i < diagnostics.length; i++) {
                 const errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
@@ -172,6 +177,8 @@ export default class EditorContainer extends Component {
 
             if (optimize)
                 module.optimize();
+
+            this._errorCounts = 0;
 
             this.setState({
                 compileSuccess: true,
@@ -419,6 +426,7 @@ export default class EditorContainer extends Component {
                 </SplitPane>
 
                 <Footer
+                    errorCount={ this._errorCounts }
                     busyState={ busyState }
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }
