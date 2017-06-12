@@ -259,13 +259,15 @@
 
     <div id="root"></div>
 
-    <script>
-        window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
-        ga('create', 'UA-100807291-1', 'auto');
-        ga('send', 'pageview');
-        window.addEventListener('serviceevent', function (e) {
-            ga('send', 'event', e.detail.category, e.detail.action, e.detail.label);
-        });
+    <script type="text/javascript">
+        (function() {
+            window.ga=window.ga||function(){(ga.q=ga.q||[]).push(arguments)};ga.l=+new Date;
+            ga('create', 'UA-100807291-1', 'auto');
+            ga('send', 'pageview');
+            window.addEventListener('serviceevent', function (e) {
+                ga('send', 'event', e.detail.category, e.detail.action, e.detail.label);
+            });
+        }());
     </script>
     <script src="https://www.google-analytics.com/analytics.js" async></script>
   </body>
