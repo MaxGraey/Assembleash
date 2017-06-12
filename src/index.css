@@ -46,23 +46,6 @@
     -moz-animation: spin 2s infinite linear;
 	animation: spin 2s infinite linear;
 }
-/*
-.busy-signal {
-    font-family: 'Octicons Regular';
-    -webkit-font-smoothing: antialiased;
-}
-
-.busy-signal-busy {
-    -webkit-animation-name: spin 700ms infinite linear;
-    -moz-animation-name: spin 700ms infinite linear;
-    animation-name: spin 700ms infinite linear;
-    color: #ff0;
-}
-
-.busy-signal-idle {
-    visibility: hidden;
-}*/
-
 
 .busy-signal {
     position: absolute;
@@ -79,8 +62,8 @@
 }
 
 .busy-filure-color {
-    color: #f00;
-    border-color: #f00;
+    color: #ff6836;
+    border-color: #ff6836;
 }
 
 .busy-signal .busy-signal-symbol {

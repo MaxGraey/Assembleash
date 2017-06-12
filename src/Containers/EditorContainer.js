@@ -68,7 +68,7 @@ export default class EditorContainer extends Component {
          };
 
          this._errorCounts       = 0;
-         this._lastTextInput     = input;
+         this._lastTextInput     = input.trim();
          this._compileTimerDelay = null;
          this._cachedClientRect  = null;
     }

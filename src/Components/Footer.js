@@ -44,7 +44,7 @@ export default class Footer extends Component {
             statusBarMessage = 'Compiled successfully';
         } else if (busyState === 'failure') {
             messageClass = 'busy-filure-color';
-            statusBarMessage = `(${errorCount})  Error${errorCount > 1 ? 's' : ''}`;
+            statusBarMessage = `(${errorCount}) Error${errorCount > 1 ? 's' : ''}`;
         }
 
         return (
@@ -64,7 +64,14 @@ export default class Footer extends Component {
                     float: 'left',
                     display: 'block'
                 }}>
-                    <h4 className={ messageClass } style={{ fontWeight: 300 }} >{ statusBarMessage }</h4>
+                    <h4
+                        className={ messageClass }
+                        style={{
+                            boxSizing: 'border-box',
+                            paddingTop: '1pt',
+                            fontWeight: 100,
+                            textShadow: '0 0 1px rgba(0,0,0,0.6)'
+                        }} >{ statusBarMessage }</h4>
                 </label>
             </ButtonToolbar>
         );
