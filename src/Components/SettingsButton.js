@@ -21,7 +21,7 @@ export default class SettingsButton extends Component {
         },
         'validate': {
             label: 'Validate',
-            default: true
+            default: false
         },
         'optimize': {
             label: 'Optimize',
