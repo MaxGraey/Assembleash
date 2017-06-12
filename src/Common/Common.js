@@ -80,19 +80,24 @@ export function formatCode(buffer) {
         return buffer;
 
     // format binary data
-    return Array.prototype.map.call(buffer, (value, index) => {
-        let result = ('00' + value.toString(16)).slice(-2);
+    const last = buffer.length;
+
+    let output = 'new Uint8Array([\r\n    ';
+    output += Array.prototype.map.call(buffer, (value, index) => {
+        let result = '0x' + ('00' + value.toString(16)).slice(-2);
 
         index++;
-        result += ' ';
-        if ((index & 15) === 0) {
-            result += '\r\n';
-        } else if ((index & 3) === 0) {
-            result += ' ';
-        }
+        if (index !== last)
+            result += ', ';
+
+        if ((index & 15) === 0)
+            result += '\r\n    ';
 
         return result;
     }).join('');
+    output += '\r\n]);';
+
+    return output;
 }
 
 export function formatSize(bytes) {
