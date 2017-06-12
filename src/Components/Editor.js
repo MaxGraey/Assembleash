@@ -40,7 +40,10 @@ export default class Editor extends Component {
     onLoad = editor => {
         this.editor = editor;
         const session = editor.getSession();
+
+        session.setUseSoftTabs(true);
         session.setOptions({ useWorker: true });
+        editor.renderer.setScrollMargin(14, 14);
 
         // TODO need fix setTimeout and use more clerver way
         setTimeout(() => {
@@ -92,8 +95,6 @@ export default class Editor extends Component {
                 height={ height }
 
                 tabSize={ tabSize }
-
-                // scrollMargin={ [20,20,0,0] }
 
                 editorProps={{
                     $blockScrolling: Infinity

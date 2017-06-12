@@ -72,13 +72,11 @@ export default class SettingsButton extends Component {
                     { Object.keys(options).map((key, index) =>
                         <ToggledOption
                             key={ index }
-                            defaultActive={ options[key].default }
+                            // defaultActive={ options[key].default }
                             name={ `option-${key}` }
                             label={ options[key].label }
-                            active={ key === 'stdlib' && requireStdLib }
-                            onChange={
-                                value => { this.onChange(key, value) }
-                            }
+                            active={ (key === 'stdlib' && requireStdLib) || options[key].default }
+                            onChange={ value => { this.onChange(key, value) }}
                         />)
                     }
                 </DropdownButton>

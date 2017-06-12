@@ -121,7 +121,7 @@ export default class EditorContainer extends Component {
                 } else if (compiler === 'TurboScript') {
                     this.compileByTurboScript(inputCode);
                 } else {
-                    console.warn('compiler nor supported');
+                    console.warn('Compiler not supported');
                 }
             } catch (e) {
                 this.setState({
@@ -131,6 +131,7 @@ export default class EditorContainer extends Component {
                 let message = '<' + compiler + '> internal error:\n';
                 this.addNotification(message + e.message);
                 console.error(message, e);
+                
             } finally {
                 if (this.toolbar && this.toolbar.compileButton)
                     this.toolbar.compileButton.endCompile();
