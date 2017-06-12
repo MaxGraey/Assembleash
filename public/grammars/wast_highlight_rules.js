@@ -32,7 +32,7 @@ ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module)
                 regex: /\\b(((\\+|-)?0(x|X)[0-9a-fA-F]+\\.?[0-9a-fA-F]*((p|P)(\\+|-)?[0-9]+)?)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b/
             }, {
                 token: "constant.numeric",
-                regex: '\\b(\\+|-)?(?i:infinity|nan)\\b'
+                regex: '\\b(\\+|-)?(?i:infinity|inf|nan)\\b'
             }, {
                 token: keywordMapper,
                 regex: "[a-zA-Z_$][a-zA-Z_0-9.]*\\b"
