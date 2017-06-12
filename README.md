@@ -5,11 +5,12 @@ Playground for WebAssembly and Typescript-like languages.
 **Support languges:**
 - [AssemblyScript](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 - TurboScript (soon!)
+- Speedy.js (soon!)
 
 **TODO**
 - Add wast syntax
 - Improve typescript syntax
-- Add custom webpack config with Prepack plugin 
+- Add custom webpack config with Prepack plugin
 - Additional status info like compiling time
 - Optimize content for mobile browsers
 
