@@ -46,6 +46,7 @@ export default class EditorContainer extends Component {
              compiler:          props.compiler,
              compileMode:       CompileModes[0],
              compilerReady:     false,
+             compileFailure:    false,
              compileSuccess:    false,
              inputEditorWidth:  '100%',
              outputEditorWidth: '100%',
@@ -126,7 +127,8 @@ export default class EditorContainer extends Component {
                 }
             } catch (e) {
                 this.setState({
-                    compileSuccess: false
+                    compileSuccess: false,
+                    compileFailure: true
                 });
 
                 let message = '<' + compiler + '> internal error:\n';
@@ -147,7 +149,8 @@ export default class EditorContainer extends Component {
 
         if (!module) {
             this.setState({
-                compileSuccess: false
+                compileSuccess: false,
+                compileFailure: true
             });
 
             const diagnostics = as.Compiler.lastDiagnostics;
@@ -167,6 +170,8 @@ export default class EditorContainer extends Component {
 
             this.setState({
                 compileSuccess: true,
+                compileFailure: false,
+
                 output: {
                     text:   module.emitText(),
                     binary: module.emitBinary()
@@ -289,21 +294,28 @@ export default class EditorContainer extends Component {
     }
 
     removeAllNotification = () => {
-        return this.setState({ notifications: OrderedSet() });
+        return this.setState({
+            notificationCount: 0,
+            notifications: OrderedSet()
+        });
     }
 
     render() {
         const {
             version,
             compiler,
+
             compilerReady,
             compileSuccess,
+            compileFailure,
+            notifications,
+
             inputEditorWidth,
             outputEditorWidth,
             editorsHeight,
+
             output,
             outputType,
-            notifications,
             stdlib
         } = this.state;
 
@@ -337,6 +349,16 @@ export default class EditorContainer extends Component {
             onError={ this.onScriptError }
             onLoad={ this.onScriptLoad }
         /> : null);
+
+        let busyState = 'busy';
+
+        if (compilerReady) {
+            if (!compileSuccess && compileFailure) {
+                busyState = 'failure';
+            } else if (compileSuccess && !compileFailure) {
+                busyState = 'success';
+            }
+        }
 
         return (
             <div>
@@ -392,6 +414,7 @@ export default class EditorContainer extends Component {
                 </SplitPane>
 
                 <Footer
+                    busyState={ busyState }
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }
                     downloadDisabled={ !canBinaryDownload }

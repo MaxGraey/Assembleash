@@ -11,11 +11,12 @@ import BusySignal from './BusySignal';
 
 export default class Footer extends Component {
     static propTypes = {
-        downloadDisabled: PropTypes.bool,
+        downloadDisabled:  PropTypes.bool,
         onDownloadPressed: PropTypes.func
     }
 
     static defaultProps = {
+        busyState: 'busy',
         downloadDisabled: true,
         onDownloadPressed: () => {}
     }
@@ -24,7 +25,8 @@ export default class Footer extends Component {
         const {
             binarySize,
             onDownloadPressed,
-            downloadDisabled
+            downloadDisabled,
+            busyState
         } = this.props;
 
         const sizeUnits = binarySize.split(' ');
@@ -42,7 +44,7 @@ export default class Footer extends Component {
                         <span style={{ color: '#bbb', paddingRight: '2rem', fontWeight: 100 }}>{ ' ' + sizeUnits[1] }</span>
                     </h4>
                 </div>
-                <BusySignal/>
+                <BusySignal state={ busyState }/>
             </ButtonToolbar>
         );
     }

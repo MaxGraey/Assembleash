@@ -73,9 +73,18 @@
     margin: -14px 0 0 -14px;
 }
 
+.busy-signal .busy-success-color {
+    color: #5bb85d;
+    border-color: #5bb85d;
+}
+
+.busy-signal .busy-filure-color {
+    color: #f00;
+    border-color: #f00;
+}
+
 .busy-signal .busy-signal-symbol {
     font-size: 10px;
-    color: #5bb85d;
     position: relative;
     text-align: center;
     line-height: 24px;
@@ -85,7 +94,7 @@
     width: 18px;
     height: 18px;
     border-radius: 10px;
-    border: 1pt solid #5bb85d;
+    border: 1pt solid;
 }
 
 .busy-signal .busy-signal-mask {
