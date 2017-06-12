@@ -108,8 +108,13 @@ export default class EditorContainer extends Component {
         const { compiler, validate, optimize, longMode } = this.state;
         const inputCode = this.inputEditor.state.value;
 
-        if (this.toolbar && this.toolbar.compileButton)
+        if (this.toolbar && this.toolbar.compileButton) {
             this.toolbar.compileButton.startCompile();
+            this.setState({
+                compileSuccess: false,
+                compileFailure: false
+            });
+        }
 
         setImmediate(() => {
             if (!stdlib && isRequreStdlib(inputCode)) {
