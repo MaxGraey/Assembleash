@@ -36,8 +36,7 @@ function loadCustomizer(module) {
     try {
         return require(module);
 	} catch (e) {
-		if (e.code !== "MODULE_NOT_FOUND")
-			throw e;
+        if (e.code !== "MODULE_NOT_FOUND") throw e;
     }
 
     // If the module doesn't exist, return a
