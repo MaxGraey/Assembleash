@@ -33,7 +33,7 @@
     "proxyquire": "^1.8.0",
     "rewire": "^2.5.2",
     "react-scripts": "1.0.7",
-    "react-svg-loader": "^2.0.0"
+    "react-svg-loader": "latest"
   },
   "scripts": {
     "start": "react-scripts start",
