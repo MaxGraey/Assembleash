@@ -2,17 +2,17 @@ var rewire     = require('rewire');
 var proxyquire = require('proxyquire');
 
 switch (process.argv[2]) {
-		// The "start" script is run during development mode
+    // The "start" script is run during development mode
     case 'start':
         rewireModule('react-scripts/scripts/start.js', loadCustomizer('../webpack.config.dev.extension'));
         break;
 
-		// The "build" script is run to produce a production bundle
+    // The "build" script is run to produce a production bundle
     case 'build':
         rewireModule('react-scripts/scripts/build.js', loadCustomizer('../webpack.config.prod.extension'));
         break;
 
-		// The "test" script runs all the tests with Jest
+	// The "test" script runs all the tests with Jest
     case 'test':
         let customizer = loadCustomizer('../webpack.config.testing.extension');
         proxyquire('react-scripts/scripts/test.js', {
