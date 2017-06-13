@@ -27,15 +27,15 @@
 }
 
 .ace_tooltip {
-    color: white;
-    background-color: red;
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 1.5rem;
-    font-weight: 400;
-    border: 1px solid rgba(0,0,0,0.4);
-    padding: 12pt;
-    padding-left: 16pt;
-    padding-right: 16pt;
+    color: white !important;
+    background-color: red !important;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+    font-size: 1.5rem !important;
+    font-weight: 400 !important;
+    border: 1px solid rgba(0,0,0,0.4) !important;
+    padding: 12pt !important;
+    padding-left: 16pt !important;
+    padding-right: 16pt !important;
 }
 
 .ace_gutter-cell.ace_error {
