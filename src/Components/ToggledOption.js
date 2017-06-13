@@ -34,8 +34,7 @@ export default class ToggledOption extends Component {
         const { label, defaultActive } = this.props;
         const { active } = this.state;
         return (
-            <label
-                className="label"
+            <div
                 style={{
                     textAlign: 'left',
                     display: 'inline-block',
@@ -51,7 +50,7 @@ export default class ToggledOption extends Component {
                         onChange={ this.handleChange }
                     />
                 </h4>
-            </label>
+            </div>
         );
     }
 }
