@@ -126,30 +126,32 @@ export default class EditorContainer extends Component {
                 this.setState({ stdlib });
             }
 
-            try {
-                if (compiler === 'AssemblyScript') {
-                    this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
-                } else if (compiler === 'TurboScript') {
-                    this.compileByTurboScript(inputCode);
-                } else {
-                    console.warn('Compiler not supported');
+            setImmediate(() => {
+                try {
+                    if (compiler === 'AssemblyScript') {
+                        this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
+                    } else if (compiler === 'TurboScript') {
+                        this.compileByTurboScript(inputCode);
+                    } else {
+                        console.warn('Compiler not supported');
+                    }
+                } catch (e) {
+                    this.setState({
+                        compileSuccess: false,
+                        compileFailure: true
+                    });
+
+                    this._errorCounts = 1;
+
+                    let message = '<' + compiler + '> internal error:\n';
+                    this.addNotification(message + e.message);
+                    console.error(message, e);
+
+                } finally {
+                    if (this.toolbar && this.toolbar.compileButton)
+                        this.toolbar.compileButton.endCompile();
                 }
-            } catch (e) {
-                this.setState({
-                    compileSuccess: false,
-                    compileFailure: true
-                });
-
-                this._errorCounts = 1;
-
-                let message = '<' + compiler + '> internal error:\n';
-                this.addNotification(message + e.message);
-                console.error(message, e);
-
-            } finally {
-                if (this.toolbar && this.toolbar.compileButton)
-                    this.toolbar.compileButton.endCompile();
-            }
+            });
         });
     }
 
@@ -158,50 +160,56 @@ export default class EditorContainer extends Component {
         const as = window.assemblyscript;
         var module = as.Compiler.compileString(code, { silent: true, uintptrSize: longMode ? 8 : 4, noLib: !stdlib });
 
-        if (!module) {
-            this.setState({
-                compileSuccess: false,
-                compileFailure: true
-            });
+        setImmediate(() => {
+            if (!module) {
+                this.setState({
+                    compileSuccess: false,
+                    compileFailure: true
+                });
 
-            const diagnostics = as.Compiler.lastDiagnostics;
-            this._errorCounts = diagnostics.length;
+                const diagnostics = as.Compiler.lastDiagnostics;
+                this._errorCounts = diagnostics.length;
 
-            for (let i = 0; i < diagnostics.length; i++) {
-                let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
+                for (let i = 0; i < diagnostics.length; i++) {
+                    let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
 
-                if (i <= MaxPrintingErrors) {
-                    console.error(errorMessage);
-                    this.addNotification(errorMessage);
-                } else {
-                    errorMessage = `Too many errors (${diagnostics.length})`;
-                    console.error(errorMessage);
-                    this.addNotification(errorMessage);
-                    break;
+                    if (i <= MaxPrintingErrors) {
+                        console.error(errorMessage);
+                        this.addNotification(errorMessage);
+                    } else {
+                        errorMessage = `Too many errors (${diagnostics.length})`;
+                        console.error(errorMessage);
+                        this.addNotification(errorMessage);
+                        break;
+                    }
                 }
+
+            } else {
+                setImmediate(() => {
+                    if (validate)
+                        module.validate();
+
+                    if (optimize)
+                        module.optimize();
+
+                    this._errorCounts = 0;
+
+                    this.setState({
+                        compileSuccess: true,
+                        compileFailure: false,
+
+                        output: {
+                            text:   module.emitText(),
+                            binary: module.emitBinary()
+                        }
+                    });
+
+                    setImmediate(() => {
+                        module.dispose();
+                    });
+                });
             }
-
-        } else {
-            if (validate)
-                module.validate();
-
-            if (optimize)
-                module.optimize();
-
-            this._errorCounts = 0;
-
-            this.setState({
-                compileSuccess: true,
-                compileFailure: false,
-
-                output: {
-                    text:   module.emitText(),
-                    binary: module.emitBinary()
-                }
-            });
-
-            module.dispose();
-        }
+        });
     }
 
     compileByTurboScript(code, options) {
