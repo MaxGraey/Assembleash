@@ -30,6 +30,7 @@ const input =
 }`;
 
 
+const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;
 
 export default class EditorContainer extends Component {
@@ -65,6 +66,7 @@ export default class EditorContainer extends Component {
              stdlib:            false,
              longMode:          false,
 
+             annotations:       OrderedSet(),
              notifications:     OrderedSet(),
              notificationCount: 0
          };
@@ -106,6 +108,7 @@ export default class EditorContainer extends Component {
         if (!this.inputEditor) return;
 
         this.removeAllNotification();
+        this.removeAllAnnotation();
 
         let stdlib = this.state.stdlib;
         const { compiler, validate, optimize, longMode } = this.state;
@@ -176,6 +179,7 @@ export default class EditorContainer extends Component {
                     if (i <= MaxPrintingErrors) {
                         console.error(errorMessage);
                         this.addNotification(errorMessage);
+                        this.addAnnotation(errorMessage);
                     } else {
                         errorMessage = `Too many errors (${diagnostics.length})`;
                         console.error(errorMessage);
@@ -227,7 +231,7 @@ export default class EditorContainer extends Component {
         const mode = this.state.compileMode;
 
         if (mode === CompileModes[0]) { // Auto
-            this.updateCompilationWithDelay(2000);
+            this.updateCompilationWithDelay(AutoCompilationDelay);
         }
     }
 
@@ -292,6 +296,11 @@ export default class EditorContainer extends Component {
     })
 
     addNotification = (message) => {
+        // skip notifications for Auto compile mode
+        if (this.state.compileMode === CompileModes[0]) { //Auto
+            return;
+        }
+
     	const { notifications, notificationCount } = this.state;
 
         const id = notifications.size + 1;
@@ -314,6 +323,22 @@ export default class EditorContainer extends Component {
         		onClick: () => this.removeAllNotification()
         	})
         });
+    }
+
+    addAnnotation = (message, type = 'error') => {
+        const rowRegex = /\(([^)]+)\)/;
+        const matches = rowRegex.exec(message);
+        if (matches && matches.length === 2) {
+            var row = ((matches[1].split(','))[0] >>> 0) - 1;
+            let annotations = this.state.annotations;
+            this.setState({ annotations:
+                annotations.add({ row, type, text: message })
+            });
+        }
+    }
+
+    removeAllAnnotation = () => {
+        this.setState({ annotations: OrderedSet() });
     }
 
     removeNotification = index => {
@@ -339,6 +364,7 @@ export default class EditorContainer extends Component {
             compileSuccess,
             compileFailure,
             notifications,
+            annotations,
 
             inputEditorWidth,
             outputEditorWidth,
@@ -406,7 +432,7 @@ export default class EditorContainer extends Component {
                         this._clearCompileTimeout();
                         this.setState({ compileMode: mode });
                         if (mode === CompileModes[0]) { // Auto
-                            this.updateCompilationWithDelay(2000);
+                            this.updateCompilationWithDelay(AutoCompilationDelay);
                         }
                     }}
                     onSettingsOptionChange={ this.onSettingsOptionChange }
@@ -430,6 +456,7 @@ export default class EditorContainer extends Component {
                         width={ inputEditorWidth }
                         height={ editorsHeight }
                         code={ input }
+                        annotations={ annotations.toArray() }
                         onChange={ this.onInputChange }
                     >
                     </Editor>

@@ -15,21 +15,23 @@ import '../ace.editor.css'
 
 export default class Editor extends Component {
     static propTypes = {
-        focus:    PropTypes.bool,
-        readOnly: PropTypes.bool,
-        width:    PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        height:   PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-        code:     PropTypes.string,
-        onChange: PropTypes.func
+        focus:       PropTypes.bool,
+        readOnly:    PropTypes.bool,
+        width:       PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        height:      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+        code:        PropTypes.string,
+        annotations: PropTypes.array,
+        onChange:    PropTypes.func
     }
 
     static defaultProps = {
-        focus:    false,
-        readOnly: false,
-        width:    '100%',
-        height:   '750px',
-        code:     '',
-        onChange: () => {}
+        focus:       false,
+        readOnly:    false,
+        width:       '100%',
+        height:      '750px',
+        code:        '',
+        annotations: null,
+        onChange:    () => {}
     }
 
     constructor(props) {
@@ -66,7 +68,7 @@ export default class Editor extends Component {
 
     render() {
         const { value } = this.state;
-        const { width, height, focus, readOnly, code } = this.props;
+        const { width, height, focus, readOnly, code, annotations } = this.props;
 
         let text    = !readOnly ? value : code;
         let tabSize = !readOnly ? 4 : 1;
@@ -77,6 +79,12 @@ export default class Editor extends Component {
 
                 focus={ focus }
                 readOnly={ readOnly }
+
+                // annotations={ [
+                //     { row: 0, type: 'error', text: 'some error' }
+                // ] }
+
+                annotations={ annotations }
 
                 showGutter
                 showLineNumbers
