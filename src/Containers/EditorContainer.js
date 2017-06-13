@@ -443,7 +443,7 @@ export default class EditorContainer extends Component {
                     ref={ self => this.splitEditor = self }
                     split="vertical"
                     minSize={ 200 }
-                    defaultSize="58%"
+                    defaultSize="62%"
                     onChange={ this.onSplitPositionChange }
                     style={{
                         margin: '12px'

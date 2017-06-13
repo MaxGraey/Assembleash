@@ -90,7 +90,7 @@ export function formatCode(buffer) {
         if (index !== last)
             result += ', ';
 
-        if ((index & 15) === 0)
+        if ((index % 10) === 0)
             result += '\r\n    ';
 
         return result;
