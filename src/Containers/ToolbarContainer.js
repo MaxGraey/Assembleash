@@ -21,7 +21,6 @@ export default class ToolbarContainer extends Component {
         version:                PropTypes.string,
         compiler:               PropTypes.string,
         compileDisabled:        PropTypes.bool,
-        requireStdLib:          PropTypes.bool,
 
         onCompilerChange:       PropTypes.func,
         onCompileClick:         PropTypes.func,
@@ -34,7 +33,6 @@ export default class ToolbarContainer extends Component {
         version:                '0.0.0',
         compiler:               'Unknown',
         compileDisabled:        false,
-        requireStdLib:          false,
 
         onCompilerChange:       () => {},
         onCompileClick:         () => {},
@@ -59,8 +57,7 @@ export default class ToolbarContainer extends Component {
             onCompilerChange,
             onCompileModeChange,
             onCompileClick,
-            onOutputSelect,
-            requireStdLib
+            onOutputSelect
         } = this.props;
 
         return (
@@ -98,7 +95,7 @@ export default class ToolbarContainer extends Component {
                 />
 
                 <ButtonToolbar className="pull-right">
-                    <SettingsButton requireStdLib={ requireStdLib } onOptionChange={ onSettingsOptionChange }/>
+                    <SettingsButton onOptionChange={ onSettingsOptionChange }/>
                     <OutputButtonGroup onSelect={ onOutputSelect }/>
                 </ButtonToolbar>
             </ButtonToolbar>

@@ -126,7 +126,7 @@ export default class EditorContainer extends Component {
         setImmediate(() => {
             if (!stdlib && isRequreStdlib(inputCode)) {
                 stdlib = true;
-                this.setState({ stdlib });
+                //this.setState({ stdlib });
             }
 
             setImmediate(() => {
@@ -371,8 +371,8 @@ export default class EditorContainer extends Component {
             editorsHeight,
 
             output,
-            outputType,
-            stdlib
+            outputType
+
         } = this.state;
 
         function notificationStyle(index, style, notification) {
@@ -424,7 +424,6 @@ export default class EditorContainer extends Component {
                     ref={ self => this.toolbar = self }
                     version={ version }
                     compiler={ compiler }
-                    requireStdLib={ stdlib }
                     compileDisabled={ !compilerReady }
                     onCompilerChange={ compiler => this.setState({ compiler }) }
                     onCompileClick={ this.onCompileButtonClick }

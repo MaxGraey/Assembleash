@@ -8,46 +8,23 @@ import {
 import ToggledOption from './ToggledOption'
 import tooltip from './Tooltip'
 
+import { CompilerDescriptions, CompilerList } from '../Common/Common'
+
 export default class SettingsButton extends Component {
 
-    static Options = {
-        'stdlib': {
-            label: 'Library',
-            default: false
-        },
-        'longMode': {
-            label: 'Use 64 bits',
-            default: false
-        },
-        'validate': {
-            label: 'Validate',
-            default: false
-        },
-        'optimize': {
-            label: 'Optimize',
-            default: true
-        }
-    }
-
     static defaultProps = {
-        requireStdLib: false
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            requireStdLib: props.requireStdLib
-        }
+        compiler: CompilerList[1],
+        onOptionChange: () => {}
     }
 
     onChange = (key, value) => {
         const { onOptionChange } = this.props;
-        onOptionChange && onOptionChange(key, value);
+        onOptionChange(key, value);
     }
 
     render() {
-        const options = SettingsButton.Options;
-        const requireStdLib = this.props.requireStdLib;
+        const { compiler, requireStdLib } = this.props;
+        const options = CompilerDescriptions[compiler].options;
 
         return (
             <OverlayTrigger
@@ -69,16 +46,21 @@ export default class SettingsButton extends Component {
                         paddingRight: '0.9em'
                     }}
                 >
-                    { Object.keys(options).map((key, index) =>
-                        <ToggledOption
-                            key={ index }
-                            // defaultActive={ options[key].default }
-                            name={ `option-${key}` }
-                            label={ options[key].label }
-                            active={ (key === 'stdlib' && requireStdLib) || options[key].default }
-                            onChange={ value => { this.onChange(key, value) }}
-                        />)
-                    }
+                    { Object.keys(options).map((key, index) => {
+                        if (!options[key].label) return null;
+
+                        const defaultActive = options[key].default || false;
+
+                        return (
+                            <ToggledOption
+                                key={ key }
+                                defaultActive={ defaultActive }
+                                name={ `option-${key}` }
+                                label={ options[key].label }
+                                onChange={ value => { this.onChange(key, value) }}
+                            />
+                        );
+                    }) }
                 </DropdownButton>
             </OverlayTrigger>
         );

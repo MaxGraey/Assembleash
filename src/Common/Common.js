@@ -3,18 +3,58 @@ export const CompileModes = ['Auto', 'Manual', 'Decompile'];
 
 export const CompilerDescriptions = {
     'TurboScript': {
-        url:    'compilers/Turboscript/index.js',
-        github: 'https://github.com/01alchemist/TurboScript'
+        offline: true,
+        url:     'compilers/Turboscript/index.js',
+        github:  'https://github.com/01alchemist/TurboScript',
+        options: {
+
+        }
     },
 
     'AssemblyScript': {
+        offline: true,
         url:    'compilers/AssemblyScript/assemblyscript.min.js',
-        github: 'https://github.com/dcodeIO/AssemblyScript'
+        github: 'https://github.com/dcodeIO/AssemblyScript',
+        options: {
+            stdlib: {
+                label: 'Library',
+                default: false
+            },
+            longMode: {
+                label: 'Use 64 bits',
+                default: false
+            },
+            validate: {
+                label: 'Validate',
+                default: false
+            },
+            optimize: {
+                label: 'Optimize',
+                default: true
+            }
+        }
     },
 
     'Speedy.js': {
-        url:    '',
-        github: ''
+        offline: false,
+        url:    'https://speedyjs-saas.herokuapp.com/compile',
+        github: 'https://github.com/MichaReiser/speedy.js',
+        options: {
+            unsafe: {
+                label: 'Unsafe',
+                default: true
+            },
+            saveWast: {
+                default: true
+            },
+            binaryenOpt: {
+                label: 'Optimize',
+                default: true
+            },
+            optimizationLevel: {
+                default: "s"
+            }
+        }
     }
 };
 
@@ -37,9 +77,9 @@ export function isRequreStdlib(code) {
 
 export function anyExists(array, value) {
     if (Array.isArray(value)) {
-        for (let j = 0, len = array.length; j < len; j++) {
+        for (let j = 0, lj = array.length; j < lj; j++) {
             let current = array[j];
-            for (let i = 0, len = value.length; i < len; i++) {
+            for (let i = 0, li = value.length; i < li; i++) {
                 if (current === value[i]) {
                     return true;
                 }
