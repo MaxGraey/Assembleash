@@ -194,17 +194,17 @@ export default class EditorContainer extends Component {
 
                     this._errorCounts = 0;
 
-                    this.setState({
-                        compileSuccess: true,
-                        compileFailure: false,
-
-                        output: {
-                            text:   module.emitText(),
-                            binary: module.emitBinary()
-                        }
-                    });
-
                     setImmediate(() => {
+                        this.setState({
+                            compileSuccess: true,
+                            compileFailure: false,
+
+                            output: {
+                                text:   module.emitText(),
+                                binary: module.emitBinary()
+                            }
+                        });
+
                         module.dispose();
                     });
                 });
