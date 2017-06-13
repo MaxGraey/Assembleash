@@ -48,7 +48,7 @@ export default class Footer extends Component {
         }
 
         return (
-            <ButtonToolbar className="navbar-fixed-bottom" style={{ padding: '0', margin: '20px 20px 7px 15px' }}>
+            <ButtonToolbar className="navbar-fixed-bottom" style={{ padding: 0, margin: '20px 20px 7px 15px' }}>
                 <Button bsSize='large' bsStyle='info' className="pull-right" disabled={ downloadDisabled } onClick={ onDownloadPressed }>
                     <span><Glyphicon glyph="download" style={{ fontSize: "125%", marginTop: '-0.5rem', top: '0.5rem' }}/>Download .wasm</span>
                 </Button>
@@ -62,13 +62,12 @@ export default class Footer extends Component {
                 <label style={{
                     marginLeft: '55px',
                     float: 'left',
+                    paddingTop: '3px',
                     display: 'block'
                 }}>
                     <h4
                         className={ messageClass }
                         style={{
-                            boxSizing: 'border-box',
-                            paddingTop: '1pt',
                             fontWeight: 100,
                             textShadow: '0 0 1px rgba(0,0,0,0.6)'
                         }} >{ statusBarMessage }</h4>

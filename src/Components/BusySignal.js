@@ -35,22 +35,32 @@ export default class BusySignal extends Component {
     _renderReadyState() {
         const state = this.props.state;
         if (state === 'success') {
-            return <Glyphicon glyph="ok" className="busy-success-color"/>;
+            return (
+                <Glyphicon
+                    glyph="ok"
+                    className="busy-success-color"
+                    style={{ paddingTop: '5px', paddingLeft: '5px' }}
+                />
+            );
         } else if (state === 'failure') {
-            return <Glyphicon glyph="remove" className="busy-filure-color"/>;
+            return (
+                <Glyphicon
+                    glyph="remove"
+                    className="busy-filure-color"
+                    style={{ paddingTop: '5px', paddingLeft: '5px' }}
+                />
+            );
         }
 
         return null;
     }
 
 	render() {
-        const state = this.props.state;
         return (
             <div className="busy-signal">
                 { this._renderSpinner() }
                 { this._renderDot() }
                 { this._renderReadyState() }
-                { this.props.children }
             </div>
         );
 	}
