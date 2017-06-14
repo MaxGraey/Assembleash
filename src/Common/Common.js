@@ -6,9 +6,7 @@ export const CompilerDescriptions = {
         offline: true,
         url:     'compilers/Turboscript/index.js',
         github:  'https://github.com/01alchemist/TurboScript',
-        options: {
-
-        }
+        options: {}
     },
 
     'AssemblyScript': {
@@ -16,45 +14,84 @@ export const CompilerDescriptions = {
         url:    'compilers/AssemblyScript/assemblyscript.min.js',
         github: 'https://github.com/dcodeIO/AssemblyScript',
         options: {
-            stdlib: {
-                label: 'Library',
+            // detect automatically
+            /*stdlib: {
+                label:   'Library',
                 default: false
-            },
+            },*/
             longMode: {
-                label: 'Use 64 bits',
+                label:   'Use 64 bits',
                 default: false
             },
             validate: {
-                label: 'Validate',
+                label:   'Validate',
                 default: false
             },
             optimize: {
-                label: 'Optimize',
+                label:   'Optimize',
                 default: true
             }
-        }
+        },
+        example:
+`export function fib(num: int32): int32 {
+    if (num <= 1) return 1;
+    return fib(num - 1) + fib(num - 2);
+}`
     },
 
     'Speedy.js': {
         offline: false,
-        url:    'https://speedyjs-saas.herokuapp.com/compile',
-        github: 'https://github.com/MichaReiser/speedy.js',
+        url:     'https://speedyjs-saas.herokuapp.com',
+        github:  'https://github.com/MichaReiser/speedy.js',
         options: {
             unsafe: {
-                label: 'Unsafe',
-                default: true
-            },
-            saveWast: {
+                label:   'Unsafe',
                 default: true
             },
             binaryenOpt: {
-                label: 'Optimize',
+                label:   'Optimize',
                 default: true
-            },
-            optimizationLevel: {
-                default: "s"
             }
-        }
+        },
+        version: () => requestCommand(
+            CompilerDescriptions['Speedy.js'].url + '/version'
+        ),
+        compile: (source, options) => {
+            const requestBody = {
+                files: [{
+                    source,
+                    fileName: 'module.ts'
+                }],
+                tsconfig: options
+            };
+
+            return requestCommand(
+                CompilerDescriptions['Speedy.js'].url + '/compile',
+                requestBody
+            );
+        },
+        example:
+`
+async function fib(value: int): Promise<int> {
+    "use speedyjs";
+
+    return fibSync(value);
+}
+
+function fibSync(value: int): int {
+    "use speedyjs";
+
+    if (value <= 2) {
+        return 1;
+    }
+
+    return fibSync(value - 2) + fibSync(value - 1);
+}
+
+async function main() {
+    console.log(await fib(40));
+}
+`
     }
 };
 
@@ -69,11 +106,13 @@ const LibStdKeywords = [
     'memcmp'
 ];
 
-const LibStdKeywordsRegex = new RegExp(LibStdKeywords.join("|"), "g");
+const LibStdKeywordsRegex = new RegExp(LibStdKeywords.join("|"), "gm");
 
 export function isRequreStdlib(code) {
+    LibStdKeywordsRegex.lastIndex = 0;
     return LibStdKeywordsRegex.test(code);
 }
+
 
 export function anyExists(array, value) {
     if (Array.isArray(value)) {
@@ -95,21 +134,28 @@ export function anyExists(array, value) {
     return false;
 }
 
-export function getCompilerVersion(compiler) {
+
+export function getCompilerVersion(compiler, callback = () => {}) {
     switch (compiler) {
         case 'TurboScript':
-            return '1.1.0-alpha';
+            callback('1.0.0-beta');
+            return;
 
         case 'AssemblyScript':
             if (window.assemblyscript)
-                return window.assemblyscript.version;
-            break;
+                callback(window.assemblyscript.version);
+            return;
 
-        default: break;
+        case 'Speedy.js':
+            CompilerDescriptions['Speedy.js'].version()
+                .then(version => callback(version['speedyjs-compiler']))
+                .catch(err => callback('0.0.0'))
+            return;
+
+        default: callback('0.0.1');
     }
-
-    return '0.0.1';
 }
+
 
 export function formatCode(buffer) {
     if (!buffer)
@@ -140,9 +186,34 @@ export function formatCode(buffer) {
     return output;
 }
 
+
 export function formatSize(bytes) {
     const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes === 0) return '0 Bytes';
     let i = Math.floor(Math.log(bytes) * (1 / Math.log(1024)));
     return Math.round(bytes * Math.pow(1024, -i) * 100) / 100 + ' ' + units[i];
+}
+
+
+function checkResponseStatus(response) {
+	if (response.status >= 200 && response.status < 300) {
+		return Promise.resolve(response);
+	} else {
+		return Promise.reject(new Error(response.statusText))
+	}
+}
+
+export function requestCommand(url, config = null) {
+    const headers = config ? {
+        'Accept':       'application/json',
+        'Content-Type': 'application/json'
+    } : void 0;
+
+    return fetch(url, {
+        headers,
+        method: config ? 'POST' : 'GET',
+        body:   config ? JSON.stringify(config) : void 0
+    })
+    //.then(checkResponseStatus)
+    .then(response => response.json());
 }

@@ -23,12 +23,6 @@ import {
 
 import { OrderedSet } from 'immutable'
 
-const input =
-`export function fib(num: int32): int32 {
-    if (num <= 1) return 1;
-    return fib(num - 1) + fib(num - 2);
-}`;
-
 
 const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;
@@ -45,7 +39,7 @@ export default class EditorContainer extends Component {
     constructor(props) {
          super(props);
          this.state = {
-             version:           '0.0.1',
+             version:           '0.0.0',
              compiler:          props.compiler,
              compileMode:       CompileModes[0],
              compilerReady:     false,
@@ -54,6 +48,7 @@ export default class EditorContainer extends Component {
              inputEditorWidth:  '100%',
              outputEditorWidth: '100%',
              editorsHeight:     '750px',
+             input:             CompilerDescriptions[props.compiler].example.trim(),
              output: {
                  text:   '',
                  binary: null
@@ -63,8 +58,9 @@ export default class EditorContainer extends Component {
              // settings
              validate:          true,
              optimize:          true,
-             stdlib:            false,
+             //stdlib:            false,
              longMode:          false,
+             unsafe:            true,
 
              annotations:       OrderedSet(),
              notifications:     OrderedSet(),
@@ -72,9 +68,11 @@ export default class EditorContainer extends Component {
          };
 
          this._errorCounts       = 0;
-         this._lastTextInput     = input.trim();
+         this._lastTextInput     = '';
          this._compileTimerDelay = null;
          this._cachedClientRect  = null;
+
+         this.changeCompiler(props.compiler);
     }
 
     componentDidMount() {
@@ -110,8 +108,15 @@ export default class EditorContainer extends Component {
         this.removeAllNotification();
         this.removeAllAnnotation();
 
-        let stdlib = this.state.stdlib;
-        const { compiler, validate, optimize, longMode } = this.state;
+        const {
+            compiler,
+            //stdlib,
+            longMode,
+            validate,
+            optimize,
+            unsafe
+        } = this.state;
+
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton) {
@@ -124,44 +129,54 @@ export default class EditorContainer extends Component {
         }
 
         setImmediate(() => {
-            if (!stdlib && isRequreStdlib(inputCode)) {
-                stdlib = true;
-                //this.setState({ stdlib });
-            }
-
-            setImmediate(() => {
-                try {
-                    if (compiler === 'AssemblyScript') {
+            try {
+                switch (compiler) {
+                    case 'AssemblyScript':
+                        const stdlib = isRequreStdlib(inputCode);
                         this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
-                    } else if (compiler === 'TurboScript') {
+                        break;
+
+                    case 'TurboScript':
                         this.compileByTurboScript(inputCode);
-                    } else {
-                        console.warn('Compiler not supported');
-                    }
-                } catch (e) {
-                    this.setState({
-                        compileSuccess: false,
-                        compileFailure: true
-                    });
+                        break;
 
-                    this._errorCounts = 1;
+                    case 'Speedy.js':
+                        this.compileBySpeedyJs(inputCode, { optimize, unsafe, saveWast: true });
+                        break;
 
-                    let message = '<' + compiler + '> internal error:\n';
-                    this.addNotification(message + e.message);
-                    console.error(message, e);
-
-                } finally {
-                    if (this.toolbar && this.toolbar.compileButton)
-                        this.toolbar.compileButton.endCompile();
+                    default: console.warn('Compiler not supported');
                 }
-            });
+
+            } catch (e) {
+
+                this.setState({
+                    compileSuccess: false,
+                    compileFailure: true
+                });
+
+                this._errorCounts = 1;
+
+                const message = '<' + compiler + '> internal error:\n';
+                this.addNotification(message + e.message);
+                console.error(message, e);
+
+            } finally {
+                if (this.toolbar && this.toolbar.compileButton)
+                    this.toolbar.compileButton.endCompile();
+            }
         });
     }
 
     compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
 
         const as = window.assemblyscript;
-        var module = as.Compiler.compileString(code, { silent: true, uintptrSize: longMode ? 8 : 4, noLib: !stdlib });
+        const module = as.Compiler.compileString(
+            code, {
+                silent: true,
+                uintptrSize: longMode ? 8 : 4,
+                noLib: !stdlib
+            }
+        );
 
         setImmediate(() => {
             if (!module) {
@@ -220,12 +235,78 @@ export default class EditorContainer extends Component {
         // TODO
     }
 
+    compileBySpeedyJs(code, options) {
+        CompilerDescriptions['Speedy.js'].compile(code, options)
+        .then(response => {
+            this.setState({
+                compilerReady:  true
+            });
+
+            //console.log(response);
+
+            if (response.length) {
+                const output = response[0];
+                if (output.exitStatus !== 0) {
+                    this.setState({
+                        compileSuccess: false,
+                        compileFailure: true
+                    });
+
+                    // compiled failure
+                    const diagnostics = output.diagnostics;
+                    this._errorCounts = diagnostics.length;
+
+                    for (let i = 0; i < diagnostics.length; i++) {
+                        let errorMessage = diagnostics[i];
+
+                        if (i <= MaxPrintingErrors) {
+                            console.error(errorMessage);
+                            this.addNotification(errorMessage);
+                            this.addAnnotation(errorMessage);
+                        } else {
+                            errorMessage = `Too many errors (${diagnostics.length})`;
+                            console.error(errorMessage);
+                            this.addNotification(errorMessage);
+                            break;
+                        }
+                    }
+                } else {
+
+                    this._errorCounts = 0;
+
+                    // compiled successfully
+                    this.setState({
+                        compileSuccess: true,
+                        compileFailure: false,
+
+                        output: {
+                            text:   output.wast || '',
+                            binary: new Uint8Array(output.wasm)
+                        }
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            this.setState({
+                compilerReady:  false,
+                compileSuccess: false,
+                compileFailure: true
+            });
+
+            this._errorCounts = 1;
+
+            const message = '<' + this.state.compiler + '> Service not response';
+            this.addNotification(message);
+            console.error(message);
+        });
+    }
+
     onInputChange = value => {
         // skip compilation if possible
         value = value.trim();
-        if (this._lastTextInput === value) {
+        if (this._lastTextInput === value)
             return;
-        }
 
         this._lastTextInput = value;
         const mode = this.state.compileMode;
@@ -241,13 +322,27 @@ export default class EditorContainer extends Component {
         FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
     }
 
-    onScriptLoad = () => {
+    changeCompiler = compiler => {
+        compiler = compiler || this.state.compiler;
         this.setState({
-            compilerReady: true,
-            version: getCompilerVersion(this.state.compiler)
+            compiler,
+            input: CompilerDescriptions[compiler].example
         });
+        getCompilerVersion(
+            compiler,
+            version => {
+                this.setState({ version });
+            }
+        );
+        if (this.state.compilerReady || !CompilerDescriptions[compiler].offline) {
+            this.updateCompilationWithDelay(AutoCompilationDelay);
+        }
+    }
 
-        this.updateCompilation();
+    onScriptLoad = () => {
+        this.setState({ compilerReady: true }, () => {
+            this.changeCompiler();
+        });
     }
 
     onScriptError = () => {
@@ -269,7 +364,7 @@ export default class EditorContainer extends Component {
 
             this.updateCompilation();
 
-        } else if (CompileModes[2]) {
+        } else if (CompileModes[2]) { // Decompile
             // Decompile not supported yet
         }
     }
@@ -370,6 +465,7 @@ export default class EditorContainer extends Component {
             outputEditorWidth,
             editorsHeight,
 
+            input,
             output,
             outputType
 
@@ -400,7 +496,7 @@ export default class EditorContainer extends Component {
         const canBinaryDownload   = compilerReady && compileSuccess && output.binary;
         const compilerDescription = CompilerDescriptions[compiler];
 
-        const compilerScript = (compilerDescription ? <Script
+        const compilerScript = (compilerDescription && compilerDescription.offline ? <Script
             url={ compilerDescription.url }
             onError={ this.onScriptError }
             onLoad={ this.onScriptLoad }
@@ -409,6 +505,7 @@ export default class EditorContainer extends Component {
         let busyState = 'busy';
 
         if (compilerReady) {
+            // TODO change this to compileStatus
             if (!compileSuccess && compileFailure) {
                 busyState = 'failure';
             } else if (compileSuccess && !compileFailure) {
@@ -425,7 +522,7 @@ export default class EditorContainer extends Component {
                     version={ version }
                     compiler={ compiler }
                     compileDisabled={ !compilerReady }
-                    onCompilerChange={ compiler => this.setState({ compiler }) }
+                    onCompilerChange={ this.changeCompiler }
                     onCompileClick={ this.onCompileButtonClick }
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();

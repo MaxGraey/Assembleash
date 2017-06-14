@@ -17,13 +17,8 @@ export default class SettingsButton extends Component {
         onOptionChange: () => {}
     }
 
-    onChange = (key, value) => {
-        const { onOptionChange } = this.props;
-        onOptionChange(key, value);
-    }
-
     render() {
-        const { compiler, requireStdLib } = this.props;
+        const { compiler, onOptionChange } = this.props;
         const options = CompilerDescriptions[compiler].options;
 
         return (
@@ -36,6 +31,7 @@ export default class SettingsButton extends Component {
                 <DropdownButton
                     noCaret
                     pullRight
+                    disabled={ !options || !Object.keys(options).length }
                     id="settings-button"
                     className="pull-right"
                     bsStyle="info"
@@ -47,17 +43,17 @@ export default class SettingsButton extends Component {
                     }}
                 >
                     { Object.keys(options).map((key, index) => {
-                        if (!options[key].label) return null;
+                        if (!options[key] || !options[key].label)
+                            return null;
 
                         const defaultActive = options[key].default || false;
-
                         return (
                             <ToggledOption
                                 key={ key }
                                 defaultActive={ defaultActive }
                                 name={ `option-${key}` }
                                 label={ options[key].label }
-                                onChange={ value => { this.onChange(key, value) }}
+                                onChange={ value => onOptionChange(key, value) }
                             />
                         );
                     }) }

@@ -4,8 +4,11 @@ Playground for WebAssembly and Typescript-like languages.
 
 **Support languges:**
 - [AssemblyScript](https://maxgraey.github.io/Assembleash/#AssemblyScript)
+- [Speedy.js](https://maxgraey.github.io/Assembleash/#Speedy.js)
 - TurboScript (soon!)
-- Speedy.js (soon!)
+
+**KNOWN ISSUES**
+- After change compiler you should refresh page for updating input editor.
 
 **TODO**
 - Add wast syntax
