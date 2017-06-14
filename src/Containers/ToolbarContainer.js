@@ -44,14 +44,14 @@ export default class ToolbarContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            compiler: props.compiler,
-            version:  props.version
+            compiler: props.compiler
         }
     }
 
     render() {
-        const { compiler, version } = this.state;
+        const { compiler } = this.state;
         const {
+            version,
             compileDisabled,
             onSettingsOptionChange,
             onCompilerChange,
@@ -77,10 +77,7 @@ export default class ToolbarContainer extends Component {
                     <CompilerButton
                         compiler={ compiler }
                         onSelect={ compiler => {
-                            this.setState({
-                                compiler,
-                                version: getCompilerVersion(compiler)
-                            });
+                            this.setState({ compiler });
                             onCompilerChange(compiler);
                         }}
                     />

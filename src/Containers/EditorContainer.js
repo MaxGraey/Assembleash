@@ -45,7 +45,7 @@ export default class EditorContainer extends Component {
     constructor(props) {
          super(props);
          this.state = {
-             version:           '0.0.1',
+             version:           '0.0.0',
              compiler:          props.compiler,
              compileMode:       CompileModes[0],
              compilerReady:     false,
@@ -223,9 +223,8 @@ export default class EditorContainer extends Component {
     onInputChange = value => {
         // skip compilation if possible
         value = value.trim();
-        if (this._lastTextInput === value) {
+        if (this._lastTextInput === value)
             return;
-        }
 
         this._lastTextInput = value;
         const mode = this.state.compileMode;
@@ -241,12 +240,22 @@ export default class EditorContainer extends Component {
         FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
     }
 
-    onScriptLoad = () => {
-        this.setState({
-            compilerReady: true,
-            version: getCompilerVersion(this.state.compiler)
-        });
+    changeCompiler = compiler => {
+        //if (this.state.compiler === compiler)
+        //    return;
+        compiler = compiler || this.state.compiler;
+        this.setState({ compiler });
+        getCompilerVersion(
+            compiler,
+            version => {
+                this.setState({ version });
+            }
+        );
+    }
 
+    onScriptLoad = () => {
+        this.changeCompiler();
+        this.setState({ compilerReady: true });
         this.updateCompilation();
     }
 
@@ -269,7 +278,7 @@ export default class EditorContainer extends Component {
 
             this.updateCompilation();
 
-        } else if (CompileModes[2]) {
+        } else if (CompileModes[2]) { // Decompile
             // Decompile not supported yet
         }
     }
@@ -409,6 +418,7 @@ export default class EditorContainer extends Component {
         let busyState = 'busy';
 
         if (compilerReady) {
+            // TODO change this to compileStatus
             if (!compileSuccess && compileFailure) {
                 busyState = 'failure';
             } else if (compileSuccess && !compileFailure) {
@@ -425,7 +435,7 @@ export default class EditorContainer extends Component {
                     version={ version }
                     compiler={ compiler }
                     compileDisabled={ !compilerReady }
-                    onCompilerChange={ compiler => this.setState({ compiler }) }
+                    onCompilerChange={ this.changeCompiler }
                     onCompileClick={ this.onCompileButtonClick }
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();

@@ -17,19 +17,19 @@ export const CompilerDescriptions = {
         github: 'https://github.com/dcodeIO/AssemblyScript',
         options: {
             stdlib: {
-                label: 'Library',
+                label:   'Library',
                 default: false
             },
             longMode: {
-                label: 'Use 64 bits',
+                label:   'Use 64 bits',
                 default: false
             },
             validate: {
-                label: 'Validate',
+                label:   'Validate',
                 default: false
             },
             optimize: {
-                label: 'Optimize',
+                label:   'Optimize',
                 default: true
             }
         }
@@ -37,23 +37,40 @@ export const CompilerDescriptions = {
 
     'Speedy.js': {
         offline: false,
-        url:    'https://speedyjs-saas.herokuapp.com/compile',
-        github: 'https://github.com/MichaReiser/speedy.js',
+        url:     'https://speedyjs-saas.herokuapp.com',
+        github:  'https://github.com/MichaReiser/speedy.js',
         options: {
             unsafe: {
-                label: 'Unsafe',
+                label:   'Unsafe',
                 default: true
             },
             saveWast: {
                 default: true
             },
             binaryenOpt: {
-                label: 'Optimize',
+                label:   'Optimize',
                 default: true
             },
             optimizationLevel: {
-                default: "s"
+                default: 's'
             }
+        },
+        version: () => requestCommand(
+            CompilerDescriptions['Speedy.js'].url + '/version'
+        ),
+        compile: (source, options) => {
+            const requestBody = {
+                files: [{
+                    source,
+                    fileName: 'module.ts'
+                }],
+                tsconfig: options
+            };
+
+            return requestCommand(
+                CompilerDescriptions['Speedy.js'].url + '/compile',
+                requestBody
+            );
         }
     }
 };
@@ -75,6 +92,7 @@ export function isRequreStdlib(code) {
     return LibStdKeywordsRegex.test(code);
 }
 
+
 export function anyExists(array, value) {
     if (Array.isArray(value)) {
         for (let j = 0, lj = array.length; j < lj; j++) {
@@ -95,21 +113,28 @@ export function anyExists(array, value) {
     return false;
 }
 
-export function getCompilerVersion(compiler) {
+
+export function getCompilerVersion(compiler, callback = () => {}) {
     switch (compiler) {
         case 'TurboScript':
-            return '1.1.0-alpha';
+            callback('1.1.0-alpha');
+            return;
 
         case 'AssemblyScript':
             if (window.assemblyscript)
-                return window.assemblyscript.version;
-            break;
+                callback(window.assemblyscript.version);
+            return;
 
-        default: break;
+        case 'Speedy.js':
+            CompilerDescriptions['Speedy.js'].version()
+                .then(version => callback(version))
+                .error(err => callback('0.0.0'))
+            return;
+
+        default: callback('0.0.1');
     }
-
-    return '0.0.1';
 }
+
 
 export function formatCode(buffer) {
     if (!buffer)
@@ -140,9 +165,26 @@ export function formatCode(buffer) {
     return output;
 }
 
+
 export function formatSize(bytes) {
     const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
     if (bytes === 0) return '0 Bytes';
     let i = Math.floor(Math.log(bytes) * (1 / Math.log(1024)));
     return Math.round(bytes * Math.pow(1024, -i) * 100) / 100 + ' ' + units[i];
+}
+
+
+export function requestCommand(url, options = null) {
+    const headers = options ? {
+        'Accept':       'application/json',
+        'Content-Type': 'application/json'
+    } : void 0;
+
+    return fetch(url, {
+        headers,
+        method: options ? 'POST' : 'GET',
+        body: options ? JSON.stringify(options) : void 0
+    }).then(
+        response => options ? response.json() : response
+    );
 }
