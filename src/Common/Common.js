@@ -6,9 +6,7 @@ export const CompilerDescriptions = {
         offline: true,
         url:     'compilers/Turboscript/index.js',
         github:  'https://github.com/01alchemist/TurboScript',
-        options: {
-
-        }
+        options: {}
     },
 
     'AssemblyScript': {
@@ -16,10 +14,11 @@ export const CompilerDescriptions = {
         url:    'compilers/AssemblyScript/assemblyscript.min.js',
         github: 'https://github.com/dcodeIO/AssemblyScript',
         options: {
-            stdlib: {
+            // detect automatically
+            /*stdlib: {
                 label:   'Library',
                 default: false
-            },
+            },*/
             longMode: {
                 label:   'Use 64 bits',
                 default: false
@@ -32,7 +31,12 @@ export const CompilerDescriptions = {
                 label:   'Optimize',
                 default: true
             }
-        }
+        },
+        example:
+`export function fib(num: int32): int32 {
+    if (num <= 1) return 1;
+    return fib(num - 1) + fib(num - 2);
+}`
     },
 
     'Speedy.js': {
@@ -44,15 +48,9 @@ export const CompilerDescriptions = {
                 label:   'Unsafe',
                 default: true
             },
-            saveWast: {
-                default: true
-            },
             binaryenOpt: {
                 label:   'Optimize',
                 default: true
-            },
-            optimizationLevel: {
-                default: 's'
             }
         },
         version: () => requestCommand(
@@ -71,7 +69,29 @@ export const CompilerDescriptions = {
                 CompilerDescriptions['Speedy.js'].url + '/compile',
                 requestBody
             );
-        }
+        },
+        example:
+`
+async function fib(value: int): Promise<int> {
+    "use speedyjs";
+
+    return fibSync(value);
+}
+
+function fibSync(value: int): int {
+    "use speedyjs";
+
+    if (value <= 2) {
+        return 1;
+    }
+
+    return fibSync(value - 2) + fibSync(value - 1);
+}
+
+async function main() {
+    console.log(await fib(40));
+}
+`
     }
 };
 
@@ -86,9 +106,10 @@ const LibStdKeywords = [
     'memcmp'
 ];
 
-const LibStdKeywordsRegex = new RegExp(LibStdKeywords.join("|"), "g");
+const LibStdKeywordsRegex = new RegExp(LibStdKeywords.join("|"), "gm");
 
 export function isRequreStdlib(code) {
+    LibStdKeywordsRegex.lastIndex = 0;
     return LibStdKeywordsRegex.test(code);
 }
 
@@ -127,7 +148,7 @@ export function getCompilerVersion(compiler, callback = () => {}) {
 
         case 'Speedy.js':
             CompilerDescriptions['Speedy.js'].version()
-                .then(callback)
+                .then(version => callback(version['speedyjs-compiler']))
                 .catch(err => callback('0.0.0'))
             return;
 
@@ -189,12 +210,10 @@ export function requestCommand(url, config = null) {
     } : void 0;
 
     return fetch(url, {
-            headers,
-            method: config ? 'POST' : 'GET',
-            body:   config ? JSON.stringify(config) : void 0,
-        })
-        //.then(checkResponseStatus)
-        .then(
-            response => config ? response.json() : response.text()
-        );
+        headers,
+        method: config ? 'POST' : 'GET',
+        body:   config ? JSON.stringify(config) : void 0
+    })
+    //.then(checkResponseStatus)
+    .then(response => response.json());
 }

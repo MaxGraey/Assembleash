@@ -1,15 +1,11 @@
-import React, { Component } from "react"
-/*import {
-    Button
-} from 'react-bootstrap';*/
-
-//import SwitchButton from 'react-switch-button'
+import React, { Component } from 'react'
 import Toggle from 'react-toggle'
 
 export default class ToggledOption extends Component {
     static defualtProps = {
         active: false,
-        defaultActive: false
+        defaultActive: false,
+        onChange: () => {}
     }
 
     constructor(props) {
@@ -19,35 +15,29 @@ export default class ToggledOption extends Component {
         };
     }
 
-    handleChange = () => {
-        let newValue = !this.state.active;
-        this.setState({
-            active: newValue
-        });
-
-        if (this.props.onChange) {
-            this.props.onChange(newValue);
-        }
+    onChange = () => {
+        const active = !this.state.active;
+        this.setState({ active });
+        this.props.onChange(active);
     }
 
     render() {
-        const { label, defaultActive } = this.props;
-        const { active } = this.state;
+        const { label } = this.props;
+        const active = this.state.active;
         return (
             <div
                 style={{
-                    textAlign: 'left',
-                    display: 'inline-block',
-                    paddingLeft: '15px',
+                    textAlign:    'left',
+                    display:      'inline-block',
+                    paddingLeft:  '15px',
                     paddingRight: '15px',
-                    width: '200px'
+                    width:        '200px'
                 }}>
                 <h4><span style={{ paddingRight: '10px', lineHeight: '3rem' }}>{ label }</span>
                     <Toggle
-                        aria-labelledby="toggle"
+                        aria-labelledby='toggle'
                         checked={ active }
-                        defaultChecked={ defaultActive }
-                        onChange={ this.handleChange }
+                        onChange={ this.onChange }
                     />
                 </h4>
             </div>

@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -45,19 +45,19 @@ export default class CompilerButton extends Component {
         const { compiler } = this.state;
 
         // not yet integrated
-        const disabledCompilers = ['Speedy.js', 'TurboScript'];
+        const disabledCompilers = [/*'Speedy.js',*/ 'TurboScript'];
 
         return (
             <OverlayTrigger
                 rootClose
-                placement="bottom"
-                trigger={["hover"]}
+                placement='bottom'
+                trigger={['hover']}
                 overlay={ tooltip('Choose Compiler') }
             >
                 <DropdownButton
-                    id="compilers"
-                    bsStyle="info"
-                    bsSize="large"
+                    id='compilers'
+                    bsStyle='info'
+                    bsSize='large'
                     title={ compiler }
                     style={{
                         minWidth: '210px'
@@ -70,7 +70,7 @@ export default class CompilerButton extends Component {
                             key={ index }
                             eventKey={ index }
                             href={ '#' + value }
-                            bsStyle="info"
+                            bsStyle='info'
                             disabled={ anyExists(disabledCompilers, value) }
                             style={{
                                 minWidth:  '210px',

@@ -92,7 +92,7 @@ export default class ToolbarContainer extends Component {
                 />
 
                 <ButtonToolbar className="pull-right">
-                    <SettingsButton onOptionChange={ onSettingsOptionChange }/>
+                    <SettingsButton compiler={ compiler } onOptionChange={ onSettingsOptionChange }/>
                     <OutputButtonGroup onSelect={ onOutputSelect }/>
                 </ButtonToolbar>
             </ButtonToolbar>

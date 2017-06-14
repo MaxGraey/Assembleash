@@ -31,6 +31,7 @@ export default class SettingsButton extends Component {
                 <DropdownButton
                     noCaret
                     pullRight
+                    disabled={ !options || !Object.keys(options).length }
                     id="settings-button"
                     className="pull-right"
                     bsStyle="info"
