@@ -128,7 +128,7 @@ export function getCompilerVersion(compiler, callback = () => {}) {
         case 'Speedy.js':
             CompilerDescriptions['Speedy.js'].version()
                 .then(callback)
-                .error(err => callback('0.0.0'))
+                .catch(err => callback('0.0.0'))
             return;
 
         default: callback('0.0.1');
@@ -174,6 +174,14 @@ export function formatSize(bytes) {
 }
 
 
+function checkResponseStatus(response) {
+	if (response.status >= 200 && response.status < 300) {
+		return Promise.resolve(response);
+	} else {
+		return Promise.reject(new Error(response.statusText))
+	}
+}
+
 export function requestCommand(url, config = null) {
     const headers = config ? {
         'Accept':       'application/json',
@@ -181,10 +189,12 @@ export function requestCommand(url, config = null) {
     } : void 0;
 
     return fetch(url, {
-        headers,
-        method: config ? 'POST' : 'GET',
-        body:   config ? JSON.stringify(config) : void 0
-    }).then(
-        response => config ? response.json() : response
-    );
+            headers,
+            method: config ? 'POST' : 'GET',
+            body:   config ? JSON.stringify(config) : void 0,
+        })
+        //.then(checkResponseStatus)
+        .then(
+            response => config ? response.json() : response.text()
+        );
 }
