@@ -232,7 +232,64 @@ export default class EditorContainer extends Component {
     }
 
     compileByTurboScript(code, options) {
-        // TODO
+        console.clear();
+        const turbo = window.turboscript;
+        const result = turbo.compileString(code, {
+            target: turbo.CompileTarget.WEBASSEMBLY,
+            silent: true,
+            logError: true
+        });
+        setImmediate(() => {
+            if (!result.success) {
+                this.setState({
+                    compileSuccess: false,
+                    compileFailure: true
+                });
+                let diagnostic = result.log.first;
+                let errorCount = 0;
+                let errorMessage;
+                while (diagnostic != null) {
+                    const location = diagnostic.range.source.indexToLineColumn(diagnostic.range.start);
+                    errorMessage = `[${location.line + 1}:${location.column + 1}] `;
+                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "ERROR: " : "WARN: ";
+                    errorMessage += diagnostic.message + "\n";
+
+                    if (errorCount <= MaxPrintingErrors) {
+                        this.addNotification(errorMessage);
+                        let annotations = this.state.annotations;
+                        this.setState({
+                            annotations: annotations.add({row: location.line, type: "error", text: errorMessage})
+                        });
+                    }
+
+                    errorCount++;
+                    this._errorCounts++;
+                    diagnostic = diagnostic.next;
+                }
+
+                if (errorCount > MaxPrintingErrors) {
+                    errorMessage = `Too many errors (${errorCount})`;
+                    console.error(errorMessage);
+                    this.addNotification(errorMessage);
+                }
+
+            } else {
+                setImmediate(() => {
+                    this._errorCounts = 0;
+
+                    setImmediate(() => {
+                        this.setState({
+                            compileSuccess: true,
+                            compileFailure: false,
+                            output: {
+                                text: result.wast,
+                                binary: result.wasm
+                            }
+                        });
+                    });
+                });
+            }
+        });
     }
 
     compileBySpeedyJs(code, options) {

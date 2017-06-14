@@ -4,9 +4,14 @@ export const CompileModes = ['Auto', 'Manual', 'Decompile'];
 export const CompilerDescriptions = {
     'TurboScript': {
         offline: true,
-        url:     'compilers/Turboscript/index.js',
+        url:     'compilers/Turboscript/turboscript.js',
         github:  'https://github.com/01alchemist/TurboScript',
-        options: {}
+        options: {},
+        example:
+`export function fib(num: int32): int32 {
+    if (num <= 1) return 1;
+    return fib(num - 1) + fib(num - 2);
+}`
     },
 
     'AssemblyScript': {
@@ -138,7 +143,8 @@ export function anyExists(array, value) {
 export function getCompilerVersion(compiler, callback = () => {}) {
     switch (compiler) {
         case 'TurboScript':
-            callback('1.0.0-beta');
+            if (window.turboscript)
+                callback(window.turboscript.version);
             return;
 
         case 'AssemblyScript':

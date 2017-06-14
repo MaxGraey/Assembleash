@@ -7,7 +7,7 @@ export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            compiler: CompilerList[1] // AssemblyScript
+            compiler: CompilerList[0] // AssemblyScript
         }
     }
 
