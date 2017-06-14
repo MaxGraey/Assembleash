@@ -7,6 +7,9 @@ Playground for WebAssembly and Typescript-like languages.
 - [Speedy.js](https://maxgraey.github.io/Assembleash/#Speedy.js)
 - TurboScript (soon!)
 
+**KNOWN ISSUES**
+- After change compiler you should refresh page for updating input editor.
+
 **TODO**
 - Add wast syntax
 - Improve typescript syntax
