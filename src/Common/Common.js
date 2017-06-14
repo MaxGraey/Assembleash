@@ -117,7 +117,7 @@ export function anyExists(array, value) {
 export function getCompilerVersion(compiler, callback = () => {}) {
     switch (compiler) {
         case 'TurboScript':
-            callback('1.1.0-alpha');
+            callback('1.0.0-beta');
             return;
 
         case 'AssemblyScript':
@@ -127,7 +127,7 @@ export function getCompilerVersion(compiler, callback = () => {}) {
 
         case 'Speedy.js':
             CompilerDescriptions['Speedy.js'].version()
-                .then(version => callback(version))
+                .then(callback)
                 .error(err => callback('0.0.0'))
             return;
 
@@ -174,17 +174,17 @@ export function formatSize(bytes) {
 }
 
 
-export function requestCommand(url, options = null) {
-    const headers = options ? {
+export function requestCommand(url, config = null) {
+    const headers = config ? {
         'Accept':       'application/json',
         'Content-Type': 'application/json'
     } : void 0;
 
     return fetch(url, {
         headers,
-        method: options ? 'POST' : 'GET',
-        body: options ? JSON.stringify(options) : void 0
+        method: config ? 'POST' : 'GET',
+        body:   config ? JSON.stringify(config) : void 0
     }).then(
-        response => options ? response.json() : response
+        response => config ? response.json() : response
     );
 }
