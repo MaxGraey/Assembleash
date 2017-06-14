@@ -263,6 +263,7 @@ export default class EditorContainer extends Component {
                     }
 
                     errorCount++;
+                    this._errorCounts++;
                     diagnostic = diagnostic.next;
                 }
 
@@ -271,8 +272,6 @@ export default class EditorContainer extends Component {
                     console.error(errorMessage);
                     this.addNotification(errorMessage);
                 }
-
-                this._errorCounts = errorCount;
 
             } else {
                 setImmediate(() => {
