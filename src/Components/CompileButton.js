@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
     OverlayTrigger,
@@ -69,8 +69,8 @@ export default class CompileButton extends Component {
         const title = (
             <span>
                 <Glyphicon
-                    glyph={ !isCompiling ? "play" : "refresh" }
-                    className={ isCompiling ? "gly-spin" : "" }
+                    glyph={ !isCompiling ? 'play' : 'refresh' }
+                    className={ isCompiling ? 'gly-spin' : '' }
                 />{ '\t' + compileMode }
             </span>
         );
@@ -78,17 +78,17 @@ export default class CompileButton extends Component {
         return (
             <OverlayTrigger
                 rootClose
-                placement="right"
-                trigger={["hover", "focus"]}
+                placement='right'
+                trigger={['hover', 'focus']}
                 overlay={ tooltip('Compile') }
             >
                 <SplitButton
-                    id="compileButton"
+                    id='compileButton'
                     title={ title }
                     disabled={ isCompiling || disabled }
-                    className="pull-left"
-                    bsStyle="success"
-                    bsSize="large"
+                    className='pull-left'
+                    bsStyle='success'
+                    bsSize='large'
                     style={{
                         cursor,
                         width: '161px'

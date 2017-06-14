@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
 import AceEditor from 'react-ace'
@@ -75,7 +75,7 @@ export default class Editor extends Component {
 
         return (
             <AceEditor
-                name="editor"
+                name='editor'
 
                 focus={ focus }
                 readOnly={ readOnly }
@@ -98,8 +98,8 @@ export default class Editor extends Component {
 
                 value={ text }
 
-                mode="typescript"
-                theme="tomorrow_night_eighties"
+                mode='typescript'
+                theme='tomorrow_night_eighties'
                 fontSize={ 14 }
                 width={ width }
                 height={ height }

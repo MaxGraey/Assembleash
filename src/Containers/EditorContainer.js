@@ -1,32 +1,27 @@
-import React, {Component} from "react";
-import PropTypes from "prop-types";
-import ReactDOM from "react-dom";
-import SplitPane from "react-split-pane";
-import Script from "react-load-script";
-import {NotificationStack} from "react-notification";
-import {throttle} from "throttle-debounce";
-import FileSaver from "file-saver";
 
-import ToolbarContainer from "./ToolbarContainer";
-import Editor from "../Components/Editor";
-import Footer from "../Components/Footer";
+import React, { Component }  from "react"
+import PropTypes             from 'prop-types'
+import ReactDOM              from "react-dom"
+import SplitPane             from 'react-split-pane'
+import Script                from 'react-load-script'
+import { NotificationStack } from 'react-notification'
+import { throttle }          from 'throttle-debounce'
+import FileSaver             from 'file-saver'
+
+import ToolbarContainer from './ToolbarContainer'
+import Editor           from '../Components/Editor'
+import Footer           from '../Components/Footer'
 
 import {
-    CompileModes,
-    CompilerDescriptions,
-    formatCode,
-    formatSize,
+    isRequreStdlib,
     getCompilerVersion,
-    isRequreStdlib
-} from "../Common/Common";
+    CompilerDescriptions,
+    CompileModes,
+    formatCode,
+    formatSize
+} from '../Common/Common'
 
-import {OrderedSet} from "immutable";
-
-const input =
-    `export function fib(num: int32): int32 {
-    if (num <= 1) return 1;
-    return fib(num - 1) + fib(num - 2);
-}`;
+import { OrderedSet } from 'immutable'
 
 
 const AutoCompilationDelay = 800; //ms
@@ -42,38 +37,42 @@ export default class EditorContainer extends Component {
     }
 
     constructor(props) {
-        super(props);
-        this.state = {
-            version: '0.0.1',
-            compiler: props.compiler,
-            compileMode: CompileModes[0],
-            compilerReady: false,
-            compileFailure: false,
-            compileSuccess: false,
-            inputEditorWidth: '100%',
-            outputEditorWidth: '100%',
-            editorsHeight: '750px',
-            output: {
-                text: '',
-                binary: null
-            },
-            outputType: 'text',
+         super(props);
+         this.state = {
+             version:           '0.0.0',
+             compiler:          props.compiler,
+             compileMode:       CompileModes[0],
+             compilerReady:     false,
+             compileFailure:    false,
+             compileSuccess:    false,
+             inputEditorWidth:  '100%',
+             outputEditorWidth: '100%',
+             editorsHeight:     '750px',
+             input:             CompilerDescriptions[props.compiler].example.trim(),
+             output: {
+                 text:   '',
+                 binary: null
+             },
+             outputType:        'text',
 
-            // settings
-            validate: true,
-            optimize: true,
-            stdlib: false,
-            longMode: false,
+             // settings
+             validate:          true,
+             optimize:          true,
+             //stdlib:            false,
+             longMode:          false,
+             unsafe:            true,
 
-            annotations: OrderedSet(),
-            notifications: OrderedSet(),
-            notificationCount: 0
-        };
+             annotations:       OrderedSet(),
+             notifications:     OrderedSet(),
+             notificationCount: 0
+         };
 
-        this._errorCounts = 0;
-        this._lastTextInput = input.trim();
-        this._compileTimerDelay = null;
-        this._cachedClientRect = null;
+         this._errorCounts       = 0;
+         this._lastTextInput     = '';
+         this._compileTimerDelay = null;
+         this._cachedClientRect  = null;
+
+         this.changeCompiler(props.compiler);
     }
 
     componentDidMount() {
@@ -109,8 +108,15 @@ export default class EditorContainer extends Component {
         this.removeAllNotification();
         this.removeAllAnnotation();
 
-        let stdlib = this.state.stdlib;
-        const {compiler, validate, optimize, longMode} = this.state;
+        const {
+            compiler,
+            //stdlib,
+            longMode,
+            validate,
+            optimize,
+            unsafe
+        } = this.state;
+
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton) {
@@ -123,44 +129,54 @@ export default class EditorContainer extends Component {
         }
 
         setImmediate(() => {
-            if (!stdlib && isRequreStdlib(inputCode)) {
-                stdlib = true;
-                //this.setState({ stdlib });
-            }
+            try {
+                switch (compiler) {
+                    case 'AssemblyScript':
+                        const stdlib = isRequreStdlib(inputCode);
+                        this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
+                        break;
 
-            setImmediate(() => {
-                try {
-                    if (compiler === 'AssemblyScript') {
-                        this.compileByAssemblyScript(inputCode, {stdlib, validate, optimize, longMode});
-                    } else if (compiler === 'TurboScript') {
+                    case 'TurboScript':
                         this.compileByTurboScript(inputCode);
-                    } else {
-                        console.warn('Compiler not supported');
-                    }
-                } catch (e) {
-                    this.setState({
-                        compileSuccess: false,
-                        compileFailure: true
-                    });
+                        break;
 
-                    this._errorCounts = 1;
+                    case 'Speedy.js':
+                        this.compileBySpeedyJs(inputCode, { optimize, unsafe, saveWast: true });
+                        break;
 
-                    let message = '<' + compiler + '> internal error:\n';
-                    this.addNotification(message + e.message);
-                    console.error(message, e);
-
-                } finally {
-                    if (this.toolbar && this.toolbar.compileButton)
-                        this.toolbar.compileButton.endCompile();
+                    default: console.warn('Compiler not supported');
                 }
-            });
+
+            } catch (e) {
+
+                this.setState({
+                    compileSuccess: false,
+                    compileFailure: true
+                });
+
+                this._errorCounts = 1;
+
+                const message = '<' + compiler + '> internal error:\n';
+                this.addNotification(message + e.message);
+                console.error(message, e);
+
+            } finally {
+                if (this.toolbar && this.toolbar.compileButton)
+                    this.toolbar.compileButton.endCompile();
+            }
         });
     }
 
-    compileByAssemblyScript(code, {stdlib, validate, optimize, longMode}) {
+    compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
 
         const as = window.assemblyscript;
-        var module = as.Compiler.compileString(code, {silent: true, uintptrSize: longMode ? 8 : 4, noLib: !stdlib});
+        const module = as.Compiler.compileString(
+            code, {
+                silent: true,
+                uintptrSize: longMode ? 8 : 4,
+                noLib: !stdlib
+            }
+        );
 
         setImmediate(() => {
             if (!module) {
@@ -203,7 +219,7 @@ export default class EditorContainer extends Component {
                             compileFailure: false,
 
                             output: {
-                                text: module.emitText(),
+                                text:   module.emitText(),
                                 binary: module.emitBinary()
                             }
                         });
@@ -277,12 +293,78 @@ export default class EditorContainer extends Component {
         });
     }
 
+    compileBySpeedyJs(code, options) {
+        CompilerDescriptions['Speedy.js'].compile(code, options)
+        .then(response => {
+            this.setState({
+                compilerReady:  true
+            });
+
+            //console.log(response);
+
+            if (response.length) {
+                const output = response[0];
+                if (output.exitStatus !== 0) {
+                    this.setState({
+                        compileSuccess: false,
+                        compileFailure: true
+                    });
+
+                    // compiled failure
+                    const diagnostics = output.diagnostics;
+                    this._errorCounts = diagnostics.length;
+
+                    for (let i = 0; i < diagnostics.length; i++) {
+                        let errorMessage = diagnostics[i];
+
+                        if (i <= MaxPrintingErrors) {
+                            console.error(errorMessage);
+                            this.addNotification(errorMessage);
+                            this.addAnnotation(errorMessage);
+                        } else {
+                            errorMessage = `Too many errors (${diagnostics.length})`;
+                            console.error(errorMessage);
+                            this.addNotification(errorMessage);
+                            break;
+                        }
+                    }
+                } else {
+
+                    this._errorCounts = 0;
+
+                    // compiled successfully
+                    this.setState({
+                        compileSuccess: true,
+                        compileFailure: false,
+
+                        output: {
+                            text:   output.wast || '',
+                            binary: new Uint8Array(output.wasm)
+                        }
+                    });
+                }
+            }
+        })
+        .catch(error => {
+            this.setState({
+                compilerReady:  false,
+                compileSuccess: false,
+                compileFailure: true
+            });
+
+            this._errorCounts = 1;
+
+            const message = '<' + this.state.compiler + '> Service not response';
+            this.addNotification(message);
+            console.error(message);
+        });
+    }
+
     onInputChange = value => {
         // skip compilation if possible
         value = value.trim();
-        if (this._lastTextInput === value) {
+        if (this._lastTextInput === value)
             return;
-        }
 
         this._lastTextInput = value;
         const mode = this.state.compileMode;
@@ -293,18 +375,32 @@ export default class EditorContainer extends Component {
     }
 
     onDownloadBinary = () => {
-        const {output, compiler} = this.state;
-        var blob = new Blob([output.binary], {type: "application/octet-stream"});
+        const { output, compiler } = this.state;
+        var blob = new Blob([output.binary], { type: "application/octet-stream" });
         FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
     }
 
-    onScriptLoad = () => {
+    changeCompiler = compiler => {
+        compiler = compiler || this.state.compiler;
         this.setState({
-            compilerReady: true,
-            version: getCompilerVersion(this.state.compiler)
+            compiler,
+            input: CompilerDescriptions[compiler].example
         });
+        getCompilerVersion(
+            compiler,
+            version => {
+                this.setState({ version });
+            }
+        );
+        if (this.state.compilerReady || !CompilerDescriptions[compiler].offline) {
+            this.updateCompilationWithDelay(AutoCompilationDelay);
+        }
+    }
 
-        this.updateCompilation();
+    onScriptLoad = () => {
+        this.setState({ compilerReady: true }, () => {
+            this.changeCompiler();
+        });
     }
 
     onScriptError = () => {
@@ -326,14 +422,14 @@ export default class EditorContainer extends Component {
 
             this.updateCompilation();
 
-        } else if (CompileModes[2]) {
+        } else if (CompileModes[2]) { // Decompile
             // Decompile not supported yet
         }
     }
 
     onSettingsOptionChange = (key, value) => {
         if (!this.state.compilerReady) return;
-        this.setState({[key]: value}, this.updateCompilation);
+        this.setState({ [key]: value }, this.updateCompilation );
     }
 
     handleSize = throttle(8, size => {
@@ -341,13 +437,13 @@ export default class EditorContainer extends Component {
             if (!this._cachedClientRect) {
                 this._cachedClientRect = ReactDOM.findDOMNode(this.splitEditor).getBoundingClientRect();
             }
-            const {width, height} = this._cachedClientRect;
+            const { width, height } = this._cachedClientRect;
             const gripWidth = 4;
 
             this.setState({
-                inputEditorWidth: size ? size : '100%',
+                inputEditorWidth:  size ? size : '100%',
                 outputEditorWidth: size ? width - size - gripWidth : '100%',
-                editorsHeight: height - 160
+                editorsHeight:     height - 160
             });
         }
     })
@@ -358,18 +454,18 @@ export default class EditorContainer extends Component {
             return;
         }
 
-        const {notifications, notificationCount} = this.state;
+    	const { notifications, notificationCount } = this.state;
 
         const id = notifications.size + 1;
         const newCount = notificationCount + 1;
         return this.setState({
-            notificationCount: newCount,
-            notifications: notifications.add({
+        	notificationCount: newCount,
+        	notifications: notifications.add({
                 id,
-                message,
-                key: newCount,
-                action: '✕',
-                dismissAfter: 5000,
+        		message,
+        		key: newCount,
+        		action: '✕',
+        		dismissAfter: 5000,
                 actionStyle: {
                     borderRadius: 0,
                     paddingLeft: '1.5rem',
@@ -377,8 +473,8 @@ export default class EditorContainer extends Component {
                     fontSize: '1.8rem',
                     color: '#fff'
                 },
-                onClick: () => this.removeAllNotification()
-            })
+        		onClick: () => this.removeAllNotification()
+        	})
         });
     }
 
@@ -388,18 +484,18 @@ export default class EditorContainer extends Component {
         if (matches && matches.length === 2) {
             var row = ((matches[1].split(','))[0] >>> 0) - 1;
             let annotations = this.state.annotations;
-            this.setState({
-                annotations: annotations.add({row, type, text: message})
+            this.setState({ annotations:
+                annotations.add({ row, type, text: message })
             });
         }
     }
 
     removeAllAnnotation = () => {
-        this.setState({annotations: OrderedSet()});
+        this.setState({ annotations: OrderedSet() });
     }
 
     removeNotification = index => {
-        const {notifications} = this.state;
+        const { notifications } = this.state;
         return this.setState({
             notifications: notifications.filter(n => n.key !== index)
         })
@@ -427,6 +523,7 @@ export default class EditorContainer extends Component {
             outputEditorWidth,
             editorsHeight,
 
+            input,
             output,
             outputType
 
@@ -454,10 +551,10 @@ export default class EditorContainer extends Component {
             }) }
         />) : null;
 
-        const canBinaryDownload = compilerReady && compileSuccess && output.binary;
+        const canBinaryDownload   = compilerReady && compileSuccess && output.binary;
         const compilerDescription = CompilerDescriptions[compiler];
 
-        const compilerScript = (compilerDescription ? <Script
+        const compilerScript = (compilerDescription && compilerDescription.offline ? <Script
             url={ compilerDescription.url }
             onError={ this.onScriptError }
             onLoad={ this.onScriptLoad }
@@ -466,6 +563,7 @@ export default class EditorContainer extends Component {
         let busyState = 'busy';
 
         if (compilerReady) {
+            // TODO change this to compileStatus
             if (!compileSuccess && compileFailure) {
                 busyState = 'failure';
             } else if (compileSuccess && !compileFailure) {
@@ -482,17 +580,17 @@ export default class EditorContainer extends Component {
                     version={ version }
                     compiler={ compiler }
                     compileDisabled={ !compilerReady }
-                    onCompilerChange={ compiler => this.setState({compiler}) }
+                    onCompilerChange={ this.changeCompiler }
                     onCompileClick={ this.onCompileButtonClick }
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();
-                        this.setState({compileMode: mode});
+                        this.setState({ compileMode: mode });
                         if (mode === CompileModes[0]) { // Auto
                             this.updateCompilationWithDelay(AutoCompilationDelay);
                         }
                     }}
                     onSettingsOptionChange={ this.onSettingsOptionChange }
-                    onOutputSelect={ type => this.setState({outputType: type}) }
+                    onOutputSelect={ type => this.setState({ outputType: type }) }
                 />
 
                 <SplitPane

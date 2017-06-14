@@ -1,4 +1,4 @@
-import React, { Component } from "react"
+import React, { Component } from 'react'
 import {
     Button,
     OverlayTrigger,
@@ -42,22 +42,22 @@ export default class OutputButtonGroup extends Component {
         return (
             <OverlayTrigger
                 rootClose
-                placement="left"
-                trigger={[ "hover", "focus" ]}
+                placement='left'
+                trigger={[ 'hover', 'focus' ]}
                 overlay={ tooltip('Output') }
             >
                 <RadioButtonGroup
                     value={ this.state.radio }
-                    type="radio"
-                    bsSize="large"
-                    className="pull-right"
+                    type='radio'
+                    bsSize='large'
+                    className='pull-right'
                     onChange={ this.onSelect }
                 >
-                    <Button eventKey="text" bsStyle="primary" style={{ paddingLeft: '0.95em', paddingRight: '0.95em' }}>
-                        <Glyphicon glyph="align-left"/>
+                    <Button eventKey='text' bsStyle='primary' style={{ paddingLeft: '0.95em', paddingRight: '0.95em' }}>
+                        <Glyphicon glyph='align-left'/>
                     </Button>
-                    <Button eventKey="binary" bsStyle="primary" style={{ paddingLeft: '1.12em', paddingRight: '1.12em' }}>
-                        <span className="icon-binary-code"></span>
+                    <Button eventKey='binary' bsStyle='primary' style={{ paddingLeft: '1.12em', paddingRight: '1.12em' }}>
+                        <span className='icon-binary-code'></span>
                     </Button>
                 </RadioButtonGroup>
             </OverlayTrigger>

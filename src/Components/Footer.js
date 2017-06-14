@@ -61,9 +61,9 @@ export default class Footer extends Component {
                 </BusySignal>
                 <label style={{
                     marginLeft: '55px',
-                    float: 'left',
+                    float:      'left',
                     paddingTop: '3px',
-                    display: 'block'
+                    display:    'block'
                 }}>
                     <h4
                         className={ messageClass }
