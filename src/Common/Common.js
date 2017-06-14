@@ -4,7 +4,7 @@ export const CompileModes = ['Auto', 'Manual', 'Decompile'];
 export const CompilerDescriptions = {
     'TurboScript': {
         offline: true,
-        url:     'compilers/Turboscript/index.js',
+        url:     'compilers/Turboscript/turboscript.js',
         github:  'https://github.com/01alchemist/TurboScript',
         options: {
 
@@ -98,7 +98,7 @@ export function anyExists(array, value) {
 export function getCompilerVersion(compiler) {
     switch (compiler) {
         case 'TurboScript':
-            return '1.1.0-alpha';
+            return window.turboscript.version;
 
         case 'AssemblyScript':
             if (window.assemblyscript)

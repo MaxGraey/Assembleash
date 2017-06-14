@@ -45,7 +45,7 @@ export default class CompilerButton extends Component {
         const { compiler } = this.state;
 
         // not yet integrated
-        const disabledCompilers = ['Speedy.js', 'TurboScript'];
+        const disabledCompilers = ['Speedy.js'];
 
         return (
             <OverlayTrigger

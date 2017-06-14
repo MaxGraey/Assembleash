@@ -1,30 +1,29 @@
+import React, {Component} from "react";
+import PropTypes from "prop-types";
+import ReactDOM from "react-dom";
+import SplitPane from "react-split-pane";
+import Script from "react-load-script";
+import {NotificationStack} from "react-notification";
+import {throttle} from "throttle-debounce";
+import FileSaver from "file-saver";
 
-import React, { Component }  from "react"
-import PropTypes             from 'prop-types'
-import ReactDOM              from "react-dom"
-import SplitPane             from 'react-split-pane'
-import Script                from 'react-load-script'
-import { NotificationStack } from 'react-notification'
-import { throttle }          from 'throttle-debounce'
-import FileSaver             from 'file-saver'
-
-import ToolbarContainer from './ToolbarContainer'
-import Editor           from '../Components/Editor'
-import Footer           from '../Components/Footer'
+import ToolbarContainer from "./ToolbarContainer";
+import Editor from "../Components/Editor";
+import Footer from "../Components/Footer";
 
 import {
-    isRequreStdlib,
-    getCompilerVersion,
-    CompilerDescriptions,
     CompileModes,
+    CompilerDescriptions,
     formatCode,
-    formatSize
-} from '../Common/Common'
+    formatSize,
+    getCompilerVersion,
+    isRequreStdlib
+} from "../Common/Common";
 
-import { OrderedSet } from 'immutable'
+import {OrderedSet} from "immutable";
 
 const input =
-`export function fib(num: int32): int32 {
+    `export function fib(num: int32): int32 {
     if (num <= 1) return 1;
     return fib(num - 1) + fib(num - 2);
 }`;
@@ -43,38 +42,38 @@ export default class EditorContainer extends Component {
     }
 
     constructor(props) {
-         super(props);
-         this.state = {
-             version:           '0.0.1',
-             compiler:          props.compiler,
-             compileMode:       CompileModes[0],
-             compilerReady:     false,
-             compileFailure:    false,
-             compileSuccess:    false,
-             inputEditorWidth:  '100%',
-             outputEditorWidth: '100%',
-             editorsHeight:     '750px',
-             output: {
-                 text:   '',
-                 binary: null
-             },
-             outputType:        'text',
+        super(props);
+        this.state = {
+            version: '0.0.1',
+            compiler: props.compiler,
+            compileMode: CompileModes[0],
+            compilerReady: false,
+            compileFailure: false,
+            compileSuccess: false,
+            inputEditorWidth: '100%',
+            outputEditorWidth: '100%',
+            editorsHeight: '750px',
+            output: {
+                text: '',
+                binary: null
+            },
+            outputType: 'text',
 
-             // settings
-             validate:          true,
-             optimize:          true,
-             stdlib:            false,
-             longMode:          false,
+            // settings
+            validate: true,
+            optimize: true,
+            stdlib: false,
+            longMode: false,
 
-             annotations:       OrderedSet(),
-             notifications:     OrderedSet(),
-             notificationCount: 0
-         };
+            annotations: OrderedSet(),
+            notifications: OrderedSet(),
+            notificationCount: 0
+        };
 
-         this._errorCounts       = 0;
-         this._lastTextInput     = input.trim();
-         this._compileTimerDelay = null;
-         this._cachedClientRect  = null;
+        this._errorCounts = 0;
+        this._lastTextInput = input.trim();
+        this._compileTimerDelay = null;
+        this._cachedClientRect = null;
     }
 
     componentDidMount() {
@@ -111,7 +110,7 @@ export default class EditorContainer extends Component {
         this.removeAllAnnotation();
 
         let stdlib = this.state.stdlib;
-        const { compiler, validate, optimize, longMode } = this.state;
+        const {compiler, validate, optimize, longMode} = this.state;
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton) {
@@ -132,7 +131,7 @@ export default class EditorContainer extends Component {
             setImmediate(() => {
                 try {
                     if (compiler === 'AssemblyScript') {
-                        this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
+                        this.compileByAssemblyScript(inputCode, {stdlib, validate, optimize, longMode});
                     } else if (compiler === 'TurboScript') {
                         this.compileByTurboScript(inputCode);
                     } else {
@@ -158,10 +157,10 @@ export default class EditorContainer extends Component {
         });
     }
 
-    compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
+    compileByAssemblyScript(code, {stdlib, validate, optimize, longMode}) {
 
         const as = window.assemblyscript;
-        var module = as.Compiler.compileString(code, { silent: true, uintptrSize: longMode ? 8 : 4, noLib: !stdlib });
+        var module = as.Compiler.compileString(code, {silent: true, uintptrSize: longMode ? 8 : 4, noLib: !stdlib});
 
         setImmediate(() => {
             if (!module) {
@@ -204,7 +203,7 @@ export default class EditorContainer extends Component {
                             compileFailure: false,
 
                             output: {
-                                text:   module.emitText(),
+                                text: module.emitText(),
                                 binary: module.emitBinary()
                             }
                         });
@@ -217,7 +216,65 @@ export default class EditorContainer extends Component {
     }
 
     compileByTurboScript(code, options) {
-        // TODO
+        console.clear();
+        const turbo = window.turboscript;
+        const result = turbo.compileString(code, {
+            target: turbo.CompileTarget.WEBASSEMBLY,
+            silent: true,
+            logError: true
+        });
+        setImmediate(() => {
+            if (!result.success) {
+                this.setState({
+                    compileSuccess: false,
+                    compileFailure: true
+                });
+                let diagnostic = result.log.first;
+                let errorCount = 0;
+                let errorMessage;
+                while (diagnostic != null) {
+                    const location = diagnostic.range.source.indexToLineColumn(diagnostic.range.start);
+                    errorMessage = `[${location.line + 1}:${location.column + 1}] `;
+                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "ERROR: " : "WARN: ";
+                    errorMessage += diagnostic.message + "\n";
+
+                    if (errorCount <= MaxPrintingErrors) {
+                        this.addNotification(errorMessage);
+                        let annotations = this.state.annotations;
+                        this.setState({
+                            annotations: annotations.add({row: location.line, type: "error", text: errorMessage})
+                        });
+                    }
+
+                    errorCount++;
+                    diagnostic = diagnostic.next;
+                }
+
+                if (errorCount > MaxPrintingErrors) {
+                    errorMessage = `Too many errors (${errorCount})`;
+                    console.error(errorMessage);
+                    this.addNotification(errorMessage);
+                }
+
+                this._errorCounts = errorCount;
+
+            } else {
+                setImmediate(() => {
+                    this._errorCounts = 0;
+
+                    setImmediate(() => {
+                        this.setState({
+                            compileSuccess: true,
+                            compileFailure: false,
+                            output: {
+                                text: result.wast,
+                                binary: result.wasm
+                            }
+                        });
+                    });
+                });
+            }
+        });
     }
 
     onInputChange = value => {
@@ -236,8 +293,8 @@ export default class EditorContainer extends Component {
     }
 
     onDownloadBinary = () => {
-        const { output, compiler } = this.state;
-        var blob = new Blob([output.binary], { type: "application/octet-stream" });
+        const {output, compiler} = this.state;
+        var blob = new Blob([output.binary], {type: "application/octet-stream"});
         FileSaver.saveAs(blob, `${compiler.toLowerCase()}.module.wasm`);
     }
 
@@ -276,7 +333,7 @@ export default class EditorContainer extends Component {
 
     onSettingsOptionChange = (key, value) => {
         if (!this.state.compilerReady) return;
-        this.setState({ [key]: value }, this.updateCompilation );
+        this.setState({[key]: value}, this.updateCompilation);
     }
 
     handleSize = throttle(8, size => {
@@ -284,13 +341,13 @@ export default class EditorContainer extends Component {
             if (!this._cachedClientRect) {
                 this._cachedClientRect = ReactDOM.findDOMNode(this.splitEditor).getBoundingClientRect();
             }
-            const { width, height } = this._cachedClientRect;
+            const {width, height} = this._cachedClientRect;
             const gripWidth = 4;
 
             this.setState({
-                inputEditorWidth:  size ? size : '100%',
+                inputEditorWidth: size ? size : '100%',
                 outputEditorWidth: size ? width - size - gripWidth : '100%',
-                editorsHeight:     height - 160
+                editorsHeight: height - 160
             });
         }
     })
@@ -301,18 +358,18 @@ export default class EditorContainer extends Component {
             return;
         }
 
-    	const { notifications, notificationCount } = this.state;
+        const {notifications, notificationCount} = this.state;
 
         const id = notifications.size + 1;
         const newCount = notificationCount + 1;
         return this.setState({
-        	notificationCount: newCount,
-        	notifications: notifications.add({
+            notificationCount: newCount,
+            notifications: notifications.add({
                 id,
-        		message,
-        		key: newCount,
-        		action: '✕',
-        		dismissAfter: 5000,
+                message,
+                key: newCount,
+                action: '✕',
+                dismissAfter: 5000,
                 actionStyle: {
                     borderRadius: 0,
                     paddingLeft: '1.5rem',
@@ -320,8 +377,8 @@ export default class EditorContainer extends Component {
                     fontSize: '1.8rem',
                     color: '#fff'
                 },
-        		onClick: () => this.removeAllNotification()
-        	})
+                onClick: () => this.removeAllNotification()
+            })
         });
     }
 
@@ -331,18 +388,18 @@ export default class EditorContainer extends Component {
         if (matches && matches.length === 2) {
             var row = ((matches[1].split(','))[0] >>> 0) - 1;
             let annotations = this.state.annotations;
-            this.setState({ annotations:
-                annotations.add({ row, type, text: message })
+            this.setState({
+                annotations: annotations.add({row, type, text: message})
             });
         }
     }
 
     removeAllAnnotation = () => {
-        this.setState({ annotations: OrderedSet() });
+        this.setState({annotations: OrderedSet()});
     }
 
     removeNotification = index => {
-        const { notifications } = this.state;
+        const {notifications} = this.state;
         return this.setState({
             notifications: notifications.filter(n => n.key !== index)
         })
@@ -397,7 +454,7 @@ export default class EditorContainer extends Component {
             }) }
         />) : null;
 
-        const canBinaryDownload   = compilerReady && compileSuccess && output.binary;
+        const canBinaryDownload = compilerReady && compileSuccess && output.binary;
         const compilerDescription = CompilerDescriptions[compiler];
 
         const compilerScript = (compilerDescription ? <Script
@@ -425,17 +482,17 @@ export default class EditorContainer extends Component {
                     version={ version }
                     compiler={ compiler }
                     compileDisabled={ !compilerReady }
-                    onCompilerChange={ compiler => this.setState({ compiler }) }
+                    onCompilerChange={ compiler => this.setState({compiler}) }
                     onCompileClick={ this.onCompileButtonClick }
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();
-                        this.setState({ compileMode: mode });
+                        this.setState({compileMode: mode});
                         if (mode === CompileModes[0]) { // Auto
                             this.updateCompilationWithDelay(AutoCompilationDelay);
                         }
                     }}
                     onSettingsOptionChange={ this.onSettingsOptionChange }
-                    onOutputSelect={ type => this.setState({ outputType: type }) }
+                    onOutputSelect={ type => this.setState({outputType: type}) }
                 />
 
                 <SplitPane
