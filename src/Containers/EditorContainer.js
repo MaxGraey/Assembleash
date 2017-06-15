@@ -141,7 +141,11 @@ export default class EditorContainer extends Component {
                         break;
 
                     case 'Speedy.js':
-                        this.compileBySpeedyJs(inputCode, { optimize, unsafe, saveWast: true });
+                        this.compileBySpeedyJs(inputCode, {
+                            unsafe,
+                            optimizationLevel: optimize ? '3' : '0',
+                            saveWast: true
+                        });
                         break;
 
                     default: console.warn('Compiler not supported');
@@ -205,8 +209,13 @@ export default class EditorContainer extends Component {
 
             } else {
                 setImmediate(() => {
-                    if (validate)
-                        module.validate();
+                    if (validate) {
+                        if (!module.validate()) {
+                            let notValid = 'Wasm validation error';
+                            console.error(notValid);
+                            this.addNotification(notValid);
+                        }
+                    }
 
                     if (optimize)
                         module.optimize();
@@ -341,7 +350,6 @@ export default class EditorContainer extends Component {
         })
         .catch(error => {
             this.setState({
-                compilerReady:  false,
                 compileSuccess: false,
                 compileFailure: true
             });

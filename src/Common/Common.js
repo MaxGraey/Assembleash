@@ -227,6 +227,6 @@ export function requestCommand(url, config = null) {
         method: config ? 'POST' : 'GET',
         body:   config ? JSON.stringify(config) : void 0
     })
-    //.then(checkResponseStatus)
+    .then(checkResponseStatus)
     .then(response => response.json());
 }
