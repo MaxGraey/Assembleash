@@ -151,7 +151,7 @@ export function getCompilerVersion(compiler, callback = () => {}) {
     switch (compiler) {
         case 'TurboScript':
             if (window.turboscript)
-                callback(window.turboscript.version);
+                callback(window.turboscript.default.version);
             return;
 
         case 'AssemblyScript':
