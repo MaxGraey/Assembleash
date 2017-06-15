@@ -22,18 +22,18 @@
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
     "react-live": "^1.5.3",
-    "react-load-script": "^0.0.4",
     "react-notification": "^6.7.0",
     "react-split-pane": "^0.1.63",
     "react-switch-button": "^2.2.2",
     "react-toggle": "^4.0.1",
+    "scriptjs": "^2.5.8",
     "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
     "proxyquire": "^1.8.0",
-    "rewire": "^2.5.2",
     "react-scripts": "1.0.7",
-    "react-svg-loader": "latest"
+    "react-svg-loader": "latest",
+    "rewire": "^2.5.2"
   },
   "scripts": {
     "start": "react-scripts start",

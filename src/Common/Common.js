@@ -4,7 +4,10 @@ export const CompileModes = ['Auto', 'Manual', 'Decompile'];
 export const CompilerDescriptions = {
     'TurboScript': {
         offline: true,
-        url:     'compilers/Turboscript/turboscript.js',
+        scripts:  [
+            'https://rawgit.com/01alchemist/TurboScript/master/lib/turboscript.js'
+        ],
+        loaded: false,
         github:  'https://github.com/01alchemist/TurboScript',
         options: {},
         example:
@@ -16,7 +19,11 @@ export const CompilerDescriptions = {
 
     'AssemblyScript': {
         offline: true,
-        url:    'compilers/AssemblyScript/assemblyscript.min.js',
+        scripts: [
+            'https://rawgit.com/dcodeIO/binaryen.js/master/index.js',
+            'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.min.js'
+        ],
+        loaded: false,
         github: 'https://github.com/dcodeIO/AssemblyScript',
         options: {
             // detect automatically
