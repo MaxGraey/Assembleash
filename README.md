@@ -5,7 +5,7 @@ Playground for WebAssembly and Typescript-like languages.
 **Support languges:**
 - [AssemblyScript](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 - [Speedy.js](https://maxgraey.github.io/Assembleash/#Speedy.js)
-- TurboScript (soon!)
+- [TurboScript](https://maxgraey.github.io/Assembleash/#TurboScript)
 
 **KNOWN ISSUES**
 - After change compiler you should refresh page for updating input editor.
