@@ -34,19 +34,15 @@ export default class CompileButton extends Component {
     }
 
     startCompile() {
-        this._savedCompileMode = this.state.compileMode;
         this.setState({
             isCompiling: true,
-            compileMode: 'Compiling...',
             cursor:      'wait'
         });
     }
 
     endCompile() {
-        let currentMode = this._savedCompileMode || this.state.compileMode;
         this.setState({
             isCompiling: false,
-            compileMode: currentMode,
             cursor:      'pointer'
         });
     }
