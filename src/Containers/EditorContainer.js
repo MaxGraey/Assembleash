@@ -143,7 +143,7 @@ export default class EditorContainer extends Component {
                     case 'Speedy.js':
                         this.compileBySpeedyJs(inputCode, {
                             unsafe,
-                            optimizationLevel: optimize ? '3' : '0',
+                            optimizationLevel: optimize ? 3 : 0,
                             saveWast: true
                         });
                         break;
@@ -214,6 +214,8 @@ export default class EditorContainer extends Component {
                             let notValid = 'Wasm validation error';
                             console.error(notValid);
                             this.addNotification(notValid);
+                            this._errorCounts = 1;
+                            return;
                         }
                     }
 
