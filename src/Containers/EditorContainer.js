@@ -105,6 +105,7 @@ export default class EditorContainer extends Component {
     updateCompilation = () => {
         if (!this.inputEditor) return;
 
+        console.clear();
         this.removeAllNotification();
         this.removeAllAnnotation();
 
@@ -231,19 +232,19 @@ export default class EditorContainer extends Component {
     }
 
     compileByTurboScript(code, options) {
-        console.clear();
         const turbo = window.turboscript;
         const result = turbo.compileString(code, {
-            target: turbo.CompileTarget.WEBASSEMBLY,
-            silent: true,
+            target:   turbo.CompileTarget.WEBASSEMBLY,
+            silent:   true,
             logError: true
         });
-        setImmediate(() => {
-            if (!result.success) {
-                this.setState({
-                    compileSuccess: false,
-                    compileFailure: true
-                });
+
+        if (!result.success) {
+            this.setState({
+                compileSuccess: false,
+                compileFailure: true
+            });
+            setImmediate(() => {
                 let diagnostic = result.log.first;
                 let errorCount = 0;
                 let errorMessage;
@@ -271,24 +272,21 @@ export default class EditorContainer extends Component {
                     console.error(errorMessage);
                     this.addNotification(errorMessage);
                 }
+            });
 
-            } else {
-                setImmediate(() => {
-                    this._errorCounts = 0;
-
-                    setImmediate(() => {
-                        this.setState({
-                            compileSuccess: true,
-                            compileFailure: false,
-                            output: {
-                                text: result.wast,
-                                binary: result.wasm
-                            }
-                        });
-                    });
+        } else {
+            setImmediate(() => {
+                this._errorCounts = 0;
+                this.setState({
+                    compileSuccess: true,
+                    compileFailure: false,
+                    output: {
+                        text: result.wast,
+                        binary: result.wasm
+                    }
                 });
-            }
-        });
+            });
+        }
     }
 
     compileBySpeedyJs(code, options) {
@@ -297,8 +295,6 @@ export default class EditorContainer extends Component {
             this.setState({
                 compilerReady:  true
             });
-
-            //console.log(response);
 
             if (response.length) {
                 const output = response[0];
@@ -395,7 +391,7 @@ export default class EditorContainer extends Component {
 
         if (description.offline) {
             if (!description.loaded) {
-                $script(description.scripts, () => {
+                $script.order(description.scripts, () => {
                     this.setState({ compilerReady: true }, () => {
                         description.loaded = true;
                         getCompilerVersion(compiler, version => this.setState({ version }));
