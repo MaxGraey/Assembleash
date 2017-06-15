@@ -9,7 +9,7 @@ import {
 } from 'react-bootstrap';
 
 import tooltip from './Tooltip'
-import { CompilerList, anyExists } from '../Common/Common'
+import { CompilerList } from '../Common/Common'
 
 export default class CompilerButton extends Component {
     static defaultProps = {
@@ -44,9 +44,6 @@ export default class CompilerButton extends Component {
     render() {
         const { compiler } = this.state;
 
-        // not yet integrated
-        const disabledCompilers = [/*'Speedy.js', 'TurboScript'*/];
-
         return (
             <OverlayTrigger
                 rootClose
@@ -71,7 +68,6 @@ export default class CompilerButton extends Component {
                             eventKey={ index }
                             href={ '#' + value }
                             bsStyle='info'
-                            disabled={ anyExists(disabledCompilers, value) }
                             style={{
                                 minWidth:  '210px',
                                 textAlign: 'center'
