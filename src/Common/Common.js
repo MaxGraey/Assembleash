@@ -5,7 +5,7 @@ export const CompilerDescriptions = {
     'TurboScript': {
         offline: true,
         scripts:  [
-            'https://rawgit.com/01alchemist/TurboScript/master/lib/turboscript.js'
+            'https://rawgit.com/01alchemist/TurboScript/master/lib/turboscript.min.js'
         ],
         loaded: false,
         github:  'https://github.com/01alchemist/TurboScript',
