@@ -12,9 +12,11 @@ Playground for WebAssembly and Typescript-like languages.
 
 **TODO**
 
-~~Add wast syntax~~
-- Improve typescript syntax
-- Improve wast syntax
+- ~~Add wast syntax~~
+- ~~Improve typescript syntax~~
+- ~~Improve wast syntax~~
+
+- Switch to monaco-editor
 - Add custom webpack config with Prepack plugin
 - Additional status info like compiling time
 - Optimize content for mobile browsers
