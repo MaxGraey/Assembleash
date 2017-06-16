@@ -11,8 +11,10 @@ Playground for WebAssembly and Typescript-like languages.
 - After change compiler you should refresh page for updating input editor.
 
 **TODO**
-- Add wast syntax
+
+~~Add wast syntax~~
 - Improve typescript syntax
+- Improve wast syntax
 - Add custom webpack config with Prepack plugin
 - Additional status info like compiling time
 - Optimize content for mobile browsers
