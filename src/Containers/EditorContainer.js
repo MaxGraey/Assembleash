@@ -105,7 +105,7 @@ export default class EditorContainer extends Component {
     updateCompilation = () => {
         if (!this.inputEditor) return;
 
-        console.clear();
+        //console.clear();
         this.removeAllNotification();
         this.removeAllAnnotation();
 

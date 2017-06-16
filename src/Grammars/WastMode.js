@@ -1,12 +1,16 @@
-ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module) {
-    "use strict";
+import brace from 'brace'
 
-    var oop = acequire("ace/lib/oop");
-    var TextHighlightRules = acequire("ace/mode/text_highlight_rules").TextHighlightRules;
+const BraceMode          = brace.acequire("ace/mode/text").Mode;
+const Tokenizer          = brace.acequire("ace/tokenizer").Tokenizer;
+const TextHighlightRules = brace.acequire("ace/mode/text_highlight_rules").TextHighlightRules;
 
-    var WastHighlightRules = function () {
-        var keywords = ["global|local|type|memory|module|table|import|export|param|offset|start|code",
-                        "data|segment|element|invoke|label"].join("|");
+class WastHighlightRules extends TextHighlightRules {
+    constructor() {
+        super();
+
+        var keywords = [
+            "global|local|type|memory|module|table|import|export|param|offset|start|code|data|segment|element|invoke|label"
+        ].join("|");
 
         var types    = "i32|i64|f32|f64|anyfunc|func|void";
         var operator = [
@@ -21,7 +25,7 @@ ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module)
         ].join("|");
 
         var keywordMapper = this.createKeywordMapper({
-            "keyword.control":  keywords,
+            "keyword.control" : keywords,
             "keyword.operator": operator,
             "support.function": types
         }, "identifier", true);
@@ -30,10 +34,10 @@ ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module)
             "start": [{
                 token: "constant.numeric", // hex, float, octal, binary
                 regex: /\\b(((\\+|-)?0(x|X)[0-9a-fA-F]+\\.?[0-9a-fA-F]*((p|P)(\\+|-)?[0-9]+)?)|(([0-9]+\\.?[0-9]*)|(\\.[0-9]+))((e|E)(\\+|-)?[0-9]+)?)\\b/
-            }, {
+            }/*, {
                 token: "constant.numeric",
                 regex: '\\b(\\+|-)?(?i:infinity|inf|nan)\\b'
-            }, {
+            }*/, {
                 token: keywordMapper,
                 regex: "[a-zA-Z_$][a-zA-Z_0-9.]*\\b"
             }, {
@@ -43,12 +47,25 @@ ace.define('ace/mode/wast_highlight_rules', function (acequire, exports, module)
                 token: "rparen",
                 regex: "[\\])}]"
             }, {
+                token: "comment",
+                regex: ";"
+            }, {
                 token: "text",
                 regex: "\\s+"
             }]
         };
-    };
+    }
+}
 
-    oop.inherits(WastHighlightRules, TextHighlightRules);
-    exports.WastHighlightRules = WastHighlightRules;
-});
+
+export default class WastMode extends BraceMode {
+	constructor() {
+		super();
+
+        this.$id            = 'ace/mode/wast';
+        this.HighlightRules = new WastHighlightRules();
+        this.$tokenizer     = new Tokenizer(this.HighlightRules.getRules());
+		this.$behaviour     = this.$defaultBehaviour;
+        this.lineCommentStart = ";";
+	}
+}

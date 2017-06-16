@@ -5,7 +5,7 @@ ace.define(function (acequire, exports, module) {
 	var TextMode = acequire("ace/mode/text").Mode;
 	var WastHighlightRules = acequire("ace/mode/wast_highlight_rules").WastHighlightRules;
 
-	var Mode = function() {
+	var Mode = function () {
 		this.HighlightRules = WastHighlightRules;
 		this.$behaviour = this.$defaultBehaviour;
 	};

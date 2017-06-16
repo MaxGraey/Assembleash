@@ -11,6 +11,8 @@ import 'brace/mode/typescript'
 import 'brace/snippets/typescript'
 import 'brace/theme/tomorrow_night_eighties'
 
+import WastMode from '../Grammars/WastMode'
+
 import '../ace.editor.css'
 
 export default class Editor extends Component {
@@ -44,6 +46,11 @@ export default class Editor extends Component {
     onLoad = editor => {
         this.editor = editor;
         const session = editor.getSession();
+
+        if (this.props.readOnly) {
+            // TODO need $tokenizer
+            session.setMode(new WastMode());
+        }
 
         session.setUseSoftTabs(true);
         session.setOptions({ useWorker: true });
