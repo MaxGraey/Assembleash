@@ -21,7 +21,7 @@
     "react-ace": "^5.0.1",
     "react-bootstrap": "^0.31.0",
     "react-dom": "^15.5.4",
-    "react-live": "^1.5.3",
+    "react-live": "^1.7.0",
     "react-notification": "^6.7.0",
     "react-split-pane": "^0.1.63",
     "react-switch-button": "^2.2.2",
