@@ -19,6 +19,7 @@ export default class Editor extends Component {
     static propTypes = {
         focus:       PropTypes.bool,
         readOnly:    PropTypes.bool,
+        mode:        PropTypes.string,
         width:       PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         height:      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         code:        PropTypes.string,
@@ -29,6 +30,7 @@ export default class Editor extends Component {
     static defaultProps = {
         focus:       false,
         readOnly:    false,
+        mode:        'typescript',
         width:       '100%',
         height:      '750px',
         code:        '',
@@ -43,12 +45,22 @@ export default class Editor extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.mode !== this.props.mode) {
+            if (this.editor) {
+                const session = this.editor.getSession();
+                if (nextProps.mode === 'wast') {
+                    session.setMode(new WastMode());
+                }
+            }
+        }
+    }
+
     onLoad = editor => {
         this.editor = editor;
         const session = editor.getSession();
 
-        if (this.props.readOnly) {
-            // TODO need $tokenizer
+        if (this.props.mode === 'wast') {
             session.setMode(new WastMode());
         }
 
@@ -56,7 +68,7 @@ export default class Editor extends Component {
         session.setOptions({ useWorker: true });
         editor.renderer.setScrollMargin(14, 14);
 
-        // TODO need fix setTimeout and use more clerver way
+        // TODO need fix setTimeout and use more clever way
         setTimeout(() => {
             editor.scrollToLine(Infinity, false, false, () => {});
             editor.gotoLine(Infinity, 0, false);
@@ -75,7 +87,15 @@ export default class Editor extends Component {
 
     render() {
         const { value } = this.state;
-        const { width, height, focus, readOnly, code, annotations } = this.props;
+        const {
+            width,
+            height,
+            focus,
+            mode,
+            readOnly,
+            code,
+            annotations
+        } = this.props;
 
         let text    = !readOnly ? value : code;
         let tabSize = !readOnly ? 4 : 1;
@@ -86,10 +106,6 @@ export default class Editor extends Component {
 
                 focus={ focus }
                 readOnly={ readOnly }
-
-                // annotations={ [
-                //     { row: 0, type: 'error', text: 'some error' }
-                // ] }
 
                 annotations={ annotations }
 
@@ -105,7 +121,7 @@ export default class Editor extends Component {
 
                 value={ text }
 
-                mode='typescript'
+                mode={ mode }
                 theme='tomorrow_night_eighties'
                 fontSize={ 14 }
                 width={ width }

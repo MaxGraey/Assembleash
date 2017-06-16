@@ -582,19 +582,6 @@ export default class EditorContainer extends Component {
         const canBinaryDownload   = compilerReady && compileSuccess && output.binary;
         const compilerDescription = CompilerDescriptions[compiler];
 
-        /*const compilerScripts =
-        (compilerDescription && compilerDescription.offline ?
-        (compilerDescription.scripts.map((script, index) => {
-            console.log(script, index);
-            return <Script
-                key={ index }
-                url={ script.url }
-                onError={ this.onScriptError }
-                onLoad={ index === compilerDescription.scripts.length - 1 ? this.onScriptLoad : void 0 }
-            />
-        }))
-        : null);*/
-
         let busyState = 'busy';
 
         if (compilerReady) {
@@ -608,8 +595,6 @@ export default class EditorContainer extends Component {
 
         return (
             <div>
-                {/* { compilerScripts } */}
-
                 <ToolbarContainer
                     ref={ self => this.toolbar = self }
                     version={ version }
@@ -652,6 +637,7 @@ export default class EditorContainer extends Component {
                     <Editor
                         readOnly
                         id="output"
+                        mode={ outputType === 'text' ? 'wast' : 'typescript' }
                         ref={ self => this.outputEditor = self }
                         width={ outputEditorWidth }
                         height={ editorsHeight }
