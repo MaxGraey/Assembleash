@@ -26,11 +26,6 @@ export const CompilerDescriptions = {
         loaded: false,
         github: 'https://github.com/dcodeIO/AssemblyScript',
         options: {
-            // detect automatically
-            /*stdlib: {
-                label:   'Library',
-                default: false
-            },*/
             longMode: {
                 label:   'Use 64 bits',
                 default: false

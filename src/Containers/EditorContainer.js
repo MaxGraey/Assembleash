@@ -17,6 +17,7 @@ import {
     isRequreStdlib,
     getCompilerVersion,
     CompilerDescriptions,
+    CompilerList,
     CompileModes,
     formatCode,
     formatSize
@@ -46,6 +47,7 @@ export default class EditorContainer extends Component {
              compilerReady:     false,
              compileFailure:    false,
              compileSuccess:    false,
+             splitPosition:     0.62,
              inputEditorWidth:  '100%',
              outputEditorWidth: '100%',
              editorsHeight:     '750px',
@@ -59,7 +61,6 @@ export default class EditorContainer extends Component {
              // settings
              validate:          true,
              optimize:          true,
-             //stdlib:            false,
              longMode:          false,
              unsafe:            true,
 
@@ -244,6 +245,11 @@ export default class EditorContainer extends Component {
 
     compileByTurboScript(code, options) {
         const turbo = window.turboscript;
+
+        if (!turbo) {
+            throw new Error('Turboscript not loaded');
+        }
+
         const result = turbo.compileString(code, {
             target:   turbo.CompileTarget.WEBASSEMBLY,
             silent:   true,
@@ -425,7 +431,20 @@ export default class EditorContainer extends Component {
     }
 
     onScriptLoad = () => {
-        console.log('Compiler', window.assemblyscript);
+        if (this.state.compiler === CompilerList[1]) { // AssemblyScript
+            if (window.assemblyscript) {
+                const files = window.assemblyscript.library.files;
+                const names = Object.keys(files);
+
+                if (this.inputEditor && this.inputEditor.monaco) {
+                    const typescript = this.inputEditor.monaco.languages.typescript;
+                    for (let index = 0, len = names.length; index < len; index++) {
+                        typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+                    }
+                }
+            }
+        }
+
         this.setState({ compilerReady: true }, () => {
             this.changeCompiler();
         });
@@ -466,13 +485,22 @@ export default class EditorContainer extends Component {
                 this._cachedClientRect = ReactDOM.findDOMNode(this.splitEditor).getBoundingClientRect();
             }
             const { width, height } = this._cachedClientRect;
+
             const gripWidth = 4;
+            const pos = (size ? size / width : this.state.splitPosition);
+            const primaryWidth = width * pos;
 
             this.setState({
-                inputEditorWidth:  size ? size : '100%',
-                outputEditorWidth: size ? width - size - gripWidth : '100%',
-                editorsHeight:     height - 160
+                inputEditorWidth:  primaryWidth,
+                outputEditorWidth: width - primaryWidth - gripWidth,
+                editorsHeight:     height - 160,
+                splitPosition:     pos
             });
+
+            this.splitEditor.setSize(
+                { primary: 'first', size: primaryWidth },
+                { draggedSize: primaryWidth }
+            );
         }
     })
 
@@ -510,7 +538,7 @@ export default class EditorContainer extends Component {
         const rowRegex = /\(([^)]+)\)/;
         const matches = rowRegex.exec(message);
         if (matches && matches.length === 2) {
-            var row = ((matches[1].split(','))[0] >>> 0) - 1;
+            var row = ((matches[1].split(','))[0] >>> 0);
             let annotations = this.state.annotations;
             this.setState({ annotations:
                 annotations.add({ row, type, text: message })
@@ -547,6 +575,7 @@ export default class EditorContainer extends Component {
             notifications,
             annotations,
 
+            splitPosition,
             inputEditorWidth,
             outputEditorWidth,
             editorsHeight,
@@ -617,7 +646,7 @@ export default class EditorContainer extends Component {
                     ref={ self => this.splitEditor = self }
                     split="vertical"
                     minSize={ 200 }
-                    defaultSize="62%"
+                    defaultSize={ splitPosition * 100 + '%' }
                     onChange={ this.onSplitPositionChange }
                     style={{
                         margin: '12px'

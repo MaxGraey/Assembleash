@@ -4130,6 +4130,10 @@ module-not-found-error@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/module-not-found-error/-/module-not-found-error-1.0.1.tgz#cf8b4ff4f29640674d6cdd02b0e3bc523c2bbdc0"
 
+monaco-editor@~0.8.x:
+  version "0.8.3"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.8.3.tgz#523bdf2d1524db2c2dfc3cae0a7b6edc48d6dea6"
+
 ms@0.7.1:
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.1.tgz#9cd13c03adbff25b65effde7ce864ee952017098"
@@ -5114,6 +5118,12 @@ react-live@^1.7.0:
     prismjs "^1.6.0"
     prop-types "^15.5.8"
     unescape "^0.2.0"
+
+react-monaco-editor@^0.8.1:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.8.1.tgz#3f09a3a26919c22b783d275d0ec674f6ce5b7f81"
+  dependencies:
+    monaco-editor "~0.8.x"
 
 react-notification@^6.7.0:
   version "6.7.0"

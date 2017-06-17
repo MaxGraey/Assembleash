@@ -16,7 +16,7 @@ Playground for WebAssembly and Typescript-like languages.
 - ~~Improve typescript syntax~~
 - ~~Improve wast syntax~~
 
-- Switch to monaco-editor
+- Switch to react-monaco-editor with vscode-textmate 
 - Add custom webpack config with Prepack plugin
 - Additional status info like compiling time
 - Optimize content for mobile browsers
