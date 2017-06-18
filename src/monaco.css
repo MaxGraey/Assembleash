@@ -10,6 +10,10 @@
     background-color: rgba(0,0,0,0.17);
 }
 
+.margin-view-overlays .line-numbers {
+    color: rgba(230, 210, 255, 0.25) !important;
+}
+
 .monaco-scrollable-element {
     background: rgba(0,0,0,0.25) !important;
 }

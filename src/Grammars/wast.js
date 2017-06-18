@@ -183,13 +183,13 @@ export default function registerWastSyntax(monaco) {
                 [/(@digits)[fFdD]/, 'number.float'],
                 [/(@digits)[lL]?/, 'number'],
 
-                [/\$[^\s]*/, { token: 'variable' }],
+                [/\$[^\s"\(\)\{\}\[\]]+/, { token: 'variable' }],
 
                 [/[a-zA-Z_$][\w$]*/, {
                     cases: {
                         '@keywords':   { token: 'keyword.$0' },
                         '@types':      { token: 'type.$0' },
-                        '@operations': { token: 'entity.name.function.$0', foreground: 'ff0000' },
+                        '@operations': { token: 'keyword.operator.$0' },
                         '@default':    'identifier'
                     }
                 }]
