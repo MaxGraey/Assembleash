@@ -1,5 +1,5 @@
 
-export const CompileModes = ['Auto', 'Manual', 'Decompile'];
+export const CompileModes = ['Auto', 'Manual'];
 
 export const CompilerDescriptions = {
     'TurboScript': {

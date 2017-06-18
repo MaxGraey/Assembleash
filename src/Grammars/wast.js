@@ -69,6 +69,7 @@ export default function registerWastSyntax(monaco) {
             // Call
             "call",
             "call_indirect",
+            "call_import",
 
             // Parametric
             "drop",
@@ -159,7 +160,20 @@ export default function registerWastSyntax(monaco) {
             "promote",
 
             // Reinterpretations
-            "reinterpret"
+            "reinterpret",
+
+            // Misc
+            "switch",
+            "case",
+            "tableswitch",
+            "has_feature",
+
+            // Assertion
+            "failure",
+            "assert_invalid",
+            "assert_trap",
+            "assert_return_nan",
+            "assert_return"
         ],
 
         escapes:      /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
@@ -182,6 +196,7 @@ export default function registerWastSyntax(monaco) {
                 [/0[bB](@binarydigits)[Ll]?/, 'number.binary'],
                 [/(@digits)[fFdD]/, 'number.float'],
                 [/(@digits)[lL]?/, 'number'],
+                [/[+-]?(infinity|inf|nan)/, 'constant.number'],
 
                 [/\$[^\s"\(\)\{\}\[\]]+/, { token: 'variable' }],
 
@@ -210,9 +225,9 @@ export default function registerWastSyntax(monaco) {
             ],
 
             comment: [
-                //[/[^\/*]+/, 'comment'],
+                [/[^\/*]+/, 'comment'],
                 [/\*\//,    'comment', '@pop'],
-                //[/[\/*]/,   'comment']
+                [/[\/*]/,   'comment']
             ],
         }
     });

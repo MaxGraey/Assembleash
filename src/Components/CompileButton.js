@@ -95,7 +95,6 @@ export default class CompileButton extends Component {
                     CompileModes.map((value, index) =>
                         <MenuItem
                             key={ index }
-                            disabled={ value === 'Decompile' }
                             eventKey={ index }
                             onSelect={ this.onSelect }
                             style={{ textAlign: 'center' }}
