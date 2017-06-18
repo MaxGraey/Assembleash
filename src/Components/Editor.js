@@ -119,9 +119,11 @@ export default class Editor extends Component {
         this.monaco = monaco;
 
         if (!Editor.wastRegistered) {
-            console.log('registered!');
-            registerTheme(this.monaco);
-            registerWastSyntax(this.monaco);
+
+            this.addExtraLibs(this.props.typescriptExtraLibs);
+
+            registerTheme(monaco);
+            registerWastSyntax(monaco);
             Editor.wastRegistered = true;
 
             const typescript = monaco.languages.typescript;
@@ -143,8 +145,6 @@ export default class Editor extends Component {
                     typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
                 }
             }*/
-
-            this.addExtraLibs(this.props.typescriptExtraLibs);
         }
 
         /*if (this.props.mode === 'typescript') {

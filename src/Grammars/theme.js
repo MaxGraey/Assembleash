@@ -10,6 +10,8 @@ export default function registerTheme(monaco) {
 
             { token: 'identifier', foreground: 'c0c5ce' },
 
+            { token: 'delimiter.parenthesis', foreground: 'c0c5ce' },
+
             { token: 'variable.parameter.function', foreground: 'c0c5ce'},
             { token: 'punctuation.definition.string', foreground: 'c0c5ce'},
             { token: 'punctuation.definition.variable', foreground: 'c0c5ce'},

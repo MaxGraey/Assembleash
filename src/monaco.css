@@ -29,10 +29,20 @@
 }
 
 .monaco-editor .suggest-widget {
+    color: #c0c5ce;
     background: #4e5d6c !important;
     border: none !important;
     box-shadow: 0px 12px 22px rgba(0,0,0,0.15);
 }
+
+.monaco-editor .view-overlays.focused .selected-text {
+	background: rgba(100, 120, 160, 0.3) !important;
+}
+
+.monaco-editor .view-overlays .selected-text {
+	background: rgba(100, 120, 160, 0.15) !important;
+}
+
 /*
 .monaco-editor .token.indent-guide {
     border-left: 1px solid #353535 !important;
