@@ -19,8 +19,8 @@ export default function registerTheme(monaco) {
             { token: 'punctuation.definition.array', foreground: 'c0c5ce'},
 
             { token: 'keyword.operator', foreground: 'f69057' },
-            { token: 'keyword', foreground: 'b48ead' },
-            { token: 'variable', foreground: 'bf616a' },
+            { token: 'keyword', foreground: 'cc99cc' },
+            { token: 'variable', foreground: '6699cc' },
             { token: 'variable.other.dollar', foreground: 'bf616a' },
 
             { token: 'entity.name.function', foreground: '8fa1b3' },
@@ -35,23 +35,23 @@ export default function registerTheme(monaco) {
             { token: 'meta.class', foreground: 'eff1f5' },
             { token: 'keyword.other.special-method', foreground: '8fa1b3' },
 
-            { token: 'storage', foreground: 'b48ead' },
+            { token: 'storage', foreground: 'cc99cc' },
             { token: 'support.function', foreground: '96b5b4' },
 
             { token: 'string', foreground: 'a3be8c' },
             { token: 'constant.other.symbol', foreground: 'a3be8c' },
             { token: 'entity.other.inherited-class', foreground: 'a3be8c' },
 
-            { token: 'number', foreground: 'd08770' },
+            { token: 'number', foreground: 'f2777a' },
 
             { token: 'entity.name.tag', foreground: 'bf616a' },
-            { token: 'entity.other.attribute-name', foreground: 'd08770' },
+            { token: 'entity.other.attribute-name', foreground: 'f2777a' },
             { tonen: 'meta.selector', foreground: 'c0c5ce' },
 
-            { token: 'keyword.other.unit', foreground: 'd08770' },
+            { token: 'keyword.other.unit', foreground: 'f2777a' },
             { token: 'string.other.link', foreground: 'bf616a' },
 
-            { token: 'meta.link', foreground: 'd08770' },
+            { token: 'meta.link', foreground: 'f2777a' },
 
             { token: 'string.regexp', foreground: '96b5b4' },
             { token: 'constant.character.escape', foreground: '96b5b4' },
