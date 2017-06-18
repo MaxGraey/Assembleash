@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import MonacoEditor from 'react-monaco-editor';
+import MonacoEditor from 'react-monaco-editor'
+import registerWastSyntax from '../Grammars/wast'
 
 export default class Editor extends Component {
+    static wastRegistered = false
+
     static propTypes = {
         focus:       PropTypes.bool,
         readOnly:    PropTypes.bool,
@@ -42,15 +45,6 @@ export default class Editor extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.mode !== this.props.mode) {
-            if (this.editor) {
-                const editor = this.editor;
-                if (nextProps.mode === 'wast') {
-                    //session.setMode(new WastMode());
-                }
-            }
-        }
-
         if (this.editor) {
             if (nextProps.width  !== this.props.width ||
                 nextProps.height !== this.props.height) {
@@ -82,19 +76,16 @@ export default class Editor extends Component {
     }
 
     onLoad = (editor, monaco) => {
-        /*this.editor = editor;
-        const session = editor.getSession();
-
-        if (this.props.mode === 'wast') {
-            session.setMode(new WastMode());
-        }
-
-        session.setUseSoftTabs(true);
-        session.setOptions({ useWorker: true });
-        editor.renderer.setScrollMargin(14, 14);*/
-
         this.editor = editor;
         this.monaco = monaco;
+
+        if (!Editor.wastRegistered) {
+            console.log('registered!');
+            registerWastSyntax(this.monaco);
+            Editor.wastRegistered = true;
+
+            console.log('wast', this.monaco.languages);
+        }
 
         if (this.props.mode === 'typescript') {
             const typescript = monaco.languages.typescript;
@@ -131,7 +122,7 @@ export default class Editor extends Component {
         }]);*/
     }
 
-    onChange = (newValue, e) => {
+    onChange = newValue => {
         this.setState({ value: newValue });
         this.props.onChange(newValue);
     }
@@ -153,7 +144,7 @@ export default class Editor extends Component {
             <MonacoEditor
                 id='editor'
                 value={ text }
-                language={ 'typescript' }
+                language={ mode }
                 width={ width }
                 height={ height }
                 options={{
