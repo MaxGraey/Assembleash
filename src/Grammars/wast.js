@@ -5,6 +5,11 @@ export default function registerWastSyntax(monaco) {
     monaco.languages.register({ id: 'wast' });
 
     monaco.languages.setLanguageConfiguration('wast', {
+        /*indentationRules: {
+            decreaseIndentPattern: /^(.*\*\/)?\s*\}.*$/,
+            increaseIndentPattern: /^.*\{[^}"']*$/
+        },*/
+
         comments: {
 		    lineComment: ';;',
 		    blockComment: ['\(;', ';\)'],
@@ -47,7 +52,20 @@ export default function registerWastSyntax(monaco) {
             "code",
             "segment",
             "invoke",
-            "label"
+            "label",
+
+            // Control
+            "unreachable",
+            "nop",
+            "block",
+            "loop",
+            "if",
+            "else",
+            "end",
+            "br",
+            "br_if",
+            "br_table",
+            "return"
         ],
 
         types: [
@@ -61,19 +79,6 @@ export default function registerWastSyntax(monaco) {
         ],
 
         operations: [
-            // Control flow
-            "unreachable",
-            "nop",
-            "block",
-            "loop",
-            "if",
-            "else",
-            "end",
-            "br",
-            "br_if",
-            "br_table",
-            "return",
-
             // Call
             "call",
             "call_indirect",
@@ -209,7 +214,7 @@ export default function registerWastSyntax(monaco) {
                 [/[a-zA-Z_$][\w$]*/, {
                     cases: {
                         '@keywords':   { token: 'keyword.$0' },
-                        '@types':      { token: 'type.$0' },
+                        '@types':      { token: 'entity.name.type.class.$0' },
                         '@operations': { token: 'keyword.operator.$0' },
                         '@default':    'identifier'
                     }
@@ -230,7 +235,7 @@ export default function registerWastSyntax(monaco) {
                 [/\/\/.*$/,      'comment'],
             ],
 
-            // TODO need change to ';' and ';;'
+            // TODO need change to ';;' and '(;;)'
             comment: [
                 [/[^\/*]+/, 'comment'],
                 [/\*\//,    'comment', '@pop'],

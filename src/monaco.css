@@ -24,7 +24,7 @@
 }
 
 .cursor {
-    background: #fff !important;
+    background: #c0c5ce !important;
     width: 1pt !important;
 }
 
@@ -33,7 +33,11 @@
     border: none !important;
     box-shadow: 0px 12px 22px rgba(0,0,0,0.15);
 }
-
+/*
+.monaco-editor .token.indent-guide {
+    border-left: 1px solid #353535 !important;
+}
+*/
 .monaco-editor .monaco-scrollable-element .scrollbar.horizontal,
 .monaco-editor .decorationsOverviewRuler,
 .monaco-editor .monaco-scrollable-element .scrollbar.vertical .arrow-background {

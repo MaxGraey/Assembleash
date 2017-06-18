@@ -104,14 +104,24 @@ export default class Editor extends Component {
         }
     }
 
+    replaceTextInRange(range, text) {
+        const replaceOperation = {
+            text,
+            range,
+            identifier: { major: 1, minor: 1 },
+            forceMoveMarkers: true
+        };
+        this.editor.executeEdits("replace", [replaceOperation]);
+    }
+
     onLoad = (editor, monaco) => {
         this.editor = editor;
         this.monaco = monaco;
 
         if (!Editor.wastRegistered) {
             console.log('registered!');
-            registerWastSyntax(this.monaco);
             registerTheme(this.monaco);
+            registerWastSyntax(this.monaco);
             Editor.wastRegistered = true;
 
             const typescript = monaco.languages.typescript;
@@ -224,7 +234,7 @@ export default class Editor extends Component {
                     fixedOverflowWidgets: true,
 
                     folding: true,
-                    renderIndentGuides: true
+                    //renderIndentGuides: true
                 }}
                 onChange={ this.onChange }
                 editorDidMount={ this.onLoad }
