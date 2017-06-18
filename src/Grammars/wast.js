@@ -163,8 +163,6 @@ export default function registerWastSyntax(monaco) {
             "reinterpret",
 
             // Misc
-            "switch",
-            "case",
             "tableswitch",
             "has_feature",
 
@@ -189,14 +187,14 @@ export default function registerWastSyntax(monaco) {
                 [/"([^"\\]|\\.)*$/, 'string.invalid'],
                 [/"/, 'string', '@string'],
 
-                [/(@digits)[eE]([-+]?(@digits))?[fFdD]?/, 'number.float'],
-                [/(@digits)\.(@digits)([eE][-+]?(@digits))?[fFdD]?/, 'number.float'],
+                [/(@digits)[eE]([+\-]?(@digits))?[fFdD]?/, 'number.float'],
+                [/(@digits)\.(@digits)([eE][+\-]?(@digits))?[fFdD]?/, 'number.float'],
                 [/0[xX](@hexdigits)[Ll]?/, 'number.hex'],
                 [/0(@octaldigits)[Ll]?/, 'number.octal'],
                 [/0[bB](@binarydigits)[Ll]?/, 'number.binary'],
                 [/(@digits)[fFdD]/, 'number.float'],
                 [/(@digits)[lL]?/, 'number'],
-                [/[+-]?(infinity|inf|nan)/, 'constant.number'],
+                [/[+\-]?(infinity|inf|nan)/, 'constant.number'],
 
                 [/\$[^\s"\(\)\{\}\[\]]+/, { token: 'variable' }],
 
@@ -224,6 +222,7 @@ export default function registerWastSyntax(monaco) {
                 [/\/\/.*$/,      'comment'],
             ],
 
+            // TODO need change to ';' and ';;'
             comment: [
                 [/[^\/*]+/, 'comment'],
                 [/\*\//,    'comment', '@pop'],

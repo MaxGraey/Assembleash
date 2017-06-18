@@ -66,7 +66,9 @@ export default class EditorContainer extends Component {
 
              annotations:       OrderedSet(),
              notifications:     OrderedSet(),
-             notificationCount: 0
+             notificationCount: 0,
+
+             typescriptExtraLibs: null
          };
 
          this._errorCounts       = 0;
@@ -431,7 +433,7 @@ export default class EditorContainer extends Component {
     }
 
     onScriptLoad = () => {
-        if (this.state.compiler === CompilerList[1]) { // AssemblyScript
+        /*if (c) { // AssemblyScript
             if (window.assemblyscript) {
                 const files = window.assemblyscript.library.files;
                 const names = Object.keys(files);
@@ -443,11 +445,21 @@ export default class EditorContainer extends Component {
                     }
                 }
             }
-        }
+        }*/
 
         this.setState({ compilerReady: true }, () => {
             this.changeCompiler();
         });
+
+        if (window.assemblyscript) {
+            console.log('as', window.assemblyscript);
+            console.log('as.library', window.assemblyscript.library);
+            console.log('as.library.files', window.assemblyscript.library.files);
+
+            this.setState({
+                typescriptExtraLibs: window.assemblyscript.library.files
+            });
+        }
     }
 
     onScriptError = () => {
@@ -582,7 +594,9 @@ export default class EditorContainer extends Component {
 
             input,
             output,
-            outputType
+            outputType,
+
+            typescriptExtraLibs
 
         } = this.state;
 
@@ -661,6 +675,7 @@ export default class EditorContainer extends Component {
                         code={ input }
                         annotations={ annotations.toArray() }
                         onChange={ this.onInputChange }
+                        typescriptExtraLibs={ typescriptExtraLibs }
                     >
                     </Editor>
                     <Editor

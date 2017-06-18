@@ -177,18 +177,18 @@ export function formatCode(buffer) {
     const last = buffer.length;
 
     let output = 'new Uint8Array([\r\n    ';
-    output += Array.prototype.map.call(buffer, (value, index) => {
-        let result = '0x' + ('00' + value.toString(16)).slice(-2);
+    for (let i = 0, len = buffer.length; i < len; i++) {
+        const value = buffer[i];
+        let result = '0x' + ('00' + value.toString(16)).substr(-2);
 
-        index++;
-        if (index !== last)
+        if (i !== last - 1)
             result += ', ';
 
-        if ((index % 10) === 0)
+        if (((i + 1) % 10) === 0)
             result += '\r\n    ';
 
-        return result;
-    }).join('');
+        output += result;
+    }
     output += '\r\n]);';
 
     return output;

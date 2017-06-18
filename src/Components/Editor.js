@@ -14,7 +14,9 @@ export default class Editor extends Component {
         height:      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         code:        PropTypes.string,
         annotations: PropTypes.array,
-        onChange:    PropTypes.func
+        onChange:    PropTypes.func,
+
+        typescriptExtraLibs: PropTypes.array
     }
 
     static defaultProps = {
@@ -25,7 +27,9 @@ export default class Editor extends Component {
         height:      '750px',
         code:        '',
         annotations: [],
-        onChange:    () => {}
+        onChange:    () => {},
+
+        typescriptExtraLibs: null
     }
 
     static requireConfig = {
@@ -42,10 +46,15 @@ export default class Editor extends Component {
         };
 
         this.decorations = [];
+        this.extraLibsRegistered = false;
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.editor) {
+            if (nextProps.typescriptExtraLibs !== this.props.typescriptExtraLibs) {
+                this.addExtraLibs(nextProps.typescriptExtraLibs);
+            }
+
             if (nextProps.width  !== this.props.width ||
                 nextProps.height !== this.props.height) {
                 const width  = nextProps.width  || this.props.width;
@@ -75,6 +84,23 @@ export default class Editor extends Component {
         }
     }
 
+    // this.props.typescriptExtraLibs
+    addExtraLibs(extraLibs) {
+        if (!this.extraLibsRegistered && this.monaco && extraLibs) {
+            console.log('extralib registered!');
+
+            const files = extraLibs;
+            const names = Object.keys(files);
+
+            const typescript = this.monaco.languages.typescript;
+            for (let index = 0, len = names.length; index < len; index++) {
+                typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+            }
+
+            this.extraLibsRegistered = true;
+        }
+    }
+
     onLoad = (editor, monaco) => {
         this.editor = editor;
         this.monaco = monaco;
@@ -84,10 +110,30 @@ export default class Editor extends Component {
             registerWastSyntax(this.monaco);
             Editor.wastRegistered = true;
 
-            console.log('wast', this.monaco.languages);
+            const typescript = monaco.languages.typescript;
+            typescript.typescriptDefaults.setCompilerOptions({
+                target: typescript.ScriptTarget.Latest,
+                module: typescript.ModuleKind.None,
+                noLib:  true,
+                allowNonTsExtensions: true
+            });
+
+            /*if (window.assemblyscript) {
+                console.log('assembly files');
+
+                const files = window.assemblyscript.library.files;
+                const names = Object.keys(files);
+
+                const typescript = monaco.languages.typescript;
+                for (let index = 0, len = names.length; index < len; index++) {
+                    typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+                }
+            }*/
+
+            this.addExtraLibs(this.props.typescriptExtraLibs);
         }
 
-        if (this.props.mode === 'typescript') {
+        /*if (this.props.mode === 'typescript') {
             const typescript = monaco.languages.typescript;
             typescript.typescriptDefaults.setCompilerOptions({
                 target: typescript.ScriptTarget.Latest,
@@ -105,7 +151,7 @@ export default class Editor extends Component {
                     typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
                 }
             }
-        }
+        }*/
 
         if (this.props.focus) {
             editor.focus();
