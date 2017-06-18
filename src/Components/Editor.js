@@ -199,7 +199,6 @@ export default class Editor extends Component {
                     renderLineHighlight:  'gutter',
                     selectOnLineNumbers:  true,
                     scrollBeyondLastLine: false,
-                    lineDecorationsWidth: 20,
 
                     cursorBlinking: 'smooth',
                     scrollbar: {
@@ -216,7 +215,12 @@ export default class Editor extends Component {
                     quickSuggestionsDelay: 300,
                     hideCursorInOverviewRuler: true,
                     suggestFontSize:   fontSize,
-                    suggestLineHeight: fontSize + 12
+                    suggestLineHeight: fontSize + 16,
+                    roundedSelection: false,
+                    fixedOverflowWidgets: true,
+
+                    folding: true,
+                    renderIndentGuides: true
                 }}
                 onChange={ this.onChange }
                 editorDidMount={ this.onLoad }
