@@ -23,6 +23,11 @@
     border: none !important;
 }
 
+.cursor {
+    background: #fff !important;
+    width: 1pt !important;
+}
+
 .monaco-editor .suggest-widget {
     background: #4e5d6c !important;
     border: none !important;
@@ -32,14 +37,14 @@
 .monaco-editor .monaco-scrollable-element .scrollbar.horizontal,
 .monaco-editor .decorationsOverviewRuler,
 .monaco-editor .monaco-scrollable-element .scrollbar.vertical .arrow-background {
-	  background: transparent;
-      /*display: none;*/
+    background: transparent;
+    /*display: none;*/
 }
 /* Make vertical scrollbar transparent to allow decorations overview ruler to be visible */
 .monaco-editor .monaco-scrollable-element .scrollbar.vertical,
 .monaco-editor .monaco-scrollable-element .scrollbar.horizontal {
-	  background: transparent;
-      /*display: none;*/
+	background: transparent;
+    /*display: none;*/
 }
 
 .errorDecoration {

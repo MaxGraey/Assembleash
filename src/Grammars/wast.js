@@ -5,18 +5,26 @@ export default function registerWastSyntax(monaco) {
     monaco.languages.register({ id: 'wast' });
 
     monaco.languages.setLanguageConfiguration('wast', {
+        comments: {
+		    lineComment: ';;',
+		    blockComment: ['\(;', ';\)'],
+        },
         brackets: [
             ['(', ')']
         ],
         autoClosingPairs: [
-            { open: '(', close: ')' }
+            { open: '(', close: ')' },
+            { open: '"', close: '"' }
         ],
         surroundingPairs: [
-            { open: '(', close: ')' }
+            { open: '(', close: ')' },
+            { open: '"', close: '"' }
         ]
     });
 
     monaco.languages.setMonarchTokensProvider('wast', {
+
+        tokenPostfix: '.wast',
 
         keywords: [
             "module",

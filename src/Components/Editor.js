@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import MonacoEditor from 'react-monaco-editor'
 import registerWastSyntax from '../Grammars/wast'
+import registerTheme from '../Grammars/theme.js'
 
 export default class Editor extends Component {
     static wastRegistered = false
@@ -81,6 +82,8 @@ export default class Editor extends Component {
 
                 this.decorations = this.editor.deltaDecorations(this.decorations, decorations);
             }
+
+            //this.editor.setHiddenAreas([new this.monaco.Range(1, 1, 3, 1)]);
         }
     }
 
@@ -108,6 +111,7 @@ export default class Editor extends Component {
         if (!Editor.wastRegistered) {
             console.log('registered!');
             registerWastSyntax(this.monaco);
+            registerTheme(this.monaco);
             Editor.wastRegistered = true;
 
             const typescript = monaco.languages.typescript;
@@ -195,7 +199,7 @@ export default class Editor extends Component {
                 height={ height }
                 options={{
                     readOnly,
-                    theme: 'vs-dark',
+                    theme: 'vs-assembleash',
                     renderLineHighlight:  'gutter',
                     selectOnLineNumbers:  true,
                     scrollBeyondLastLine: false,
