@@ -107,8 +107,13 @@ export default class EditorContainer extends Component {
         if (!this.inputEditor) return;
 
         //console.clear();
+
+        // clean errors and messages
         this.removeAllNotification();
         this.removeAllAnnotation();
+        this.setState({
+            additionalStatusMessage: ''
+        });
 
         const {
             compiler,
