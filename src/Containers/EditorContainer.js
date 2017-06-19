@@ -264,9 +264,7 @@ export default class EditorContainer extends Component {
     compileByTurboScript(code, options) {
         const turbo = window.turboscript;
 
-        if (!turbo) {
-            throw new Error('Turboscript not loaded');
-        }
+        if (!turbo) throw new Error('Turboscript not loaded');
 
         const result = turbo.compileString(code, {
             target:   turbo.CompileTarget.WEBASSEMBLY,
@@ -397,7 +395,7 @@ export default class EditorContainer extends Component {
         this._lastTextInput = value;
         const mode = this.state.compileMode;
 
-        if (mode === CompileMode.Auto) { // Auto
+        if (mode === CompileMode.Auto) {
             this.updateCompilationWithDelay(AutoCompilationDelay);
         }
     }
@@ -426,11 +424,8 @@ export default class EditorContainer extends Component {
         if (description.offline) {
             if (!description.loaded) {
                 $script.order(description.scripts, () => {
-                    this.setState({ compilerReady: true }, () => {
-                        description.loaded = true;
-                        getCompilerVersion(compiler, version => this.setState({ version }));
-                        this.updateCompilation();
-                    });
+                    description.loaded = true;
+                    this.onScriptLoad();
                 });
             } else {
                 this.setState({ compilerReady: true }, () => {
@@ -440,42 +435,29 @@ export default class EditorContainer extends Component {
             }
         } else {
             this.setState({ compilerReady: true }, () => {
-                console.log('loaded');
-
                 getCompilerVersion(compiler, version => this.setState({ version }));
                 this.updateCompilation();
             });
         }
     }
 
-    onScriptLoad = () => {
-        /*if (c) { // AssemblyScript
-            if (window.assemblyscript) {
-                const files = window.assemblyscript.library.files;
-                const names = Object.keys(files);
+    onScriptLoad() {
+        if (!this.extraLibsRegistered && window.assemblyscript && window.monaco) {
+            const files = window.assemblyscript.library.files;
+            const names = Object.keys(files);
 
-                if (this.inputEditor && this.inputEditor.monaco) {
-                    const typescript = this.inputEditor.monaco.languages.typescript;
-                    for (let index = 0, len = names.length; index < len; index++) {
-                        typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-                    }
-                }
+            const typescript = window.monaco.languages.typescript;
+            for (let index = 0, len = names.length; index < len; index++) {
+                typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
             }
-        }*/
+
+            this.extraLibsRegistered = true;
+        }
 
         this.setState({ compilerReady: true }, () => {
             this.changeCompiler();
+            getCompilerVersion(this.state.compiler, version => this.setState({ version }));
         });
-
-        if (window.assemblyscript) {
-            console.log('as', window.assemblyscript);
-            console.log('as.library', window.assemblyscript.library);
-            console.log('as.library.files', window.assemblyscript.library.files);
-
-            this.setState({
-                typescriptExtraLibs: window.assemblyscript.library.files
-            });
-        }
     }
 
     onScriptError = () => {

@@ -17,7 +17,7 @@ export default class Editor extends Component {
         annotations: PropTypes.array,
         onChange:    PropTypes.func,
 
-        typescriptExtraLibs: PropTypes.array
+        //typescriptExtraLibs: PropTypes.array
     }
 
     static defaultProps = {
@@ -30,7 +30,7 @@ export default class Editor extends Component {
         annotations: [],
         onChange:    () => {},
 
-        typescriptExtraLibs: null
+        //typescriptExtraLibs: null
     }
 
     /*
@@ -49,14 +49,14 @@ export default class Editor extends Component {
         };
 
         this.decorations = [];
-        this.extraLibsRegistered = false;
+        //this.extraLibsRegistered = false;
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.editor) {
-            if (nextProps.typescriptExtraLibs !== this.props.typescriptExtraLibs) {
+            /*if (nextProps.typescriptExtraLibs !== this.props.typescriptExtraLibs) {
                 this.addExtraLibs(nextProps.typescriptExtraLibs);
-            }
+            }*/
 
             if (nextProps.width  !== this.props.width ||
                 nextProps.height !== this.props.height) {
@@ -90,7 +90,7 @@ export default class Editor extends Component {
     }
 
     // this.props.typescriptExtraLibs
-    addExtraLibs(extraLibs) {
+    /*addExtraLibs(extraLibs) {
         if (!this.extraLibsRegistered && Editor.monaco && extraLibs) {
             console.log('extralib registered!');
 
@@ -104,7 +104,7 @@ export default class Editor extends Component {
 
             this.extraLibsRegistered = true;
         }
-    }
+    }*/
 
     replaceTextInRange(range, text) {
         const replaceOperation = {
@@ -122,7 +122,7 @@ export default class Editor extends Component {
 
         if (!Editor.wastRegistered) {
 
-            this.addExtraLibs(this.props.typescriptExtraLibs);
+            //this.addExtraLibs(this.props.typescriptExtraLibs);
 
             registerTheme(Editor.monaco);
             registerWastSyntax(Editor.monaco);
