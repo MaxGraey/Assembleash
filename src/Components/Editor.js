@@ -223,7 +223,7 @@ export default class Editor extends Component {
                         verticalScrollbarSize:   10,
 		                horizontalScrollbarSize: 10
                     },
-                    // glyphMargin: true,
+                    //glyphMargin: true,
                     fontSize: fontSize,
                     lineHeight: fontSize + 5,
                     quickSuggestionsDelay: 300,

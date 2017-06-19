@@ -1,5 +1,5 @@
-var rewire     = require('rewire');
-var proxyquire = require('proxyquire');
+let rewire     = require('rewire');
+let proxyquire = require('proxyquire');
 
 switch (process.argv[2]) {
     // The "start" script is run during development mode

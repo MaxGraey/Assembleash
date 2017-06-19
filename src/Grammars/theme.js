@@ -20,8 +20,12 @@ export default function registerTheme(monaco) {
             { token: 'punctuation.definition.string', foreground: 'c0c5ce'},
             { token: 'punctuation.definition.array', foreground: 'c0c5ce'},
 
-            { token: 'keyword.operator', foreground: 'f69057' },
             { token: 'keyword', foreground: 'cc99cc' },
+            { token: 'keyword.operator', foreground: 'f69057' },
+            { token: 'keyword.call', foreground: '48c7e0' },
+            { token: 'keyword.call_indirect', foreground: '48c7e0' },
+            { token: 'keyword.call_import', foreground: '48c7e0' },
+
             { token: 'variable', foreground: '6699cc' },
             { token: 'variable.other.dollar', foreground: 'bf616a' },
 

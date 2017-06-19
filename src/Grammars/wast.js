@@ -65,7 +65,12 @@ export default function registerWastSyntax(monaco) {
             "br",
             "br_if",
             "br_table",
-            "return"
+            "return",
+
+            // Call
+            "call",
+            "call_indirect",
+            "call_import"
         ],
 
         types: [
@@ -79,11 +84,6 @@ export default function registerWastSyntax(monaco) {
         ],
 
         operations: [
-            // Call
-            "call",
-            "call_indirect",
-            "call_import",
-
             // Parametric
             "drop",
             "select",
