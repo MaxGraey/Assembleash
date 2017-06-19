@@ -48,6 +48,7 @@ export default class EditorContainer extends Component {
              compileFailure:    false,
              compileSuccess:    false,
              splitPosition:     0.62,
+             additionalStatusMessage: '',
              inputEditorWidth:  '100%',
              outputEditorWidth: '100%',
              editorsHeight:     '750px',
@@ -109,8 +110,13 @@ export default class EditorContainer extends Component {
         if (!this.inputEditor) return;
 
         //console.clear();
+
+        // clean errors and messages
         this.removeAllNotification();
         this.removeAllAnnotation();
+        this.setState({
+            additionalStatusMessage: ''
+        });
 
         const {
             compiler,
@@ -167,6 +173,10 @@ export default class EditorContainer extends Component {
                 this.addNotification(message + e.message);
                 console.error(message, e);
 
+                this.setState({
+                    additionalStatusMessage: message
+                });
+
             } finally {
                 if (this.toolbar && this.toolbar.compileButton)
                     this.toolbar.compileButton.endCompile();
@@ -214,10 +224,15 @@ export default class EditorContainer extends Component {
                 setImmediate(() => {
                     if (validate) {
                         if (!module.validate()) {
-                            let notValid = 'Wasm validation error';
+                            let notValid = 'Code validation error';
                             console.error(notValid);
                             this.addNotification(notValid);
                             this._errorCounts = 1;
+                            this.setState({
+                                compileSuccess: false,
+                                compileFailure: true,
+                                additionalStatusMessage: notValid
+                            });
                             return;
                         }
                     }
@@ -586,6 +601,7 @@ export default class EditorContainer extends Component {
             compileFailure,
             notifications,
             annotations,
+            additionalStatusMessage,
 
             splitPosition,
             inputEditorWidth,
@@ -695,6 +711,7 @@ export default class EditorContainer extends Component {
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }
                     downloadDisabled={ !canBinaryDownload }
+                    errorMessage={ additionalStatusMessage }
                 />
 
                 { errorNotifications }

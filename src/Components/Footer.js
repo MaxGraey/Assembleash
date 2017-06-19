@@ -12,12 +12,14 @@ import BusySignal from './BusySignal';
 export default class Footer extends Component {
     static propTypes = {
         downloadDisabled:  PropTypes.bool,
-        onDownloadPressed: PropTypes.func
+        onDownloadPressed: PropTypes.func,
+        errorMessage:      PropTypes.string
     }
 
     static defaultProps = {
         busyState: 'busy',
         downloadDisabled: true,
+        errorMessage: null,
         onDownloadPressed: () => {}
     }
 
@@ -27,7 +29,8 @@ export default class Footer extends Component {
             onDownloadPressed,
             downloadDisabled,
             busyState,
-            errorCount
+            errorCount,
+            errorMessage
         } = this.props;
 
         const sizeUnits = binarySize.split(' ');
@@ -45,6 +48,9 @@ export default class Footer extends Component {
         } else if (busyState === 'failure') {
             messageClass = 'busy-filure-color';
             statusBarMessage = `(${errorCount}) Error${errorCount > 1 ? 's' : ''}`;
+            if (errorMessage) {
+                statusBarMessage += ': ' + errorMessage;
+            }
         }
 
         return (
