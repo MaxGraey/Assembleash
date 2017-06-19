@@ -61,6 +61,12 @@
     /*display: none;*/
 }
 
+.monaco-editor .monaco-scrollable-element .slider {
+    background: #111 !important;
+    border: 1pt solid #485360;
+    border-radius: 100pt;
+}
+
 .errorDecoration {
     left: 0px !important;
     width: 100% !important;

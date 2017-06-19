@@ -218,12 +218,14 @@ export default class Editor extends Component {
 
                     cursorBlinking: 'smooth',
                     scrollbar: {
-                        //vertical: 'hidden',
-                        //horizontal: 'hidden',
+                        //vertical: 'visible',
+                        //horizontal: 'visible',
                         verticalHasArrows: false,
                         horizontalHasArrows: false,
                         verticalScrollbarSize:   10,
-		                horizontalScrollbarSize: 10
+		                horizontalScrollbarSize: 10,
+                        verticalSliderSize: 8,
+                        horizontalSliderSize: 8
                     },
                     //glyphMargin: true,
                     fontSize: fontSize,
