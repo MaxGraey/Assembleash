@@ -18,6 +18,7 @@ import {
     getCompilerVersion,
     CompilerDescriptions,
     CompilerList,
+    CompileMode,
     CompileModes,
     formatCode,
     formatSize
@@ -43,7 +44,7 @@ export default class EditorContainer extends Component {
          this.state = {
              version:           '0.0.0',
              compiler:          props.compiler,
-             compileMode:       CompileModes[0],
+             compileMode:       CompileMode.Auto,
              compilerReady:     false,
              compileFailure:    false,
              compileSuccess:    false,
@@ -396,7 +397,7 @@ export default class EditorContainer extends Component {
         this._lastTextInput = value;
         const mode = this.state.compileMode;
 
-        if (mode === CompileModes[0]) { // Auto
+        if (mode === CompileMode.Auto) { // Auto
             this.updateCompilationWithDelay(AutoCompilationDelay);
         }
     }
@@ -491,13 +492,8 @@ export default class EditorContainer extends Component {
     onCompileButtonClick = mode => {
         this._clearCompileTimeout();
 
-        if (mode === CompileModes[0] || // Auto
-            mode === CompileModes[1]) { // Manual
-
+        if (mode === CompileMode.Auto || mode === CompileMode.Manual) {
             this.updateCompilation();
-
-        } else if (CompileModes[2]) { // Decompile
-            // Decompile not supported yet
         }
     }
 
@@ -533,7 +529,7 @@ export default class EditorContainer extends Component {
 
     addNotification = (message) => {
         // skip notifications for Auto compile mode
-        if (this.state.compileMode === CompileModes[0]) { //Auto
+        if (this.state.compileMode === CompileMode.Auto) {
             return;
         }
 
@@ -664,7 +660,7 @@ export default class EditorContainer extends Component {
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();
                         this.setState({ compileMode: mode });
-                        if (mode === CompileModes[0]) { // Auto
+                        if (mode === CompileMode.Auto) {
                             this.updateCompilationWithDelay(AutoCompilationDelay);
                         }
                     }}

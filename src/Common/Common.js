@@ -1,5 +1,10 @@
 
-export const CompileModes = ['Auto', 'Manual'];
+export const CompileMode = {
+    Auto:   0,
+    Manual: 1
+};
+
+export const CompileModes = Object.keys(CompileMode);
 
 export const CompilerDescriptions = {
     'TurboScript': {

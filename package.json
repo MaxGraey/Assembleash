@@ -12,7 +12,8 @@
     "assemblyscript",
     "turboscript",
     "typescript",
-    "compiler"
+    "compiler",
+    "online"
   ],
   "dependencies": {
     "file-saver": "^1.3.3",
