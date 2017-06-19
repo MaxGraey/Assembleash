@@ -44,9 +44,9 @@ export default function registerTheme(monaco) {
             { token: 'storage', foreground: 'cc99cc' },
             { token: 'support.function', foreground: '96b5b4' },
 
-            { token: 'string', foreground: 'a3be8c' },
-            { token: 'constant.other.symbol', foreground: 'a3be8c' },
-            { token: 'entity.other.inherited-class', foreground: 'a3be8c' },
+            { token: 'string', foreground: '81c56c' },
+            { token: 'constant.other.symbol', foreground: '81c56c' },
+            { token: 'entity.other.inherited-class', foreground: '81c56c' },
 
             { token: 'number', foreground: 'f2777a' },
 

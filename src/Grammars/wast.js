@@ -1,15 +1,10 @@
 
-// Adopted from https://github.com/dcodeIO/AssemblyScript/blob/gh-pages/assets/sexpr.js
+// Based on https://github.com/dcodeIO/AssemblyScript/blob/gh-pages/assets/sexpr.js
 
 export default function registerWastSyntax(monaco) {
     monaco.languages.register({ id: 'wast' });
 
     monaco.languages.setLanguageConfiguration('wast', {
-        /*indentationRules: {
-            decreaseIndentPattern: /^(.*\*\/)?\s*\}.*$/,
-            increaseIndentPattern: /^.*\{[^}"']*$/
-        },*/
-
         comments: {
 		    lineComment: ';;',
 		    blockComment: ['\(;', ';\)'],

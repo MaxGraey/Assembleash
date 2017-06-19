@@ -33,12 +33,14 @@ export default class Editor extends Component {
         typescriptExtraLibs: null
     }
 
+    /*
     static requireConfig = {
         url: 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js',
         paths: {
             vs: 'https://unpkg.com/monaco-editor@0.8.3/min/vs'
         }
     };
+    */
 
     constructor(props) {
         super(props);
@@ -70,7 +72,7 @@ export default class Editor extends Component {
 
                     for (let annotation of annotations) {
                         decorations.push({
-                            range: new this.monaco.Range(annotation.row, 1, annotation.row),
+                            range: new Editor.monaco.Range(annotation.row, 1, annotation.row),
                             options: {
                                 isWholeLine: false,
                                 linesDecorationsClassName: 'errorDecoration',
@@ -89,13 +91,13 @@ export default class Editor extends Component {
 
     // this.props.typescriptExtraLibs
     addExtraLibs(extraLibs) {
-        if (!this.extraLibsRegistered && this.monaco && extraLibs) {
+        if (!this.extraLibsRegistered && Editor.monaco && extraLibs) {
             console.log('extralib registered!');
 
             const files = extraLibs;
             const names = Object.keys(files);
 
-            const typescript = this.monaco.languages.typescript;
+            const typescript = Editor.monaco.languages.typescript;
             for (let index = 0, len = names.length; index < len; index++) {
                 typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
             }
@@ -116,17 +118,17 @@ export default class Editor extends Component {
 
     onLoad = (editor, monaco) => {
         this.editor = editor;
-        this.monaco = monaco;
+        Editor.monaco = Editor.monaco || monaco;
 
         if (!Editor.wastRegistered) {
 
             this.addExtraLibs(this.props.typescriptExtraLibs);
 
-            registerTheme(monaco);
-            registerWastSyntax(monaco);
+            registerTheme(Editor.monaco);
+            registerWastSyntax(Editor.monaco);
             Editor.wastRegistered = true;
 
-            const typescript = monaco.languages.typescript;
+            const typescript = Editor.monaco.languages.typescript;
             typescript.typescriptDefaults.setCompilerOptions({
                 target: typescript.ScriptTarget.Latest,
                 module: typescript.ModuleKind.None,
@@ -238,7 +240,6 @@ export default class Editor extends Component {
                 }}
                 onChange={ this.onChange }
                 editorDidMount={ this.onLoad }
-                requireConfig={ this.constructor.requireConfig }
             />
         );
     }
