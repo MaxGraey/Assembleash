@@ -32,7 +32,7 @@ export const CompilerDescriptions = {
             },
             validate: {
                 label:   'Validate',
-                default: false
+                default: true
             },
             optimize: {
                 label:   'Optimize',
