@@ -56,12 +56,14 @@ function rewireModule(modulePath, customizer) {
     config = customizer(Object.assign({}, config));
     defaults.__set__('config', config);*/
 
+    const patching = () => {
+        var defaults = rewire(modulePath);
+        var config = defaults.__get__('config');
+        return customizer(Object.assign({}, config));
+    };
+
     proxyquire.noCallThru()(modulePath, {
-        '../config/webpack.config.dev': (() => {
-            var defaults = rewire(modulePath);
-            var config = defaults.__get__('config');
-            //console.log('config:', config);
-            return customizer(Object.assign({}, config));
-        })()
+        '../config/webpack.config.dev':  patching(),
+        '../config/webpack.config.prod': patching()
     });
 }
