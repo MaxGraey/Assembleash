@@ -1,5 +1,5 @@
-let rewire     = require('rewire');
-let proxyquire = require('proxyquire');
+const rewire     = require('rewire');
+const proxyquire = require('proxyquire');
 
 switch (process.argv[2]) {
     // The "start" script is run during development mode
@@ -47,12 +47,21 @@ function loadCustomizer(module) {
 function rewireModule(modulePath, customizer) {
     // Load the module with `rewire`, which allows modifying the
     // script's internal variables.
-    let defaults = rewire(modulePath);
+    //let defaults = rewire(modulePath);
 
     // Reach into the module, grab its global 'config' variable,
     // pass it through the customizer function, and then set it back.
     // 'config' is Create React App's built-in Webpack config.
-    let config = defaults.__get__('config');
+    /*let config = defaults.__get__('config');
     config = customizer(Object.assign({}, config));
-    defaults.__set__('config', config);
+    defaults.__set__('config', config);*/
+
+    proxyquire.noCallThru()(modulePath, {
+        '../config/webpack.config.dev': (() => {
+            var defaults = rewire(modulePath);
+            var config = defaults.__get__('config');
+            //console.log('config:', config);
+            return customizer(Object.assign({}, config));
+        })()
+    });
 }

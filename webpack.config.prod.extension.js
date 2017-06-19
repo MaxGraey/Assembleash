@@ -1,17 +1,16 @@
 const path = require('path');
 
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = function (config) {
     // TODO add webpack plugins
 
-    config.plugins.push(new CopyWebpackPlugin([
+    config.plugins.unshift(new CopyPlugin([
         {
             from: 'node_modules/monaco-editor/min/vs',
             to: 'vs'
         }
     ]));
 
-    //config.resolve.fallback = [...config.resolve.fallback, path.resolve('src')];
     return config;
 };

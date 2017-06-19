@@ -38,8 +38,8 @@
     "rewire": "^2.5.2"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
+    "start": "node scripts/custom-config start",
+    "build": "node scripts/custom-config build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "predeploy": "yarn build",
