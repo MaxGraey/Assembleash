@@ -83,20 +83,25 @@ export default class Editor extends Component {
 
     onLoad = (editor, monaco) => {
         this.editor = editor;
-        Editor.monaco = Editor.monaco || monaco;
+        Editor.monaco = monaco;
 
         if (!Editor.wastRegistered) {
-            registerTheme(Editor.monaco);
-            registerWastSyntax(Editor.monaco);
             Editor.wastRegistered = true;
 
-            const typescript = Editor.monaco.languages.typescript;
+            const typescript = window.monaco.languages.typescript;
             typescript.typescriptDefaults.setCompilerOptions({
                 target: typescript.ScriptTarget.Latest,
                 module: typescript.ModuleKind.None,
                 noLib:  true,
                 allowNonTsExtensions: true
             });
+
+            registerWastSyntax(window.monaco);
+            registerTheme(window.monaco);
+
+            this.editor.updateOptions({
+                theme: 'vs-assembleash'
+            })
         }
 
         if (this.props.focus) {

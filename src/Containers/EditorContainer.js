@@ -24,6 +24,9 @@ import {
     formatSize
 } from '../Common/Common'
 
+import registerWastSyntax from '../Grammars/wast'
+import registerTheme from '../Grammars/theme.js'
+
 import { OrderedSet } from 'immutable'
 
 
@@ -448,7 +451,7 @@ export default class EditorContainer extends Component {
     }
 
     onScriptLoad() {
-        if (!this.extraLibsRegistered && window.assemblyscript && window.monaco) {
+        if (window.monaco && !this.extraLibsRegistered && window.assemblyscript) {
             const files = window.assemblyscript.library.files;
             const names = Object.keys(files);
 
@@ -672,8 +675,7 @@ export default class EditorContainer extends Component {
                         code={ input }
                         annotations={ annotations.toArray() }
                         onChange={ this.onInputChange }
-                    >
-                    </Editor>
+                    />
                     <Editor
                         readOnly
                         id="output"

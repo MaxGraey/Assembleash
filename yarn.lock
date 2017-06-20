@@ -5119,9 +5119,9 @@ react-live@^1.7.0:
     prop-types "^15.5.8"
     unescape "^0.2.0"
 
-react-monaco-editor@^0.8.1:
+"react-monaco-editor@https://github.com/jurajhrib/react-monaco-editor":
   version "0.8.1"
-  resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.8.1.tgz#3f09a3a26919c22b783d275d0ec674f6ce5b7f81"
+  resolved "https://github.com/jurajhrib/react-monaco-editor#6a1a74ce7294c67138f4e2185a68537217bbe20b"
   dependencies:
     monaco-editor "~0.8.x"
 
