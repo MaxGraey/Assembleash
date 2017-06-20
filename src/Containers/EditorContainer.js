@@ -71,7 +71,7 @@ export default class EditorContainer extends Component {
              notificationCount: 0
          };
 
-         this._errorCounts       = 0;
+         this._errorCount       = 0;
          this._lastTextInput     = '';
          this._compileTimerDelay = null;
          this._cachedClientRect  = null;
@@ -111,6 +111,7 @@ export default class EditorContainer extends Component {
         //console.clear();
 
         // clean errors and messages
+        this._errorCount = 0;
         this.removeAllNotification();
         this.removeAllAnnotation();
         this.setState({
@@ -128,7 +129,6 @@ export default class EditorContainer extends Component {
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton) {
-            this._errorCounts = 0;
             this.toolbar.compileButton.startCompile();
             this.setState({
                 compileSuccess: false,
@@ -166,14 +166,14 @@ export default class EditorContainer extends Component {
                     compileFailure: true
                 });
 
-                this._errorCounts = 1;
+                this._errorCount = 1;
 
-                const message = '<' + compiler + '> internal error:\n';
+                const message = '<' + compiler + '> internal error: ';
                 this.addNotification(message + e.message);
                 console.error(message, e);
 
                 this.setState({
-                    additionalStatusMessage: message
+                    additionalStatusMessage: message + e.message
                 });
 
             } finally {
@@ -202,7 +202,7 @@ export default class EditorContainer extends Component {
                 });
 
                 const diagnostics = as.Compiler.lastDiagnostics;
-                this._errorCounts = diagnostics.length;
+                this._errorCount = diagnostics.length;
 
                 for (let i = 0; i < diagnostics.length; i++) {
                     let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
@@ -226,7 +226,7 @@ export default class EditorContainer extends Component {
                             let notValid = 'Code validation error';
                             console.error(notValid);
                             this.addNotification(notValid);
-                            this._errorCounts = 1;
+                            this._errorCount = 1;
                             this.setState({
                                 compileSuccess: false,
                                 compileFailure: true,
@@ -239,7 +239,7 @@ export default class EditorContainer extends Component {
                     if (optimize)
                         module.optimize();
 
-                    this._errorCounts = 0;
+                    this._errorCount = 0;
 
                     setImmediate(() => {
                         this.setState({
@@ -277,15 +277,16 @@ export default class EditorContainer extends Component {
             });
             setImmediate(() => {
                 let diagnostic = result.log.first;
-                let errorCount = 0;
                 let errorMessage;
+                this._errorCount = 0;
+
                 while (diagnostic != null) {
                     const location = diagnostic.range.source.indexToLineColumn(diagnostic.range.start);
-                    errorMessage = `[${location.line + 1}:${location.column + 1}] `;
-                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "ERROR: " : "WARN: ";
+                    errorMessage = `module.ts(${location.line + 1}, ${location.column + 1}): `;
+                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "error. " : "warning. ";
                     errorMessage += diagnostic.message + "\n";
 
-                    if (errorCount <= MaxPrintingErrors) {
+                    if (this._errorCount <= MaxPrintingErrors) {
                         this.addNotification(errorMessage);
                         let annotations = this.state.annotations;
                         this.setState({
@@ -293,13 +294,12 @@ export default class EditorContainer extends Component {
                         });
                     }
 
-                    errorCount++;
-                    this._errorCounts++;
+                    this._errorCount++;
                     diagnostic = diagnostic.next;
                 }
 
-                if (errorCount > MaxPrintingErrors) {
-                    errorMessage = `Too many errors (${errorCount})`;
+                if (this._errorCount > MaxPrintingErrors) {
+                    errorMessage = `Too many errors (${this._errorCount})`;
                     console.error(errorMessage);
                     this.addNotification(errorMessage);
                 }
@@ -307,7 +307,7 @@ export default class EditorContainer extends Component {
 
         } else {
             setImmediate(() => {
-                this._errorCounts = 0;
+                this._errorCount = 0;
                 this.setState({
                     compileSuccess: true,
                     compileFailure: false,
@@ -337,7 +337,7 @@ export default class EditorContainer extends Component {
 
                     // compiled failure
                     const diagnostics = output.diagnostics;
-                    this._errorCounts = diagnostics.length;
+                    this._errorCount = diagnostics.length;
 
                     for (let i = 0; i < diagnostics.length; i++) {
                         let errorMessage = diagnostics[i];
@@ -355,7 +355,7 @@ export default class EditorContainer extends Component {
                     }
                 } else {
 
-                    this._errorCounts = 0;
+                    this._errorCount = 0;
 
                     // compiled successfully
                     this.setState({
@@ -376,7 +376,7 @@ export default class EditorContainer extends Component {
                 compileFailure: true
             });
 
-            this._errorCounts = 1;
+            this._errorCount = 1;
 
             const message = '<' + this.state.compiler + '> Service not response';
             this.addNotification(message);
@@ -405,7 +405,7 @@ export default class EditorContainer extends Component {
     }
 
     changeCompiler = compiler => {
-        this._errorCounts       = 0;
+        this._errorCount       = 0;
         this._lastTextInput     = '';
         this._compileTimerDelay = null;
 
@@ -678,7 +678,7 @@ export default class EditorContainer extends Component {
                 </SplitPane>
 
                 <Footer
-                    errorCount={ this._errorCounts }
+                    errorCount={ this._errorCount }
                     busyState={ busyState }
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }
