@@ -98,11 +98,9 @@ export default class Editor extends Component {
 
             registerWastSyntax(window.monaco);
             registerTheme(window.monaco);
-
-            this.editor.updateOptions({
-                theme: 'vs-assembleash'
-            })
         }
+
+        this.editor.updateOptions({ theme: 'vs-assembleash' });
 
         if (this.props.focus) {
             editor.focus();
@@ -146,7 +144,6 @@ export default class Editor extends Component {
                 height={ height }
                 options={{
                     readOnly,
-                    theme: 'vs-assembleash',
                     renderLineHighlight:  'gutter',
                     selectOnLineNumbers:  true,
                     scrollBeyondLastLine: false,
