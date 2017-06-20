@@ -12,8 +12,6 @@ Playground for WebAssembly and Typescript-like languages.
 
 **TODO**
 
-- ~~Switch to react-monaco-editor with vscode-textmate~~
-- ~~Add custom webpack config with Prepack plugin~~
 - Additional status info like compiling time
 - Switch to feather icons
 - Optimize content for mobile browsers
