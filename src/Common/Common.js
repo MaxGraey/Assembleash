@@ -11,9 +11,12 @@ export const CompilerDescriptions = {
         github:  'https://github.com/01alchemist/TurboScript',
         options: {},
         example:
-`export function fib(num: int32): int32 {
-    if (num <= 1) return 1;
-    return fib(num - 1) + fib(num - 2);
+`export function fib(n: int): int {
+    let i: int, t: int, a: int = 0, b: int = 1;
+    for (i = 0; i < n; i++) {
+        t = a + b; a = b; b = t;
+    }
+    return b;
 }`
     },
 
@@ -45,9 +48,12 @@ export const CompilerDescriptions = {
             }
         },
         example:
-`export function fib(num: int32): int32 {
-    if (num <= 1) return 1;
-    return fib(num - 1) + fib(num - 2);
+`export function fib(n: int): int {
+    let i: int, t: int, a: int = 0, b: int = 1;
+    for (i = 0; i < n; i++) {
+        t = a + b; a = b; b = t;
+    }
+    return b;
 }`
     },
 
