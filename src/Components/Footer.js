@@ -34,9 +34,8 @@ export default class Footer extends Component {
         } = this.props;
 
         const sizeUnits = binarySize.split(' ');
-
-        if (!sizeUnits[0]) sizeUnits[0] = '';
-        if (!sizeUnits[1]) sizeUnits[1] = '';
+        const size = sizeUnits[0] ? sizeUnits[0] : '';
+        const unit = sizeUnits[1] ? sizeUnits[1] : '';
 
         let statusBarMessage = '';
         let messageClass = 'busy-success-color';
@@ -46,7 +45,7 @@ export default class Footer extends Component {
         } else if (busyState === 'success') {
             statusBarMessage = 'Compiled successfully';
         } else if (busyState === 'failure') {
-            messageClass = 'busy-filure-color';
+            messageClass = 'busy-failure-color';
             statusBarMessage = `(${errorCount}) Error${errorCount > 1 ? 's' : ''}`;
             if (errorMessage) {
                 statusBarMessage += ': ' + errorMessage;
@@ -59,12 +58,11 @@ export default class Footer extends Component {
                     <span><Glyphicon glyph="download" style={{ fontSize: "125%", marginTop: '-0.5rem', top: '0.5rem' }}/>Download .wasm</span>
                 </Button>
                 <div className="pull-right label">
-                    <h4>{ sizeUnits[0] }
-                        <span style={{ color: '#bbb', paddingRight: '2rem', fontWeight: 100 }}>{ ' ' + sizeUnits[1] }</span>
+                    <h4>{ size }
+                        <span style={{ color: '#bbb', paddingRight: '2rem', fontWeight: 100 }}>{ ' ' + unit }</span>
                     </h4>
                 </div>
-                <BusySignal state={ busyState }>
-                </BusySignal>
+                <BusySignal state={ busyState }/>
                 <label style={{
                     marginLeft: '55px',
                     float:      'left',
@@ -76,7 +74,8 @@ export default class Footer extends Component {
                         style={{
                             fontWeight: 100,
                             textShadow: '0 0 1px rgba(0,0,0,0.6)'
-                        }} >{ statusBarMessage }</h4>
+                        }}
+                    >{ statusBarMessage }</h4>
                 </label>
             </ButtonToolbar>
         );

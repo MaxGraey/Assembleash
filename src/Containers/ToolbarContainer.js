@@ -14,8 +14,6 @@ import CompileButton     from '../Components/CompileButton'
 import SettingsButton    from '../Components/SettingsButton'
 import OutputButtonGroup from '../Components/OutputButtonGroup'
 
-import { getCompilerVersion } from '../Common/Common'
-
 export default class ToolbarContainer extends Component {
     static propTypes = {
         version:                PropTypes.string,

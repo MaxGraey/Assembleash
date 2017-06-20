@@ -1,5 +1,10 @@
 
-export const CompileModes = ['Auto', 'Manual', 'Decompile'];
+export const CompileMode = {
+    Auto:   0,
+    Manual: 1
+};
+
+export const CompileModes = Object.keys(CompileMode);
 
 export const CompilerDescriptions = {
     'TurboScript': {
@@ -30,11 +35,6 @@ export const CompilerDescriptions = {
         loaded: false,
         github: 'https://github.com/dcodeIO/AssemblyScript',
         options: {
-            // detect automatically
-            /*stdlib: {
-                label:   'Library',
-                default: false
-            },*/
             longMode: {
                 label:   'Use 64 bits',
                 default: false
@@ -180,20 +180,20 @@ export function formatCode(buffer) {
     // format binary data
     const last = buffer.length;
 
-    let output = 'new Uint8Array([\r\n    ';
-    output += Array.prototype.map.call(buffer, (value, index) => {
-        let result = '0x' + ('00' + value.toString(16)).slice(-2);
+    let output = 'new Uint8Array([\n    ';
+    for (let i = 0, len = buffer.length; i < len; i++) {
+        const value = buffer[i];
+        let result = '0x' + ('00' + value.toString(16)).substr(-2);
 
-        index++;
-        if (index !== last)
+        if (i !== last - 1)
             result += ', ';
 
-        if ((index % 10) === 0)
-            result += '\r\n    ';
+        if (((i + 1) % 10) === 0)
+            result += '\n    ';
 
-        return result;
-    }).join('');
-    output += '\r\n]);';
+        output += result;
+    }
+    output += '\n]);';
 
     return output;
 }

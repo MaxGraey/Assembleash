@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 
-import {
-    Glyphicon
-} from 'react-bootstrap';
+import { Glyphicon } from 'react-bootstrap';
 
 export default class BusySignal extends Component {
     static propTypes = {
@@ -33,20 +31,15 @@ export default class BusySignal extends Component {
     }
 
     _renderReadyState() {
-        const state = this.props.state;
-        if (state === 'success') {
+        const state   = this.props.state;
+        const success = state === 'success';
+        const failure = state === 'failure';
+
+        if (success || failure) {
             return (
                 <Glyphicon
-                    glyph='ok'
-                    className='busy-success-color'
-                    style={{ paddingTop: '5px', paddingLeft: '5px' }}
-                />
-            );
-        } else if (state === 'failure') {
-            return (
-                <Glyphicon
-                    glyph='remove'
-                    className='busy-filure-color'
+                    glyph={ success ? 'ok' : 'remove' }
+                    className={ `busy-${state}-color` }
                     style={{ paddingTop: '5px', paddingLeft: '5px' }}
                 />
             );

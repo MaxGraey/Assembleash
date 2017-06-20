@@ -16,8 +16,7 @@ export default class App extends Component {
         let spinner = document.getElementById('load-spinner');
         document.body.removeChild(spinner);
 
-        let url = window.location.href;
-        let compiler = url.split('#')[1];
+        let compiler = window.location.hash.substring(1);
         if (compiler) {
             CompilerList.forEach(value => {
                 if (compiler.toLowerCase() === value.toLowerCase()) {

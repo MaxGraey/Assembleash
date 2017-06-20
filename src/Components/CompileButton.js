@@ -7,7 +7,7 @@ import {
     SplitButton
 } from 'react-bootstrap';
 
-import { CompileModes } from '../Common/Common'
+import { CompileMode, CompileModes } from '../Common/Common'
 
 import tooltip from './Tooltip'
 
@@ -28,7 +28,7 @@ export default class CompileButton extends Component {
         super(props);
         this.state = {
             isCompiling: false,
-            compileMode: CompileModes[0],
+            compileMode: CompileMode.Auto,
             cursor:      'pointer'
         };
     }
@@ -52,8 +52,7 @@ export default class CompileButton extends Component {
         onClick(this.state.compileMode);
     }
 
-    onSelect = eventKey => {
-        let compileMode = CompileModes[eventKey];
+    onSelect = compileMode => {
         this.setState({ compileMode });
         this.props.onChange(compileMode);
     }
@@ -67,7 +66,7 @@ export default class CompileButton extends Component {
                 <Glyphicon
                     glyph={ !isCompiling ? 'play' : 'refresh' }
                     className={ isCompiling ? 'gly-spin' : '' }
-                />{ '\t' + compileMode }
+                />{ '\t' + CompileModes[compileMode] }
             </span>
         );
 
@@ -95,7 +94,6 @@ export default class CompileButton extends Component {
                     CompileModes.map((value, index) =>
                         <MenuItem
                             key={ index }
-                            disabled={ value === 'Decompile' }
                             eventKey={ index }
                             onSelect={ this.onSelect }
                             style={{ textAlign: 'center' }}

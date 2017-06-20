@@ -17,10 +17,15 @@ import {
     isRequreStdlib,
     getCompilerVersion,
     CompilerDescriptions,
+    CompilerList,
+    CompileMode,
     CompileModes,
     formatCode,
     formatSize
 } from '../Common/Common'
+
+import registerWastSyntax from '../Grammars/wast'
+import registerTheme from '../Grammars/theme.js'
 
 import { OrderedSet } from 'immutable'
 
@@ -42,10 +47,11 @@ export default class EditorContainer extends Component {
          this.state = {
              version:           '0.0.0',
              compiler:          props.compiler,
-             compileMode:       CompileModes[0],
+             compileMode:       CompileMode.Auto,
              compilerReady:     false,
              compileFailure:    false,
              compileSuccess:    false,
+             splitPosition:     0.62,
              additionalStatusMessage: '',
              inputEditorWidth:  '100%',
              outputEditorWidth: '100%',
@@ -60,7 +66,6 @@ export default class EditorContainer extends Component {
              // settings
              validate:          true,
              optimize:          true,
-             //stdlib:            false,
              longMode:          false,
              unsafe:            true,
 
@@ -69,7 +74,7 @@ export default class EditorContainer extends Component {
              notificationCount: 0
          };
 
-         this._errorCounts       = 0;
+         this._errorCount       = 0;
          this._lastTextInput     = '';
          this._compileTimerDelay = null;
          this._cachedClientRect  = null;
@@ -109,6 +114,7 @@ export default class EditorContainer extends Component {
         //console.clear();
 
         // clean errors and messages
+        this._errorCount = 0;
         this.removeAllNotification();
         this.removeAllAnnotation();
         this.setState({
@@ -126,7 +132,6 @@ export default class EditorContainer extends Component {
         const inputCode = this.inputEditor.state.value;
 
         if (this.toolbar && this.toolbar.compileButton) {
-            this._errorCounts = 0;
             this.toolbar.compileButton.startCompile();
             this.setState({
                 compileSuccess: false,
@@ -169,14 +174,14 @@ export default class EditorContainer extends Component {
                     compileFailure: true
                 });
 
-                this._errorCounts = 1;
+                this._errorCount = 1;
 
-                const message = '<' + compiler + '> internal error:\n';
+                const message = '<' + compiler + '> internal error: ';
                 this.addNotification(message + e.message);
                 console.error(message, e);
 
                 this.setState({
-                    additionalStatusMessage: message
+                    additionalStatusMessage: message + e.message
                 });
 
             } finally {
@@ -208,7 +213,7 @@ export default class EditorContainer extends Component {
                 });
 
                 const diagnostics = as.Compiler.lastDiagnostics;
-                this._errorCounts = diagnostics.length;
+                this._errorCount = diagnostics.length;
 
                 for (let i = 0; i < diagnostics.length; i++) {
                     let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
@@ -232,7 +237,7 @@ export default class EditorContainer extends Component {
                             let notValid = 'Code validation error';
                             console.error(notValid);
                             this.addNotification(notValid);
-                            this._errorCounts = 1;
+                            this._errorCount = 1;
                             this.setState({
                                 compileSuccess: false,
                                 compileFailure: true,
@@ -245,7 +250,7 @@ export default class EditorContainer extends Component {
                     if (optimize)
                         module.optimize();
 
-                    this._errorCounts = 0;
+                    this._errorCount = 0;
 
                     setImmediate(() => {
                         this.setState({
@@ -267,6 +272,9 @@ export default class EditorContainer extends Component {
 
     compileByTurboScript(code, options) {
         const turbo = window.turboscript;
+
+        if (!turbo) throw new Error('Turboscript not loaded');
+
         const result = turbo.compileString(code, {
             target:   turbo.CompileTarget.WEBASSEMBLY,
             silent:   true,
@@ -280,15 +288,16 @@ export default class EditorContainer extends Component {
             });
             setImmediate(() => {
                 let diagnostic = result.log.first;
-                let errorCount = 0;
                 let errorMessage;
+                this._errorCount = 0;
+
                 while (diagnostic != null) {
                     const location = diagnostic.range.source.indexToLineColumn(diagnostic.range.start);
-                    errorMessage = `[${location.line + 1}:${location.column + 1}] `;
-                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "ERROR: " : "WARN: ";
+                    errorMessage = `module.ts(${location.line + 1}, ${location.column + 1}): `;
+                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "error. " : "warning. ";
                     errorMessage += diagnostic.message + "\n";
 
-                    if (errorCount <= MaxPrintingErrors) {
+                    if (this._errorCount <= MaxPrintingErrors) {
                         this.addNotification(errorMessage);
                         let annotations = this.state.annotations;
                         this.setState({
@@ -296,13 +305,12 @@ export default class EditorContainer extends Component {
                         });
                     }
 
-                    errorCount++;
-                    this._errorCounts++;
+                    this._errorCount++;
                     diagnostic = diagnostic.next;
                 }
 
-                if (errorCount > MaxPrintingErrors) {
-                    errorMessage = `Too many errors (${errorCount})`;
+                if (this._errorCount > MaxPrintingErrors) {
+                    errorMessage = `Too many errors (${this._errorCount})`;
                     console.error(errorMessage);
                     this.addNotification(errorMessage);
                 }
@@ -310,7 +318,7 @@ export default class EditorContainer extends Component {
 
         } else {
             setImmediate(() => {
-                this._errorCounts = 0;
+                this._errorCount = 0;
                 this.setState({
                     compileSuccess: true,
                     compileFailure: false,
@@ -340,7 +348,7 @@ export default class EditorContainer extends Component {
 
                     // compiled failure
                     const diagnostics = output.diagnostics;
-                    this._errorCounts = diagnostics.length;
+                    this._errorCount = diagnostics.length;
 
                     for (let i = 0; i < diagnostics.length; i++) {
                         let errorMessage = diagnostics[i];
@@ -358,7 +366,7 @@ export default class EditorContainer extends Component {
                     }
                 } else {
 
-                    this._errorCounts = 0;
+                    this._errorCount = 0;
 
                     // compiled successfully
                     this.setState({
@@ -379,7 +387,7 @@ export default class EditorContainer extends Component {
                 compileFailure: true
             });
 
-            this._errorCounts = 1;
+            this._errorCount = 1;
 
             const message = '<' + this.state.compiler + '> Service not response';
             this.addNotification(message);
@@ -396,7 +404,7 @@ export default class EditorContainer extends Component {
         this._lastTextInput = value;
         const mode = this.state.compileMode;
 
-        if (mode === CompileModes[0]) { // Auto
+        if (mode === CompileMode.Auto) {
             this.updateCompilationWithDelay(AutoCompilationDelay);
         }
     }
@@ -408,7 +416,7 @@ export default class EditorContainer extends Component {
     }
 
     changeCompiler = compiler => {
-        this._errorCounts       = 0;
+        this._errorCount       = 0;
         this._lastTextInput     = '';
         this._compileTimerDelay = null;
 
@@ -425,11 +433,8 @@ export default class EditorContainer extends Component {
         if (description.offline) {
             if (!description.loaded) {
                 $script.order(description.scripts, () => {
-                    this.setState({ compilerReady: true }, () => {
-                        description.loaded = true;
-                        getCompilerVersion(compiler, version => this.setState({ version }));
-                        this.updateCompilation();
-                    });
+                    description.loaded = true;
+                    this.onScriptLoad();
                 });
             } else {
                 this.setState({ compilerReady: true }, () => {
@@ -439,18 +444,27 @@ export default class EditorContainer extends Component {
             }
         } else {
             this.setState({ compilerReady: true }, () => {
-                console.log('loaded');
-
                 getCompilerVersion(compiler, version => this.setState({ version }));
                 this.updateCompilation();
             });
         }
     }
 
-    onScriptLoad = () => {
-        console.log('Compiler', window.assemblyscript);
+    onScriptLoad() {
+        if (window.monaco && !this.extraLibsRegistered && window.assemblyscript) {
+            const files = window.assemblyscript.library.files;
+            const names = Object.keys(files);
+
+            const typescript = window.monaco.languages.typescript;
+            for (let index = 0, len = names.length; index < len; index++)
+                typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+
+            this.extraLibsRegistered = true;
+        }
+
         this.setState({ compilerReady: true }, () => {
             this.changeCompiler();
+            getCompilerVersion(this.state.compiler, version => this.setState({ version }));
         });
     }
 
@@ -468,13 +482,8 @@ export default class EditorContainer extends Component {
     onCompileButtonClick = mode => {
         this._clearCompileTimeout();
 
-        if (mode === CompileModes[0] || // Auto
-            mode === CompileModes[1]) { // Manual
-
+        if (mode === CompileMode.Auto || mode === CompileMode.Manual) {
             this.updateCompilation();
-
-        } else if (CompileModes[2]) { // Decompile
-            // Decompile not supported yet
         }
     }
 
@@ -489,21 +498,30 @@ export default class EditorContainer extends Component {
                 this._cachedClientRect = ReactDOM.findDOMNode(this.splitEditor).getBoundingClientRect();
             }
             const { width, height } = this._cachedClientRect;
+
             const gripWidth = 4;
+            const pos = (size ? size / width : this.state.splitPosition);
+            const primaryWidth = width * pos;
 
             this.setState({
-                inputEditorWidth:  size ? size : '100%',
-                outputEditorWidth: size ? width - size - gripWidth : '100%',
-                editorsHeight:     height - 160
+                inputEditorWidth:  primaryWidth,
+                outputEditorWidth: width - primaryWidth - gripWidth,
+                editorsHeight:     height - 160,
+                splitPosition:     pos
             });
+
+            this.splitEditor.setSize(
+                { primary: 'first', size: primaryWidth },
+                { draggedSize: primaryWidth }
+            );
         }
     })
 
     addNotification = (message) => {
         // skip notifications for Auto compile mode
-        if (this.state.compileMode === CompileModes[0]) { //Auto
-            return;
-        }
+        //if (this.state.compileMode === CompileMode.Auto) {
+        //    return;
+        //}
 
     	const { notifications, notificationCount } = this.state;
 
@@ -533,7 +551,7 @@ export default class EditorContainer extends Component {
         const rowRegex = /\(([^)]+)\)/;
         const matches = rowRegex.exec(message);
         if (matches && matches.length === 2) {
-            var row = ((matches[1].split(','))[0] >>> 0) - 1;
+            var row = ((matches[1].split(','))[0] >>> 0);
             let annotations = this.state.annotations;
             this.setState({ annotations:
                 annotations.add({ row, type, text: message })
@@ -571,6 +589,7 @@ export default class EditorContainer extends Component {
             annotations,
             additionalStatusMessage,
 
+            splitPosition,
             inputEditorWidth,
             outputEditorWidth,
             editorsHeight,
@@ -629,7 +648,7 @@ export default class EditorContainer extends Component {
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();
                         this.setState({ compileMode: mode });
-                        if (mode === CompileModes[0]) { // Auto
+                        if (mode === CompileMode.Auto) {
                             this.updateCompilationWithDelay(AutoCompilationDelay);
                         }
                     }}
@@ -641,7 +660,7 @@ export default class EditorContainer extends Component {
                     ref={ self => this.splitEditor = self }
                     split="vertical"
                     minSize={ 200 }
-                    defaultSize="62%"
+                    defaultSize={ splitPosition * 100 + '%' }
                     onChange={ this.onSplitPositionChange }
                     style={{
                         margin: '12px'
@@ -656,8 +675,7 @@ export default class EditorContainer extends Component {
                         code={ input }
                         annotations={ annotations.toArray() }
                         onChange={ this.onInputChange }
-                    >
-                    </Editor>
+                    />
                     <Editor
                         readOnly
                         id="output"
@@ -670,7 +688,7 @@ export default class EditorContainer extends Component {
                 </SplitPane>
 
                 <Footer
-                    errorCount={ this._errorCounts }
+                    errorCount={ this._errorCount }
                     busyState={ busyState }
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }

@@ -1,21 +1,12 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-
-import AceEditor from 'react-ace'
-//import brace from 'brace'
-
-import 'brace/ext/language_tools'
-import 'brace/ext/searchbox'
-
-import 'brace/mode/typescript'
-import 'brace/snippets/typescript'
-import 'brace/theme/tomorrow_night_eighties'
-
-import WastMode from '../Grammars/WastMode'
-
-import '../ace.editor.css'
+import MonacoEditor from 'react-monaco-editor'
+import registerWastSyntax from '../Grammars/wast'
+import registerTheme from '../Grammars/theme.js'
 
 export default class Editor extends Component {
+    static wastRegistered = false
+
     static propTypes = {
         focus:       PropTypes.bool,
         readOnly:    PropTypes.bool,
@@ -24,7 +15,7 @@ export default class Editor extends Component {
         height:      PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
         code:        PropTypes.string,
         annotations: PropTypes.array,
-        onChange:    PropTypes.func
+        onChange:    PropTypes.func,
     }
 
     static defaultProps = {
@@ -34,8 +25,8 @@ export default class Editor extends Component {
         width:       '100%',
         height:      '750px',
         code:        '',
-        annotations: null,
-        onChange:    () => {}
+        annotations: [],
+        onChange:    () => {},
     }
 
     constructor(props) {
@@ -43,36 +34,87 @@ export default class Editor extends Component {
         this.state = {
             value: props.code
         };
+
+        this.decorations = [];
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.mode !== this.props.mode) {
-            if (this.editor) {
-                const session = this.editor.getSession();
-                if (nextProps.mode === 'wast') {
-                    session.setMode(new WastMode());
-                }
+        if (this.editor) {
+            if (nextProps.width  !== this.props.width ||
+                nextProps.height !== this.props.height) {
+                const width  = nextProps.width  || this.props.width;
+                const height = nextProps.height || this.props.height;
+                this.editor.layout({ width, height });
             }
+
+            if (nextProps.annotations !== this.props.annotations) {
+                let decorations = [];
+                if (nextProps.annotations.length > 0) {
+                    const annotations = nextProps.annotations;
+
+                    for (let annotation of annotations) {
+                        decorations.push({
+                            range: new Editor.monaco.Range(annotation.row, 1, annotation.row),
+                            options: {
+                                isWholeLine: false,
+                                linesDecorationsClassName: 'errorDecoration',
+                                glyphMarginHoverMessage:   annotation.text
+                            }
+                        });
+                    }
+                }
+
+                this.decorations = this.editor.deltaDecorations(this.decorations, decorations);
+            }
+
+            //this.editor.setHiddenAreas([new this.monaco.Range(1, 1, 3, 1)]);
         }
     }
 
-    onLoad = editor => {
-        this.editor = editor;
-        const session = editor.getSession();
+    replaceTextInRange(range, text) {
+        const replaceOperation = {
+            text,
+            range,
+            identifier: { major: 1, minor: 1 },
+            forceMoveMarkers: true
+        };
+        this.editor.executeEdits("replace", [replaceOperation]);
+    }
 
-        if (this.props.mode === 'wast') {
-            session.setMode(new WastMode());
+    onLoad = (editor, monaco) => {
+        this.editor = editor;
+        Editor.monaco = monaco;
+
+        if (!Editor.wastRegistered) {
+            Editor.wastRegistered = true;
+
+            const typescript = window.monaco.languages.typescript;
+            typescript.typescriptDefaults.setCompilerOptions({
+                target: typescript.ScriptTarget.Latest,
+                module: typescript.ModuleKind.None,
+                noLib:  true,
+                allowNonTsExtensions: true
+            });
+
+            registerWastSyntax(window.monaco);
+            registerTheme(window.monaco);
         }
 
-        session.setUseSoftTabs(true);
-        session.setOptions({ useWorker: true });
-        editor.renderer.setScrollMargin(14, 14);
+        this.editor.updateOptions({ theme: 'vs-assembleash' });
 
-        // TODO need fix setTimeout and use more clever way
-        setTimeout(() => {
-            editor.scrollToLine(Infinity, false, false, () => {});
-            editor.gotoLine(Infinity, 0, false);
-        }, 300);
+        if (this.props.focus) {
+            editor.focus();
+        }
+
+        // TEST
+        /*editor.deltaDecorations([], [{
+            range: new monaco.Range(2,1, 2),
+            options: {
+                isWholeLine: false,
+                linesDecorationsClassName: 'errorDecoration',
+                glyphMarginHoverMessage:   'error TS10234: Bla bla'
+            }
+        }]);*/
     }
 
     onChange = newValue => {
@@ -80,70 +122,58 @@ export default class Editor extends Component {
         this.props.onChange(newValue);
     }
 
-    onSelectionChange = (newValue, event) => {
-        //console.log('select-change', newValue);
-        //console.log('select-change-event', event);
-    }
-
     render() {
         const { value } = this.state;
         const {
             width,
             height,
-            focus,
             mode,
             readOnly,
-            code,
-            annotations
+            code
         } = this.props;
 
-        let text    = !readOnly ? value : code;
-        let tabSize = !readOnly ? 4 : 1;
+        const text = !readOnly ? value : code;
+        const fontSize = 14;
 
         return (
-            <AceEditor
-                name='editor'
-
-                focus={ focus }
-                readOnly={ readOnly }
-
-                annotations={ annotations }
-
-                showGutter
-                showLineNumbers
-                showPrintMargin={ false }
-                highlightActiveLine={ false }
-
-                enableBasicAutocompletion={ !readOnly }
-                enableLiveAutocompletion={ !readOnly }
-                enableSnippets={ !readOnly }
-                cursorStart={ 1 }
-
+            <MonacoEditor
+                id='editor'
                 value={ text }
-
-                mode={ mode }
-                theme='tomorrow_night_eighties'
-                fontSize={ 14 }
+                language={ mode }
                 width={ width }
                 height={ height }
+                options={{
+                    readOnly,
+                    renderLineHighlight:  'gutter',
+                    selectOnLineNumbers:  true,
+                    scrollBeyondLastLine: false,
 
-                tabSize={ tabSize }
+                    cursorBlinking: 'smooth',
+                    scrollbar: {
+                        //vertical: 'visible',
+                        //horizontal: 'visible',
+                        verticalHasArrows: false,
+                        horizontalHasArrows: false,
+                        verticalScrollbarSize:   10,
+		                horizontalScrollbarSize: 10,
+                        verticalSliderSize: 8,
+                        horizontalSliderSize: 8
+                    },
+                    //glyphMargin: true,
+                    fontSize: fontSize,
+                    lineHeight: fontSize + 5,
+                    quickSuggestionsDelay: 300,
+                    hideCursorInOverviewRuler: true,
+                    suggestFontSize:   fontSize,
+                    suggestLineHeight: fontSize + 16,
+                    roundedSelection: false,
+                    fixedOverflowWidgets: true,
 
-                editorProps={{
-                    $blockScrolling: Infinity
+                    folding: true,
+                    //renderIndentGuides: true
                 }}
-
-                setOptions={{
-                    cursorStyle: 'slim',
-                    autoScrollEditorIntoView: false,
-                    showFoldWidgets: false,
-                    animatedScroll: true,
-                    displayIndentGuides: readOnly
-		        }}
-
-                onLoad={ this.onLoad }
                 onChange={ this.onChange }
-                onSelectionChange={ this.onSelectionChange }
+                editorDidMount={ this.onLoad }
             />
         );
     }

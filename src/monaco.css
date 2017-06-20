@@ -1,0 +1,78 @@
+.monaco-editor {
+    background: transparent !important;
+}
+
+.monaco-editor-background {
+    background: transparent !important;
+}
+
+.monaco-editor-background .margin-view-overlays {
+    background-color: rgba(0,0,0,0.17);
+}
+
+.margin-view-overlays .line-numbers {
+    color: rgba(230, 210, 255, 0.25) !important;
+}
+
+.monaco-scrollable-element {
+    background: rgba(0,0,0,0.25) !important;
+}
+
+.current-line-margin {
+    background: rgba(190, 225, 255, 0.05);
+    border: none !important;
+}
+
+.cursor {
+    background: #c0c5ce !important;
+    width: 1pt !important;
+}
+
+.monaco-editor .suggest-widget {
+    color: #c0c5ce;
+    background: #4e5d6c !important;
+    border: none !important;
+    box-shadow: 0px 12px 22px rgba(0,0,0,0.15);
+}
+
+.monaco-editor .view-overlays.focused .selected-text {
+	background: rgba(100, 120, 160, 0.3) !important;
+}
+
+.monaco-editor .view-overlays .selected-text {
+	background: rgba(100, 120, 160, 0.15) !important;
+}
+
+/*
+.monaco-editor .token.indent-guide {
+    border-left: 1px solid #353535 !important;
+}
+*/
+.monaco-editor .monaco-scrollable-element .scrollbar.horizontal,
+.monaco-editor .decorationsOverviewRuler,
+.monaco-editor .monaco-scrollable-element .scrollbar.vertical .arrow-background {
+    background: transparent;
+    /*display: none;*/
+}
+/* Make vertical scrollbar transparent to allow decorations overview ruler to be visible */
+.monaco-editor .monaco-scrollable-element .scrollbar.vertical,
+.monaco-editor .monaco-scrollable-element .scrollbar.horizontal {
+	background: transparent;
+    /*display: none;*/
+}
+
+.monaco-editor .monaco-scrollable-element .slider {
+    background: #111 !important;
+    border: 1pt solid #485360;
+    border-radius: 100pt;
+}
+
+.errorDecoration {
+    left: 0px !important;
+    width: 100% !important;
+    color: red;
+    background: -webkit-linear-gradient(left, rgba(255, 0, 0, 0) 0%, rgba(255, 0, 0, 0.3) 97%, #f00 97%, #f00 100%) no-repeat border-box border-box !important;
+    background: -moz-linear-gradient(left, rgba(255, 0, 0, 0) 0%, rgba(255, 0, 0, 0.3) 97%, #f00 97%, #f00 100%) no-repeat border-box border-box !important;
+    background: linear-gradient(to left, rgba(255, 0, 0, 0) 0%, rgba(255, 0, 0, 0.3) 97%, #f00 97%, #f00 100%) no-repeat border-box border-box !important;
+    background-size: cover !important;
+}
