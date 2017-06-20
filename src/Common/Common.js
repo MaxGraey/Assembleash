@@ -16,9 +16,13 @@ export const CompilerDescriptions = {
         github:  'https://github.com/01alchemist/TurboScript',
         options: {},
         example:
-`export function fib(num: int32): int32 {
-    if (num <= 1) return 1;
-    return fib(num - 1) + fib(num - 2);
+`export function fib(n: int32): int32 {
+    let i: int32 = 0, t: int32, a: int32 = 0, b: int32 = 1;
+    while (i < n) {
+        t = a + b; a = b; b = t;
+        i++;
+    }
+    return b;
 }`
     },
 
@@ -45,9 +49,13 @@ export const CompilerDescriptions = {
             }
         },
         example:
-`export function fib(num: int32): int32 {
-    if (num <= 1) return 1;
-    return fib(num - 1) + fib(num - 2);
+`export function fib(n: int32): int32 {
+    let i: int32 = 0, t: int32, a: int32 = 0, b: int32 = 1;
+    while (i < n) {
+        t = a + b; a = b; b = t;
+        i++;
+    }
+    return b;
 }`
     },
 
@@ -84,24 +92,15 @@ export const CompilerDescriptions = {
         },
         example:
 `
-async function fib(value: int): Promise<int> {
+async function fib(n: int): Promise<int> {
     "use speedyjs";
 
-    return fibSync(value);
-}
-
-function fibSync(value: int): int {
-    "use speedyjs";
-
-    if (value <= 2) {
-        return 1;
+    let i: int = 0, t: int, a: int = 0, b: int = 1;
+    while (i < n) {
+        t = a + b; a = b; b = t;
+        i++;
     }
-
-    return fibSync(value - 2) + fibSync(value - 1);
-}
-
-async function main() {
-    console.log(await fib(40));
+    return b;
 }
 `
     }

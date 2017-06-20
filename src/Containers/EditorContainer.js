@@ -141,7 +141,12 @@ export default class EditorContainer extends Component {
                 switch (compiler) {
                     case 'AssemblyScript':
                         const stdlib = isRequreStdlib(inputCode);
-                        this.compileByAssemblyScript(inputCode, { stdlib, validate, optimize, longMode });
+                        this.compileByAssemblyScript(inputCode, {
+                             stdlib,
+                             validate,
+                             optimize,
+                             longMode
+                         });
                         break;
 
                     case 'TurboScript':
@@ -186,11 +191,14 @@ export default class EditorContainer extends Component {
     compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
 
         const as = window.assemblyscript;
+
         const module = as.Compiler.compileString(
             code, {
                 silent: true,
                 uintptrSize: longMode ? 8 : 4,
-                noLib: !stdlib
+                noLib: !stdlib,
+                malloc: stdlib,
+                exportMalloc: false
             }
         );
 
