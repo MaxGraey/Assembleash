@@ -16,8 +16,6 @@ export default class Editor extends Component {
         code:        PropTypes.string,
         annotations: PropTypes.array,
         onChange:    PropTypes.func,
-
-        //typescriptExtraLibs: PropTypes.array
     }
 
     static defaultProps = {
@@ -29,18 +27,7 @@ export default class Editor extends Component {
         code:        '',
         annotations: [],
         onChange:    () => {},
-
-        //typescriptExtraLibs: null
     }
-
-    /*
-    static requireConfig = {
-        url: 'https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.3/require.min.js',
-        paths: {
-            vs: 'https://unpkg.com/monaco-editor@0.8.3/min/vs'
-        }
-    };
-    */
 
     constructor(props) {
         super(props);
@@ -49,15 +36,10 @@ export default class Editor extends Component {
         };
 
         this.decorations = [];
-        //this.extraLibsRegistered = false;
     }
 
     componentWillReceiveProps(nextProps) {
         if (this.editor) {
-            /*if (nextProps.typescriptExtraLibs !== this.props.typescriptExtraLibs) {
-                this.addExtraLibs(nextProps.typescriptExtraLibs);
-            }*/
-
             if (nextProps.width  !== this.props.width ||
                 nextProps.height !== this.props.height) {
                 const width  = nextProps.width  || this.props.width;
@@ -89,23 +71,6 @@ export default class Editor extends Component {
         }
     }
 
-    // this.props.typescriptExtraLibs
-    /*addExtraLibs(extraLibs) {
-        if (!this.extraLibsRegistered && Editor.monaco && extraLibs) {
-            console.log('extralib registered!');
-
-            const files = extraLibs;
-            const names = Object.keys(files);
-
-            const typescript = Editor.monaco.languages.typescript;
-            for (let index = 0, len = names.length; index < len; index++) {
-                typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-            }
-
-            this.extraLibsRegistered = true;
-        }
-    }*/
-
     replaceTextInRange(range, text) {
         const replaceOperation = {
             text,
@@ -121,9 +86,6 @@ export default class Editor extends Component {
         Editor.monaco = Editor.monaco || monaco;
 
         if (!Editor.wastRegistered) {
-
-            //this.addExtraLibs(this.props.typescriptExtraLibs);
-
             registerTheme(Editor.monaco);
             registerWastSyntax(Editor.monaco);
             Editor.wastRegistered = true;
@@ -135,39 +97,7 @@ export default class Editor extends Component {
                 noLib:  true,
                 allowNonTsExtensions: true
             });
-
-            /*if (window.assemblyscript) {
-                console.log('assembly files');
-
-                const files = window.assemblyscript.library.files;
-                const names = Object.keys(files);
-
-                const typescript = monaco.languages.typescript;
-                for (let index = 0, len = names.length; index < len; index++) {
-                    typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-                }
-            }*/
         }
-
-        /*if (this.props.mode === 'typescript') {
-            const typescript = monaco.languages.typescript;
-            typescript.typescriptDefaults.setCompilerOptions({
-                target: typescript.ScriptTarget.Latest,
-                module: typescript.ModuleKind.None,
-                noLib:  true,
-                allowNonTsExtensions: true
-            });
-
-            if (window.assemblyscript) {
-                const files = window.assemblyscript.library.files;
-                const names = Object.keys(files);
-
-                const typescript = monaco.languages.typescript;
-                for (let index = 0, len = names.length; index < len; index++) {
-                    typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-                }
-            }
-        }*/
 
         if (this.props.focus) {
             editor.focus();

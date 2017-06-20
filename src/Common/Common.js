@@ -181,7 +181,7 @@ export function formatCode(buffer) {
     // format binary data
     const last = buffer.length;
 
-    let output = 'new Uint8Array([\r\n    ';
+    let output = 'new Uint8Array([\n    ';
     for (let i = 0, len = buffer.length; i < len; i++) {
         const value = buffer[i];
         let result = '0x' + ('00' + value.toString(16)).substr(-2);
@@ -190,11 +190,11 @@ export function formatCode(buffer) {
             result += ', ';
 
         if (((i + 1) % 10) === 0)
-            result += '\r\n    ';
+            result += '\n    ';
 
         output += result;
     }
-    output += '\r\n]);';
+    output += '\n]);';
 
     return output;
 }

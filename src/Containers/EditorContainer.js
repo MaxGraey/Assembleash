@@ -68,9 +68,7 @@ export default class EditorContainer extends Component {
 
              annotations:       OrderedSet(),
              notifications:     OrderedSet(),
-             notificationCount: 0,
-
-             typescriptExtraLibs: null
+             notificationCount: 0
          };
 
          this._errorCounts       = 0;
@@ -447,9 +445,8 @@ export default class EditorContainer extends Component {
             const names = Object.keys(files);
 
             const typescript = window.monaco.languages.typescript;
-            for (let index = 0, len = names.length; index < len; index++) {
+            for (let index = 0, len = names.length; index < len; index++)
                 typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-            }
 
             this.extraLibsRegistered = true;
         }
@@ -588,9 +585,7 @@ export default class EditorContainer extends Component {
 
             input,
             output,
-            outputType,
-
-            typescriptExtraLibs
+            outputType
 
         } = this.state;
 
@@ -669,7 +664,6 @@ export default class EditorContainer extends Component {
                         code={ input }
                         annotations={ annotations.toArray() }
                         onChange={ this.onInputChange }
-                        typescriptExtraLibs={ typescriptExtraLibs }
                     >
                     </Editor>
                     <Editor
