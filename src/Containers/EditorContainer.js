@@ -519,9 +519,9 @@ export default class EditorContainer extends Component {
 
     addNotification = (message) => {
         // skip notifications for Auto compile mode
-        if (this.state.compileMode === CompileMode.Auto) {
-            return;
-        }
+        //if (this.state.compileMode === CompileMode.Auto) {
+        //    return;
+        //}
 
     	const { notifications, notificationCount } = this.state;
 
