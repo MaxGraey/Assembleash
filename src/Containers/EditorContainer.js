@@ -416,7 +416,7 @@ export default class EditorContainer extends Component {
     }
 
     changeCompiler = compiler => {
-        this._errorCount       = 0;
+        this._errorCount        = 0;
         this._lastTextInput     = '';
         this._compileTimerDelay = null;
 
@@ -505,8 +505,8 @@ export default class EditorContainer extends Component {
             const primaryWidth = width * pos;
 
             this.setState({
-                inputEditorWidth:  primaryWidth,
-                outputEditorWidth: width - primaryWidth - gripWidth,
+                inputEditorWidth:  Math.ceil(primaryWidth),
+                outputEditorWidth: Math.ceil(width - primaryWidth - gripWidth),
                 editorsHeight:     height - 160,
                 splitPosition:     pos
             });
