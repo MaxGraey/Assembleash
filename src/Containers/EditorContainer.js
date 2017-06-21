@@ -8,6 +8,7 @@ import { throttle }          from 'throttle-debounce'
 import FileSaver             from 'file-saver'
 
 import $script               from 'scriptjs'
+import loadjs                from 'loadjs'
 
 import ToolbarContainer from './ToolbarContainer'
 import Editor           from '../Components/Editor'
@@ -432,10 +433,18 @@ export default class EditorContainer extends Component {
         if (description.offline) {
             if (!description.loaded) {
                 //console.log('load scripts', description.scripts);
-                $script.order(description.scripts.slice(), () => {
-                    description.loaded = true;
-                    this.onScriptLoad();
-                });
+
+                if (description.scripts.length > 1) {
+                    $script.order(description.scripts.slice(), () => {
+                        description.loaded = true;
+                        this.onScriptLoad();
+                    });
+                } else {
+                    $script(description.scripts[0], () => {
+                        description.loaded = true;
+                        this.onScriptLoad();
+                    });
+                }
             } else {
                 // script already loaded
                 this.setState({ compilerReady: true }, () => {
