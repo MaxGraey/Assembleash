@@ -9,7 +9,7 @@ export const CompileModes = Object.keys(CompileMode);
 export const CompilerDescriptions = {
     'TurboScript': {
         offline: true,
-        scripts:  [
+        scripts: [
             'https://rawgit.com/01alchemist/TurboScript/master/lib/turboscript.min.js'
         ],
         loaded: false,

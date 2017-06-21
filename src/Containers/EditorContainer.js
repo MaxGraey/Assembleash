@@ -426,17 +426,18 @@ export default class EditorContainer extends Component {
 
         this.setState({
             compiler,
-            input: description.example,
-            compilerReady: false
+            input: description.example
         });
 
         if (description.offline) {
             if (!description.loaded) {
-                $script.order(description.scripts, () => {
+                //console.log('load scripts', description.scripts);
+                $script.order(description.scripts.slice(), () => {
                     description.loaded = true;
                     this.onScriptLoad();
                 });
             } else {
+                // script already loaded
                 this.setState({ compilerReady: true }, () => {
                     getCompilerVersion(compiler, version => this.setState({ version }));
                     this.updateCompilation();
@@ -463,8 +464,8 @@ export default class EditorContainer extends Component {
         }
 
         this.setState({ compilerReady: true }, () => {
-            this.changeCompiler();
             getCompilerVersion(this.state.compiler, version => this.setState({ version }));
+            this.updateCompilation();
         });
     }
 
