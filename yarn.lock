@@ -6342,6 +6342,10 @@ vm-browserify@0.0.4:
   dependencies:
     indexof "0.0.1"
 
+wabt@^0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/wabt/-/wabt-0.0.13.tgz#a597302ee2c726705b0c52d893adcc00056e65ca"
+
 walker@~1.0.5:
   version "1.0.7"
   resolved "https://registry.yarnpkg.com/walker/-/walker-1.0.7.tgz#2f7f9b8fd10d677262b18a884e28d19618e028fb"

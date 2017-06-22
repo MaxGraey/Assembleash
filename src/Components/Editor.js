@@ -40,6 +40,10 @@ export default class Editor extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.editor) {
+            if (nextProps.code !== this.props.code) {
+                this.editor.setValue(nextProps.code);
+            }
+
             if (nextProps.width  !== this.props.width ||
                 nextProps.height !== this.props.height) {
                 const width  = nextProps.width  || this.props.width;

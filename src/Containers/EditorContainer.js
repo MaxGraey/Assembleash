@@ -7,8 +7,8 @@ import { NotificationStack } from 'react-notification'
 import { throttle }          from 'throttle-debounce'
 import FileSaver             from 'file-saver'
 
+//import wabt                  from 'wabt'
 import $script               from 'scriptjs'
-import loadjs                from 'loadjs'
 
 import ToolbarContainer from './ToolbarContainer'
 import Editor           from '../Components/Editor'
@@ -427,37 +427,37 @@ export default class EditorContainer extends Component {
 
         this.setState({
             compiler,
-            input: description.example
-        });
+            input: description.example.trim()
+        }, () => {
+            if (description.offline) {
+                if (!description.loaded) {
+                    //console.log('load scripts', description.scripts);
 
-        if (description.offline) {
-            if (!description.loaded) {
-                //console.log('load scripts', description.scripts);
-
-                if (description.scripts.length > 1) {
-                    $script.order(description.scripts.slice(), () => {
-                        description.loaded = true;
-                        this.onScriptLoad();
-                    });
+                    if (description.scripts.length > 1) {
+                        $script.order(description.scripts.slice(), () => {
+                            description.loaded = true;
+                            this.onScriptLoad();
+                        });
+                    } else {
+                        $script(description.scripts[0], () => {
+                            description.loaded = true;
+                            this.onScriptLoad();
+                        });
+                    }
                 } else {
-                    $script(description.scripts[0], () => {
-                        description.loaded = true;
-                        this.onScriptLoad();
+                    // script already loaded
+                    this.setState({ compilerReady: true }, () => {
+                        getCompilerVersion(compiler, version => this.setState({ version }));
+                        this.updateCompilation();
                     });
                 }
             } else {
-                // script already loaded
                 this.setState({ compilerReady: true }, () => {
                     getCompilerVersion(compiler, version => this.setState({ version }));
                     this.updateCompilation();
                 });
             }
-        } else {
-            this.setState({ compilerReady: true }, () => {
-                getCompilerVersion(compiler, version => this.setState({ version }));
-                this.updateCompilation();
-            });
-        }
+        });
     }
 
     onScriptLoad() {
