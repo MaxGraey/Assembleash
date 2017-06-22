@@ -7,7 +7,7 @@ export default function registerWastSyntax(monaco) {
     monaco.languages.setLanguageConfiguration('wast', {
         comments: {
 		    lineComment: ';;',
-		    blockComment: ['\(;', ';\)'],
+		    blockComment: ['\\(;', ';\\)'],
         },
         brackets: [
             ['(', ')']
@@ -224,18 +224,14 @@ export default function registerWastSyntax(monaco) {
             ],
 
             whitespace: [
-                [/[ \t\r\n]+/,   ''],
-                [/\/\*\*(?!\/)/, 'comment', '@comment'],
-                [/\/\*/,         'comment', '@comment'],
-                [/\/\/.*$/,      'comment'],
+                [/[ \t\r\n]+/,           ''],
+                [/(^;{2}.*$)/,           'comment.line'],
+                [/(^\(;[\n\t\r\w]+;\))/, 'comment.block']
             ],
 
-            // TODO need change to ';;' and '(;;)'
             comment: [
-                [/[^\/*]+/, 'comment'],
-                [/\*\//,    'comment', '@pop'],
-                [/[\/*]/,   'comment']
-            ],
+                [/(;{2})(.*)$/, 'comment.line']
+            ]
         }
     });
 }
