@@ -19,6 +19,7 @@ export default function registerTheme(monaco) {
             { token: 'punctuation.definition.parameters', foreground: 'c0c5ce'},
             { token: 'punctuation.definition.string', foreground: 'c0c5ce'},
             { token: 'punctuation.definition.array', foreground: 'c0c5ce'},
+            { token: 'punctuation.separator.dot', foreground: 'f2777a' },
 
             { token: 'keyword', foreground: 'cc99cc' },
             { token: 'keyword.operator', foreground: 'f69057' },

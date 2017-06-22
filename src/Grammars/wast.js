@@ -204,6 +204,8 @@ export default function registerWastSyntax(monaco) {
                 [/(@digits)[lL]?/, 'number'],
                 [/[+\-]?(infinity|inf|nan)/, 'constant.number'],
 
+                [/\./, 'punctuation.separator.dot'],
+
                 [/\$[^\s"\(\)\{\}\[\]]+/, { token: 'variable' }],
 
                 [/[a-zA-Z_$][\w$]*/, {

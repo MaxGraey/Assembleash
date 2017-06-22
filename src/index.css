@@ -1,4 +1,20 @@
 
+.fork-me .github-octicon-mark {
+    fill: #999;
+    transform: scale(2.2);
+    padding-top: 12px;
+}
+
+.fork-me .github-octicon-mark:hover {
+    fill: #fff;
+}
+
+.logo {
+    margin-top: -0.9em;
+    margin-right: 2rem;
+    text-align: center;
+}
+
 .icon-binary-code:before {
     -webkit-font-smoothing: antialiased;
     content: "\e900";
