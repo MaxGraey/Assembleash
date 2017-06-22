@@ -9,7 +9,6 @@ Playground for WebAssembly and Typescript-like languages.
 
 **KNOWN ISSUES**
 - After change compiler you should refresh page for updating input editor.
-- TurboScript is broken.
 
 **TODO**
 
