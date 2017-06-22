@@ -7,9 +7,6 @@ Playground for WebAssembly and Typescript-like languages.
 - [AssemblyScript](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 - [Speedy.js](https://maxgraey.github.io/Assembleash/#Speedy.js)
 
-**KNOWN ISSUES**
-- After change compiler you should refresh page for updating input editor.
-
 **TODO**
 
 - Additional status info like compiling time
