@@ -194,7 +194,7 @@ export default class EditorContainer extends Component {
 
     compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
 
-        //console.log(window.assemblyscript);
+        //console.log(window);
 
         const as = window.assemblyscript;
 
@@ -432,7 +432,7 @@ export default class EditorContainer extends Component {
             input: description.example.trim()
         }, () => {
             if (description.offline) {
-                if (!description.loaded) {
+                if (!description.loaded && description.scripts && description.scripts.length) {
                     //console.log('load scripts', description.scripts);
 
                     if (description.scripts.length > 1) {
@@ -440,6 +440,23 @@ export default class EditorContainer extends Component {
                             description.loaded = true;
                             this.onScriptLoad();
                         });
+
+
+                        /*System.import('https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript')
+                        .then(function() {
+                            console.log('Loaded!');
+                        });*/
+
+                        /*require.config({
+                            paths: {
+                                assemblyscript: 'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript'
+                            }
+                        });
+
+                        require(['assemblyscript'], data => {
+                            console.log('assemblyscript', data);
+                        });*/
+
                     } else {
                         $script(description.scripts[0], () => {
                             description.loaded = true;
