@@ -194,6 +194,8 @@ export default class EditorContainer extends Component {
 
     compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
 
+        //console.log(window.assemblyscript);
+
         const as = window.assemblyscript;
 
         const module = as.Compiler.compileString(

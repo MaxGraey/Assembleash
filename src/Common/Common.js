@@ -30,7 +30,8 @@ export const CompilerDescriptions = {
         offline: true,
         scripts: [
             'https://rawgit.com/dcodeIO/binaryen.js/master/index.js',
-            'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.min.js'
+            'https://rawgit.com/dcodeIO/wabt.js/master/index.js',
+            'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js'
         ],
         loaded: false,
         github: 'https://github.com/dcodeIO/AssemblyScript',
