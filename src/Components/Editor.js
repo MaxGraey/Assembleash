@@ -40,6 +40,14 @@ export default class Editor extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (this.editor) {
+            if (nextProps.mode !== this.props.mode) {
+                console.log('mode:', nextProps.mode);
+                this.editor.getModel().updateOptions({
+                    tabSize: nextProps.mode === 'wast' ? 1 : 4
+                });
+
+            }
+
             if (nextProps.code !== this.props.code) {
                 this.editor.setValue(nextProps.code);
             }
@@ -70,8 +78,6 @@ export default class Editor extends Component {
 
                 this.decorations = this.editor.deltaDecorations(this.decorations, decorations);
             }
-
-            //this.editor.setHiddenAreas([new this.monaco.Range(1, 1, 3, 1)]);
         }
     }
 
@@ -104,7 +110,13 @@ export default class Editor extends Component {
             registerTheme(window.monaco);
         }
 
-        this.editor.updateOptions({ theme: 'vs-assembleash' });
+        this.editor.getModel().updateOptions({
+            tabSize: this.props.mode === 'wast' ? 1 : 4
+        });
+
+        this.editor.updateOptions({
+            theme: 'vs-assembleash'
+        });
 
         if (this.props.focus) {
             editor.focus();
@@ -174,7 +186,7 @@ export default class Editor extends Component {
                     fixedOverflowWidgets: true,
 
                     folding: true,
-                    //renderIndentGuides: true
+                    renderIndentGuides: true
                 }}
                 onChange={ this.onChange }
                 editorDidMount={ this.onLoad }
