@@ -194,7 +194,7 @@ export default class EditorContainer extends Component {
 
     compileByAssemblyScript(code, { stdlib, validate, optimize, longMode }) {
 
-        //console.log(window);
+        //console.log(window.assemblyscript);
 
         const as = window.assemblyscript;
 
@@ -433,30 +433,11 @@ export default class EditorContainer extends Component {
         }, () => {
             if (description.offline) {
                 if (!description.loaded && description.scripts && description.scripts.length) {
-                    //console.log('load scripts', description.scripts);
-
                     if (description.scripts.length > 1) {
                         $script.order(description.scripts.slice(), () => {
                             description.loaded = true;
                             this.onScriptLoad();
                         });
-
-
-                        /*System.import('https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript')
-                        .then(function() {
-                            console.log('Loaded!');
-                        });*/
-
-                        /*require.config({
-                            paths: {
-                                assemblyscript: 'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript'
-                            }
-                        });
-
-                        require(['assemblyscript'], data => {
-                            console.log('assemblyscript', data);
-                        });*/
-
                     } else {
                         $script(description.scripts[0], () => {
                             description.loaded = true;
@@ -465,6 +446,7 @@ export default class EditorContainer extends Component {
                     }
                 } else {
                     // script already loaded
+                    this.addExtraLibs();
                     this.setState({ compilerReady: true }, () => {
                         getCompilerVersion(compiler, version => this.setState({ version }));
                         this.updateCompilation();
@@ -480,21 +462,24 @@ export default class EditorContainer extends Component {
     }
 
     onScriptLoad() {
+        this.addExtraLibs();
+        this.setState({ compilerReady: true }, () => {
+            getCompilerVersion(this.state.compiler, version => this.setState({ version }));
+            this.updateCompilation();
+        });
+    }
+
+    addExtraLibs() {
         if (window.monaco && !this.extraLibsRegistered && window.assemblyscript) {
+            this.extraLibsRegistered = true;
+
             const files = window.assemblyscript.library.files;
             const names = Object.keys(files);
 
             const typescript = window.monaco.languages.typescript;
             for (let index = 0, len = names.length; index < len; index++)
                 typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-
-            this.extraLibsRegistered = true;
         }
-
-        this.setState({ compilerReady: true }, () => {
-            getCompilerVersion(this.state.compiler, version => this.setState({ version }));
-            this.updateCompilation();
-        });
     }
 
     onScriptError = () => {
