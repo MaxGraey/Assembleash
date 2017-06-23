@@ -10,7 +10,6 @@ Playground for WebAssembly and Typescript-like languages.
 **TODO**
 
 - Additional status info like compiling time
-- Switch to feather icons
 - Optimize content for mobile browsers
 
 
