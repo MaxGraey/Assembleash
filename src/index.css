@@ -1,9 +1,14 @@
 
 .fork-me .github-octicon-mark {
     fill: #999;
-    transform: scale(1.8);
-    padding-top: 10px;
-    padding-right: 12px;
+    width:  42px;
+    height: 42px;
+    margin-right: 10px;
+    margin-top:   5px;
+    -moz-transition: fill .2s ease-in;
+    -o-transition: fill .2s ease-in;
+    -webkit-transition: fill .2s ease-in;
+    transition: fill .2s ease-in;
 }
 
 .fork-me .github-octicon-mark:hover {
@@ -95,6 +100,7 @@
     height: 18px;
     border-radius: 10px;
     border: 1pt solid;
+    box-sizing: border-box;
 }
 
 .busy-signal .busy-signal-mask {
