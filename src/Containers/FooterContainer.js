@@ -7,19 +7,21 @@ import {
     ButtonToolbar
 } from 'react-bootstrap';
 
-import BusySignal from './BusySignal';
+import BusySignal from '../Components/BusySignal';
 
-export default class Footer extends Component {
+export default class FooterContainer extends Component {
     static propTypes = {
         downloadDisabled:  PropTypes.bool,
         onDownloadPressed: PropTypes.func,
-        errorMessage:      PropTypes.string
+        errorMessage:      PropTypes.string,
+        cursorPosition:    PropTypes.arrayOf(PropTypes.number, PropTypes.number)
     }
 
     static defaultProps = {
         busyState: 'busy',
         downloadDisabled: true,
         errorMessage: null,
+        cursorPosition: [0, 0],
         onDownloadPressed: () => {}
     }
 
@@ -29,6 +31,7 @@ export default class Footer extends Component {
             onDownloadPressed,
             downloadDisabled,
             busyState,
+            cursorPosition,
             errorCount,
             errorMessage
         } = this.props;
@@ -53,15 +56,27 @@ export default class Footer extends Component {
         }
 
         return (
-            <ButtonToolbar className="navbar-fixed-bottom" style={{ padding: 0, margin: '20px 20px 7px 15px' }}>
+            <ButtonToolbar className="navbar-fixed-bottom" style={{ textAlign: 'center', padding: 0, margin: '20px 20px 7px 15px' }}>
                 <Button bsSize='large' bsStyle='info' className="pull-right" disabled={ downloadDisabled } onClick={ onDownloadPressed }>
                     <span><Glyphicon glyph="download" style={{ fontSize: "125%", marginTop: '-0.5rem', top: '0.5rem' }}/>Download .wasm</span>
                 </Button>
                 <div className="pull-right label">
                     <h4>{ size }
-                        <span style={{ color: '#bbb', paddingRight: '2rem', fontWeight: 100 }}>{ ' ' + unit }</span>
+                        <span style={{ color: '#bbb', paddingRight: '1em', fontWeight: 100 }}>{ ' ' + unit }</span>
                     </h4>
                 </div>
+                <label style={{ paddingTop: '2pt' }}>
+                    <h4>
+                        <span style={{ fontWeight: 100, color: '#bbb' }}>
+                            { 'Line: ' }
+                        </span>
+                        { cursorPosition[0] }
+                        <span style={{ fontWeight: 100, color: '#bbb', paddingLeft: '20px' }}>
+                            { 'Column: ' }
+                        </span>
+                        { cursorPosition[1] }
+                    </h4>
+                </label>
                 <BusySignal state={ busyState }/>
                 <label style={{
                     marginLeft: '55px',

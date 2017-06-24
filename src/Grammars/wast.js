@@ -34,6 +34,7 @@ export default function registerWastSyntax(monaco) {
             "export",
             "import",
             "func",
+            "struct",
             "start",
             "table",
             "elem",

@@ -12,7 +12,7 @@ import $script               from 'scriptjs'
 
 import ToolbarContainer from './ToolbarContainer'
 import Editor           from '../Components/Editor'
-import Footer           from '../Components/Footer'
+import FooterContainer  from './FooterContainer'
 
 import {
     isRequreStdlib,
@@ -72,7 +72,9 @@ export default class EditorContainer extends Component {
 
              annotations:       OrderedSet(),
              notifications:     OrderedSet(),
-             notificationCount: 0
+             notificationCount: 0,
+
+             inputCursorPosition: [0, 0]
          };
 
          this._errorCount       = 0;
@@ -412,6 +414,10 @@ export default class EditorContainer extends Component {
         }
     }
 
+    onInputPositionChange = inputCursorPosition => {
+        this.setState({ inputCursorPosition });
+    }
+
     onDownloadBinary = () => {
         const { output, compiler } = this.state;
         var blob = new Blob([output.binary], { type: "application/octet-stream" });
@@ -610,7 +616,9 @@ export default class EditorContainer extends Component {
 
             input,
             output,
-            outputType
+            outputType,
+
+            inputCursorPosition
 
         } = this.state;
 
@@ -689,6 +697,7 @@ export default class EditorContainer extends Component {
                         code={ input }
                         annotations={ annotations.toArray() }
                         onChange={ this.onInputChange }
+                        onPositionChange={ this.onInputPositionChange }
                     />
                     <Editor
                         readOnly
@@ -701,13 +710,14 @@ export default class EditorContainer extends Component {
                     />
                 </SplitPane>
 
-                <Footer
+                <FooterContainer
                     errorCount={ this._errorCount }
                     busyState={ busyState }
                     binarySize={ output.binary ? formatSize(output.binary.length) : '' }
                     onDownloadPressed={ this.onDownloadBinary }
                     downloadDisabled={ !canBinaryDownload }
                     errorMessage={ additionalStatusMessage }
+                    cursorPosition={ inputCursorPosition }
                 />
 
                 { errorNotifications }

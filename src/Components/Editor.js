@@ -16,6 +16,8 @@ export default class Editor extends Component {
         code:        PropTypes.string,
         annotations: PropTypes.array,
         onChange:    PropTypes.func,
+
+        onPositionChange: PropTypes.func
     }
 
     static defaultProps = {
@@ -27,6 +29,8 @@ export default class Editor extends Component {
         code:        '',
         annotations: [],
         onChange:    () => {},
+
+        onPositionChange: () => {}
     }
 
     constructor(props) {
@@ -117,6 +121,10 @@ export default class Editor extends Component {
         this.editor.updateOptions({
             theme: 'vs-assembleash'
         });
+
+        this.editor.onDidChangeCursorPosition(e => {
+            this.props.onPositionChange([e.position.lineNumber, e.position.column]);
+        })
 
         if (this.props.focus) {
             editor.focus();
