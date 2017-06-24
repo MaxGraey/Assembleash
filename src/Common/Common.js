@@ -17,22 +17,18 @@ export const CompilerDescriptions = {
         options: {},
         example:
 `export function fib(n: int32): int32 {
-    let i: int32 = 0, t: int32, a: int32 = 0, b: int32 = 1;
-    while (i < n) {
-        t = a + b; a = b; b = t;
-        i++;
-    }
-    return b;
+    if (n <= 1) return 1;
+    return fib(n - 1) + fib(n - 2);
 }`
     },
 
     'AssemblyScript': {
         offline: true,
         scripts: [
-            // 'https://rawgit.com/dcodeIO/binaryen.js/master/index.js',
+            //'https://rawgit.com/dcodeIO/binaryen.js/master/index.js',
             // 'https://rawgit.com/dcodeIO/wabt.js/master/index.js',
             // 'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js'
-            // 'https://rawgit.com/MaxGraey/AssemblyScript/new-webpack-config/dist/assemblyscript.js'
+            //'https://rawgit.com/MaxGraey/AssemblyScript/new-webpack-config/dist/assemblyscript.js'
         ],
         loaded: false,
         github: 'https://github.com/dcodeIO/AssemblyScript',
@@ -52,12 +48,8 @@ export const CompilerDescriptions = {
         },
         example:
 `export function fib(n: int32): int32 {
-    let i: int32 = 0, t: int32, a: int32 = 0, b: int32 = 1;
-    while (i < n) {
-        t = a + b; a = b; b = t;
-        i++;
-    }
-    return b;
+    if (n <= 1) return 1;
+    return fib(n - 1) + fib(n - 2);
 }`
     },
 
@@ -94,15 +86,15 @@ export const CompilerDescriptions = {
         },
         example:
 `
+function fibSync(n: int): int {
+    "use speedyjs";
+    if (n <= 1) return 1;
+    return fibSync(n - 1) + fibSync(n - 2);
+}
+
 async function fib(n: int): Promise<int> {
     "use speedyjs";
-
-    let i: int = 0, t: int, a: int = 0, b: int = 1;
-    while (i < n) {
-        t = a + b; a = b; b = t;
-        i++;
-    }
-    return b;
+    return fibSync(n);
 }
 `
     }
