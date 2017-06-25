@@ -203,10 +203,8 @@ export default class EditorContainer extends Component {
         const module = as.Compiler.compileString(
             code, {
                 silent: true,
-                uintptrSize: longMode ? 8 : 4,
-                noLib: !stdlib,
-                malloc: stdlib,
-                exportMalloc: false
+                target: longMode ? 'wasm64' : 'wasm32',
+                memoryModel: stdlib ? "malloc" : "bare"
             }
         );
 

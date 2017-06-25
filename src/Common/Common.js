@@ -26,8 +26,8 @@ export const CompilerDescriptions = {
         offline: true,
         scripts: [
             //'https://rawgit.com/dcodeIO/binaryen.js/master/index.js',
-            // 'https://rawgit.com/dcodeIO/wabt.js/master/index.js',
-            // 'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js'
+            //'https://rawgit.com/dcodeIO/wabt.js/master/index.js',
+            //'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js'
             //'https://rawgit.com/MaxGraey/AssemblyScript/new-webpack-config/dist/assemblyscript.js'
         ],
         loaded: false,
