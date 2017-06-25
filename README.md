@@ -1,5 +1,7 @@
 ### [Assembleash Playground](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 
+[![](https://tokei.rs/b1/github/MaxGraey/Assembleash?style=flat-square)](https://github.com/MaxGraey/Assembleash)
+
 Playground for WebAssembly and Typescript-like languages.
 
 **Support languges:**
