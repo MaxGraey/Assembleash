@@ -29,11 +29,11 @@ export default class ToggledOption extends Component {
                 style={{
                     textAlign:    'left',
                     display:      'inline-block',
-                    paddingLeft:  '15px',
-                    paddingRight: '15px',
-                    width:        '200px'
+                    paddingLeft:  '15pt',
+                    paddingRight: '15pt',
+                    width:        '180pt'
                 }}>
-                <h4><span style={{ paddingRight: '10px', lineHeight: '3rem' }}>{ label }</span>
+                <h4><span style={{ paddingRight: '10pt', lineHeight: '3rem' }}>{ label }</span>
                     <Toggle
                         aria-labelledby='toggle'
                         checked={ active }

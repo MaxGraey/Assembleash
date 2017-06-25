@@ -37,6 +37,10 @@ export const CompilerDescriptions = {
                 label:   'Use 64 bits',
                 default: false
             },
+            exportMalloc: {
+                label:   'Export malloc',
+                default: false
+            },
             validate: {
                 label:   'Validate',
                 default: true
