@@ -49,6 +49,7 @@ export default function registerWastSyntax(monaco) {
             "segment",
             "invoke",
             "label",
+            "binary",
 
             // Control
             "unreachable",
@@ -179,8 +180,11 @@ export default function registerWastSyntax(monaco) {
             "failure",
             "assert_invalid",
             "assert_trap",
+            "assert_return",
             "assert_return_nan",
-            "assert_return"
+            "assert_return_arithmetic_nan",
+            "assert_return_canonical_nan",
+            "assert_unlinkable"
         ],
 
         escapes:      /\\(?:[abfnrtv\\"']|x[0-9A-Fa-f]{1,4}|u[0-9A-Fa-f]{4}|U[0-9A-Fa-f]{8})/,
