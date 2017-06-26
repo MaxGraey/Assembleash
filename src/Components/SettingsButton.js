@@ -21,6 +21,11 @@ export default class SettingsButton extends Component {
         const { compiler, onOptionChange } = this.props;
         const options = CompilerDescriptions[compiler].options;
 
+        options.base64 = {
+            label:   'Base64',
+            default: false
+        };
+
         return (
             <OverlayTrigger
                 rootClose

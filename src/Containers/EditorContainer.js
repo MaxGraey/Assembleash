@@ -70,6 +70,7 @@ export default class EditorContainer extends Component {
              optimize:          true,
              longMode:          false,
              unsafe:            true,
+             base64:            false,
 
              annotations:       OrderedSet(),
              notifications:     OrderedSet(),
@@ -506,7 +507,7 @@ export default class EditorContainer extends Component {
 
     onSettingsOptionChange = (key, value) => {
         if (!this.state.compilerReady) return;
-        this.setState({ [key]: value }, this.updateCompilation );
+        this.setState({ [key]: value }, key !== 'base64' ? this.updateCompilation : null);
     }
 
     handleSize = throttle(8, size => {
@@ -614,6 +615,7 @@ export default class EditorContainer extends Component {
             input,
             output,
             outputType,
+            base64,
 
             inputCursorPosition
 
@@ -703,7 +705,7 @@ export default class EditorContainer extends Component {
                         ref={ self => this.outputEditor = self }
                         width={ outputEditorWidth }
                         height={ editorsHeight }
-                        code={ formatCode(output[outputType]) }
+                        code={ formatCode(output[outputType], base64) }
                     />
                 </SplitPane>
 

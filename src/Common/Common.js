@@ -1,4 +1,6 @@
 
+import Base64 from './Base64'
+
 export const CompileMode = {
     Auto:   0,
     Manual: 1
@@ -167,7 +169,7 @@ export function getCompilerVersion(compiler, callback = () => {}) {
 }
 
 
-export function formatCode(buffer) {
+export function formatCode(buffer, base64 = false) {
     if (!buffer)
         return '';
 
@@ -175,7 +177,21 @@ export function formatCode(buffer) {
     if (typeof buffer === 'string')
         return buffer;
 
-    // format binary data
+    if (base64) {
+        let output = 'decode(\'';
+        output += Base64.encode(buffer);
+        output += '\');\n\n';
+
+        output += 'function decode(input) {\n';
+        output += '    return new Uint8Array(atob(input).split(\'\').map(char => {\n';
+        output += '        return char.charCodeAt(0);\n';
+        output += '    }));\n';
+        output += '}';
+
+        return output;
+    }
+
+    // format binary data as array
     const last = buffer.length;
 
     let output = 'new Uint8Array([\n    ';
