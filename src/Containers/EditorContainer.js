@@ -341,6 +341,8 @@ export default class EditorContainer extends Component {
     compileBySpeedyJs(code, options) {
         CompilerDescriptions['Speedy.js'].compile(code, options)
         .then(response => {
+            if (this.state.compiler !== 'Speedy.js') return;
+
             if (response.length) {
                 const output = response[0];
                 if (output.exitStatus !== 0) {

@@ -58,6 +58,7 @@ export default function registerWastSyntax(monaco) {
             "loop",
             "if",
             "else",
+            "if_else",
             "end",
             "br",
             "br_if",
