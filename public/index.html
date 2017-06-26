@@ -270,19 +270,6 @@
             });
         }());
     </script>
-    <script type="text/javascript">
-        // prevent zoom scale on iOS >= 10
-        var lastTouchEnd = 0;
-        document.addEventListener('touchmove', function (e) {
-            if (e.scale !== 1) { e.preventDefault(); }
-        }, false);
-
-        document.addEventListener('touchend', function (e) {
-            var now = Date.now();
-            if (now - lastTouchEnd <= 300) e.preventDefault();
-            lastTouchEnd = now;
-        }, false);
-    </script>
     <script src="https://www.google-analytics.com/analytics.js" async></script>
     <script src="https://rawgit.com/dcodeIO/binaryen.js/master/index.js"></script>
     <script src="https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js"></script>
