@@ -65,24 +65,14 @@ export default class FooterContainer extends Component {
                         <span style={{ color: '#bbb', paddingRight: '1em', fontWeight: 100 }}>{ ' ' + unit }</span>
                     </h4>
                 </div>
-                <label style={{ paddingTop: '2pt' }}>
-                    <h4>
-                        <span style={{ fontWeight: 100, color: '#bbb' }}>
-                            { 'Line: ' }
-                        </span>
-                        { cursorPosition[0] }
-                        <span style={{ fontWeight: 100, color: '#bbb', paddingLeft: '20px' }}>
-                            { 'Column: ' }
-                        </span>
-                        { cursorPosition[1] }
-                    </h4>
+                <label className="pull-left" style={{ paddingTop: '2pt', paddingLeft: '10pt' }}>
+                    <h4 style={{ fontWeight: 100, color: '#bbb' }}>{ cursorPosition[0] + ':' + cursorPosition[1] }</h4>
                 </label>
-                <BusySignal state={ busyState }/>
+                <BusySignal className="pull-left" state={ busyState }/>
                 <label style={{
-                    marginLeft: '55px',
+                    marginLeft: '30pt',
                     float:      'left',
-                    paddingTop: '3px',
-                    display:    'block'
+                    paddingTop: '3pt'
                 }}>
                     <h4
                         className={ messageClass }

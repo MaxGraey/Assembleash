@@ -82,12 +82,11 @@
 }
 
 .busy-signal {
-    position: absolute;
-    top: 50%;
+    position: relative;
+    top: 15px;
     left: 26px;
     width: 26px;
     height: 26px;
-    margin: -14px 0 0 -14px;
 }
 
 .busy-success-color {

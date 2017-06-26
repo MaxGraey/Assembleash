@@ -40,7 +40,6 @@ export default class BusySignal extends Component {
                 <Glyphicon
                     glyph={ success ? 'ok' : 'remove' }
                     className={ `busy-${state}-color` }
-                    style={{ paddingTop: '5px', paddingLeft: '5px' }}
                 />
             );
         }
@@ -49,8 +48,9 @@ export default class BusySignal extends Component {
     }
 
 	render() {
+        const className = this.props.className + " busy-signal";
         return (
-            <div className='busy-signal'>
+            <div className={ className }>
                 { this._renderSpinner() }
                 { this._renderDot() }
                 { this._renderReadyState() }
