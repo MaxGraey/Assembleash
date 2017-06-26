@@ -340,10 +340,6 @@ export default class EditorContainer extends Component {
     compileBySpeedyJs(code, options) {
         CompilerDescriptions['Speedy.js'].compile(code, options)
         .then(response => {
-            this.setState({
-                compilerReady:  true
-            });
-
             if (response.length) {
                 const output = response[0];
                 if (output.exitStatus !== 0) {

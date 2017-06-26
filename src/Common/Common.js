@@ -66,7 +66,7 @@ export const CompilerDescriptions = {
                 label:   'Unsafe',
                 default: true
             },
-            binaryenOpt: {
+            optimize: {
                 label:   'Optimize',
                 default: true
             }
