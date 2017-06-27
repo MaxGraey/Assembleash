@@ -403,14 +403,10 @@ export default class EditorContainer extends Component {
     onInputChange = value => {
         // skip compilation if possible
         value = value.trim();
-        if (this._lastTextInput === value)
-            return;
-
-        this._lastTextInput = value;
-        const mode = this.state.compileMode;
-
-        if (mode === CompileMode.Auto) {
-            this.updateCompilationWithDelay(AutoCompilationDelay);
+        if (this._lastTextInput !== value) {
+            if (this.state.compileMode === CompileMode.Auto)
+                this.updateCompilationWithDelay(AutoCompilationDelay);
+            this._lastTextInput = value;
         }
     }
 
