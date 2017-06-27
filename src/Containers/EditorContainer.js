@@ -160,7 +160,10 @@ export default class EditorContainer extends Component {
                         break;
 
                     case 'TurboScript':
-                        this.compileByTurboScript(inputCode);
+                        this.compileByTurboScript(inputCode, {
+                            longMode,
+                            optimize
+                        });
                         break;
 
                     case 'Speedy.js':
@@ -199,9 +202,6 @@ export default class EditorContainer extends Component {
     }
 
     compileByAssemblyScript(code, { stdlib, exportMalloc, longMode, validate, optimize }) {
-
-        //console.log(window.assemblyscript);
-
         const as = window.assemblyscript;
 
         const module = as.Compiler.compileString(
@@ -277,7 +277,7 @@ export default class EditorContainer extends Component {
         });
     }
 
-    compileByTurboScript(code, options) {
+    compileByTurboScript(code, options = {}) {
         const turbo = window.turboscript;
 
         if (!turbo) throw new Error('Turboscript not loaded');
@@ -285,7 +285,9 @@ export default class EditorContainer extends Component {
         const result = turbo.compileString(code, {
             target:   turbo.CompileTarget.WEBASSEMBLY,
             silent:   true,
-            logError: true
+            logError: true,
+            longMode: options.longMode || false,
+            optimize: options.optimize || true
         });
 
         if (!result.success) {
@@ -446,6 +448,15 @@ export default class EditorContainer extends Component {
                             this.onScriptLoad();
                         });
                     }
+
+                    /*loadjs(description.scripts, 'compiler');
+                    loadjs.ready('compiler', {
+                        success: () => {
+                            description.loaded = true;
+                            this.onScriptLoad();
+                        }
+                    });*/
+
                 } else {
                     // script already loaded
                     this.addExtraLibs();

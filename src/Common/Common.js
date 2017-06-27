@@ -16,7 +16,12 @@ export const CompilerDescriptions = {
         ],
         loaded: false,
         github:  'https://github.com/01alchemist/TurboScript',
-        options: {},
+        options: {
+            /*optimize: {
+                label:   'Optimize',
+                default: true
+            }*/
+        },
         example:
 `export function fib(n: int32): int32 {
     if (n <= 1) return 1;
@@ -30,7 +35,6 @@ export const CompilerDescriptions = {
             //'https://rawgit.com/dcodeIO/binaryen.js/master/index.js',
             //'https://rawgit.com/dcodeIO/wabt.js/master/index.js',
             //'https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js'
-            //'https://rawgit.com/MaxGraey/AssemblyScript/new-webpack-config/dist/assemblyscript.js'
         ],
         loaded: false,
         github: 'https://github.com/dcodeIO/AssemblyScript',
