@@ -57,7 +57,7 @@
 }
 
 .Resizer.vertical {
-    width: 4px;
+    width: 5px;
     background: rgba(255, 255, 255, 0);
     cursor: col-resize;
 }

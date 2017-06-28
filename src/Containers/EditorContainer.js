@@ -30,9 +30,9 @@ import registerTheme from '../Grammars/theme.js'
 
 import { OrderedSet } from 'immutable'
 
-
 const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;
+const SplitGripWidth = 5;
 
 export default class EditorContainer extends Component {
     static defaultProps = {
@@ -525,14 +525,12 @@ export default class EditorContainer extends Component {
                 this._cachedClientRect = ReactDOM.findDOMNode(this.splitEditor).getBoundingClientRect();
             }
             const { width, height } = this._cachedClientRect;
-
-            const gripWidth = 4;
             const pos = (size ? size / width : this.state.splitPosition);
             const primaryWidth = width * pos;
 
             this.setState({
                 inputEditorWidth:  Math.ceil(primaryWidth),
-                outputEditorWidth: Math.ceil(width - primaryWidth - gripWidth),
+                outputEditorWidth: Math.ceil(width - primaryWidth - SplitGripWidth),
                 editorsHeight:     height - 160,
                 splitPosition:     pos
             });
