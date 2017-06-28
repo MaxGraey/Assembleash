@@ -50,6 +50,8 @@ export default function registerWastSyntax(monaco) {
             "invoke",
             "label",
             "binary",
+            "shared",
+            "notshared",
 
             // Control
             "unreachable",

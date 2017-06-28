@@ -310,7 +310,7 @@ export default class EditorContainer extends Component {
                         this.addNotification(errorMessage);
                         let annotations = this.state.annotations;
                         this.setState({
-                            annotations: annotations.add({row: location.line, type: "error", text: errorMessage})
+                            annotations: annotations.add({row: location.line + 1, type: "error", text: errorMessage})
                         });
                     }
 
