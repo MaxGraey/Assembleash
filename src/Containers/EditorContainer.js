@@ -640,7 +640,7 @@ export default class EditorContainer extends Component {
                 paddingLeft: '1.8em',
                 borderRadius: 0,
                 left: '5.3em',
-                bottom: `${4.2 + (index * 4.4)}em`
+                bottom: `${4.2 + (index * 3.6)}em`
             };
         }
 
