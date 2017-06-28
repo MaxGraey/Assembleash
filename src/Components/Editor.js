@@ -85,6 +85,21 @@ export default class Editor extends Component {
         }
     }
 
+    static addExtraLibs() {
+        if (this.monaco && !this.extraLibsRegistered) {
+            this.extraLibsRegistered = true;
+
+            if (window.assemblyscript) {
+                const files = window.assemblyscript.library.files;
+                const names = Object.keys(files);
+
+                const typescript = this.monaco.languages.typescript;
+                for (let index = 0, len = names.length; index < len; index++)
+                    typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+            }
+        }
+    }
+
     replaceTextInRange(range, text) {
         const replaceOperation = {
             text,
@@ -98,6 +113,8 @@ export default class Editor extends Component {
     onLoad = (editor, monaco) => {
         this.editor = editor;
         Editor.monaco = monaco;
+
+        Editor.addExtraLibs();
 
         if (!Editor.wastRegistered) {
             Editor.wastRegistered = true;

@@ -459,7 +459,6 @@ export default class EditorContainer extends Component {
 
                 } else {
                     // script already loaded
-                    this.addExtraLibs();
                     this.setState({ compilerReady: true }, () => {
                         getCompilerVersion(compiler, version => this.setState({ version }));
                         this.updateCompilation();
@@ -475,24 +474,10 @@ export default class EditorContainer extends Component {
     }
 
     onScriptLoad() {
-        this.addExtraLibs();
         this.setState({ compilerReady: true }, () => {
             getCompilerVersion(this.state.compiler, version => this.setState({ version }));
             this.updateCompilation();
         });
-    }
-
-    addExtraLibs() {
-        if (window.monaco && !this.extraLibsRegistered && window.assemblyscript) {
-            this.extraLibsRegistered = true;
-
-            const files = window.assemblyscript.library.files;
-            const names = Object.keys(files);
-
-            const typescript = window.monaco.languages.typescript;
-            for (let index = 0, len = names.length; index < len; index++)
-                typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-        }
     }
 
     onScriptError = () => {
