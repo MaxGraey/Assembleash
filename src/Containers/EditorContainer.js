@@ -76,7 +76,7 @@ export default class EditorContainer extends Component {
              notifications:     OrderedSet(),
              notificationCount: 0,
 
-             inputCursorPosition: [0, 0]
+             inputCursorPosition: [1, 1]
          };
 
          this._errorCount       = 0;
