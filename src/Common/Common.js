@@ -182,14 +182,20 @@ export function formatCode(buffer, base64 = false) {
         return buffer;
 
     if (base64) {
-        let output = 'decode(\'';
+        let output = 'const byteArray = decode(\'';
         output += Base64.encode(buffer);
         output += '\');\n\n';
 
         output += 'function decode(input) {\n';
-        output += '    return new Uint8Array(atob(input).split(\'\').map(char => {\n';
-        output += '        return char.charCodeAt(0);\n';
-        output += '    }));\n';
+        output += '    if (typeof window !== "undefined" && atob in window) {\n';
+        output += '        return new Uint8Array(atob(input).split("").map(char => {\n';
+        output += '            return char.charCodeAt(0);\n';
+        output += '        }));\n';
+        output += '    }\n';
+        output += '    if (typeof Buffer !== "undefined") {\n';
+        output += '        return new Uint8Array(Buffer.from(input, "base64"));\n';
+        output += '    }\n';
+        output += '    return null;\n';
         output += '}';
 
         return output;
