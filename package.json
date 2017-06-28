@@ -23,7 +23,7 @@
     "react-dom": "^15.6.1",
     "react-live": "^1.7.0",
     "react-monaco-editor": "https://github.com/jurajhrib/react-monaco-editor",
-    "react-notification": "^6.7.0",
+    "react-notification": "^6.7.1",
     "react-split-pane": "^0.1.63",
     "react-switch-button": "^2.2.2",
     "react-toggle": "^4.0.1",

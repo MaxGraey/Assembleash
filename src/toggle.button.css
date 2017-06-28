@@ -99,6 +99,10 @@
   transition: opacity 0.25s ease;
 }
 
+.react-toggle-track-x svg path {
+    fill: #4e5d6c;
+}
+
 .react-toggle--checked .react-toggle-track-x {
   opacity: 0;
 }

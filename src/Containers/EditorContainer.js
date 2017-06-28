@@ -636,11 +636,11 @@ export default class EditorContainer extends Component {
                 color: '#fff',
                 background: '#f00',
                 fontSize: '1.5rem',
-                padding: '1.6rem',
-                paddingLeft: '2.1rem',
+                padding: '1.2em',
+                paddingLeft: '1.8em',
                 borderRadius: 0,
-                left: '74px',
-                bottom: `${6.6 + (index * 5)}rem`
+                left: '5.3em',
+                bottom: `${4.2 + (index * 4.4)}em`
             };
         }
 
