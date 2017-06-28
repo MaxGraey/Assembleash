@@ -224,8 +224,8 @@ export function formatCode(buffer, base64 = false) {
 
 
 export function formatSize(bytes) {
+    if (!bytes) return '0 Bytes';
     const units = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
-    if (bytes === 0) return '0 Bytes';
     let i = Math.floor(Math.log(bytes) * (1 / Math.log(1024)));
     return Math.round(bytes * Math.pow(1024, -i) * 100) / 100 + ' ' + units[i];
 }
