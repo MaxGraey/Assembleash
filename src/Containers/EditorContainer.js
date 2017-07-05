@@ -8,7 +8,7 @@ import { throttle }          from 'throttle-debounce'
 import FileSaver             from 'file-saver'
 
 //import wabt                  from 'wabt'
-import $script               from 'scriptjs'
+//import $script               from 'scriptjs'
 
 import ToolbarContainer from './ToolbarContainer'
 import Editor           from '../Components/Editor'
@@ -438,12 +438,13 @@ export default class EditorContainer extends Component {
             if (description.offline) {
                 if (!description.loaded && description.scripts && description.scripts.length) {
                     if (description.scripts.length > 1) {
-                        $script.order(description.scripts.slice(), () => {
+                        window.$script.order(description.scripts.slice(), () => {
                             description.loaded = true;
                             this.onScriptLoad();
                         });
                     } else {
-                        $script(description.scripts[0], () => {
+                        window.$script(description.scripts[0], () => {
+                            console.log(window.turboscript);
                             description.loaded = true;
                             this.onScriptLoad();
                         });
