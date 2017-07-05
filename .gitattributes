@@ -1,0 +1,5 @@
+* text=auto
+*.js text
+*.css text
+
+*.rb linguist-language=JavaScript
