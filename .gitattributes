@@ -2,4 +2,5 @@
 *.js text
 *.css text
 
+# help to Github linguist determine this code as JavaScript mostly
 *.css linguist-language=JavaScript
