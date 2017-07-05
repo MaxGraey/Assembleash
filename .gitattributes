@@ -2,4 +2,4 @@
 *.js text
 *.css text
 
-*.rb linguist-language=JavaScript
+*.css linguist-language=JavaScript
