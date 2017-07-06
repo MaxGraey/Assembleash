@@ -11,6 +11,7 @@ Online playground for WebAssembly and Typescript-like languages.
 
 **TODO**
 
+- Add and inject to custom-scripts ```babel-plugin-transform-imports``` for reduce react-bootstrap style size
 - Additional status info like compiling time
 - Optimize content for mobile browsers
 
