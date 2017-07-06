@@ -2,7 +2,7 @@
 
 [![](https://tokei.rs/b1/github/MaxGraey/Assembleash?style=flat-square)](https://github.com/MaxGraey/Assembleash)
 
-Playground for WebAssembly and Typescript-like languages.
+Online playground for WebAssembly and Typescript-like languages.
 
 **Support languges:**
 - [TurboScript](https://maxgraey.github.io/Assembleash/#TurboScript)
