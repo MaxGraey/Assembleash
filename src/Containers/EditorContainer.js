@@ -65,7 +65,7 @@ export default class EditorContainer extends Component {
              outputType:        'text',
 
              // settings
-             exportMalloc:      false,
+             exportRuntime:     false,
              validate:          true,
              optimize:          true,
              longMode:          false,
@@ -131,7 +131,7 @@ export default class EditorContainer extends Component {
             longMode,
             validate,
             optimize,
-            exportMalloc,
+            exportRuntime,
             unsafe
         } = this.state;
 
@@ -151,8 +151,8 @@ export default class EditorContainer extends Component {
                     case 'AssemblyScript':
                         const stdlib = isRequreStdlib(inputCode);
                         this.compileByAssemblyScript(inputCode, {
-                             stdlib,
-                             exportMalloc,
+                             noRuntime: !stdlib,
+                             exportRuntime,
                              longMode,
                              validate,
                              optimize
@@ -201,14 +201,15 @@ export default class EditorContainer extends Component {
         });
     }
 
-    compileByAssemblyScript(code, { stdlib, exportMalloc, longMode, validate, optimize }) {
+    compileByAssemblyScript(code, { noRuntime, exportRuntime, longMode, validate, optimize }) {
         const as = window.assemblyscript;
 
         const module = as.Compiler.compileString(
             code, {
                 silent: true,
                 target: longMode ? 'wasm64' : 'wasm32',
-                memoryModel: stdlib || exportMalloc ? (exportMalloc ? "exportmalloc" : "malloc") : "bare"
+                noRuntime: noRuntime && !exportRuntime,
+                exportRuntime: exportRuntime ? ['malloc', 'free'] : false
             }
         );
 

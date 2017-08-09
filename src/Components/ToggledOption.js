@@ -31,7 +31,7 @@ export default class ToggledOption extends Component {
                     display:      'inline-block',
                     paddingLeft:  '15pt',
                     paddingRight: '15pt',
-                    width:        '180pt'
+                    width:        '190pt'
                 }}>
                 <h4><span style={{ paddingRight: '10pt', lineHeight: '3rem' }}>{ label }</span>
                     <Toggle

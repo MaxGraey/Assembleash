@@ -15,7 +15,7 @@ export default class CompileButton extends Component {
     static propTypes = {
         disabled: PropTypes.bool,
         onChange: PropTypes.func,
-		onClick:  PropTypes.func
+		    onClick:  PropTypes.func
     }
 
     static defaultProps = {
