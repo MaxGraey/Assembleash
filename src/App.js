@@ -26,10 +26,10 @@ export default class App extends Component {
         }
     }
 
-	render() {
+	  render() {
         const { compiler } = this.state;
         return (
             <EditorContainer compiler={ compiler }/>
         );
-	}
+	  }
 }
