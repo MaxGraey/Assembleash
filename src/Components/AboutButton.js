@@ -7,7 +7,7 @@ import {
     Badge
 } from 'react-bootstrap';
 
-import FeatureProperty from './FeatureProperty'
+// import FeatureProperty from './FeatureProperty'
 import { CompilerDescriptions } from '../Common/Common'
 
 
