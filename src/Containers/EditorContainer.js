@@ -18,15 +18,10 @@ import {
     isRequreStdlib,
     getCompilerVersion,
     CompilerDescriptions,
-    CompilerList,
     CompileMode,
-    CompileModes,
     formatCode,
     formatSize
 } from '../Common/Common'
-
-import registerWastSyntax from '../Grammars/wast'
-import registerTheme from '../Grammars/theme.js'
 
 import { OrderedSet } from 'immutable'
 
@@ -638,7 +633,7 @@ export default class EditorContainer extends Component {
         />) : null;
 
         const canBinaryDownload   = compilerReady && compileSuccess && output.binary;
-        const compilerDescription = CompilerDescriptions[compiler];
+        // const compilerDescription = CompilerDescriptions[compiler];
 
         let busyState = 'busy';
 
