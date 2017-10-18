@@ -1,6 +1,6 @@
 {
   "name": "assembleash-playground",
-  "version": "1.0.0-beta",
+  "version": "1.0.0-beta.2",
   "description": "WebAssembly and Typescript-like languages playground",
   "homepage": "http://MaxGraey.github.io/Assembleash",
   "author": "Max Graey <maxgraey@gmail.com>",
