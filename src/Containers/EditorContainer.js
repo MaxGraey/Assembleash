@@ -218,7 +218,7 @@ export default class EditorContainer extends Component {
                 const diagnostics = as.Compiler.lastDiagnostics;
                 this._errorCount = diagnostics.length;
 
-                for (let i = 0; i < diagnostics.length; i++) {
+                /* for (let i = 0; i < diagnostics.length; i++) {
                     let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
 
                     if (i <= MaxPrintingErrors) {
@@ -231,7 +231,7 @@ export default class EditorContainer extends Component {
                         this.addNotification(errorMessage);
                         break;
                     }
-                }
+                }*/
 
             } else {
                 setImmediate(() => {

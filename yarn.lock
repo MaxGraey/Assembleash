@@ -4377,9 +4377,9 @@ module-not-found-error@^1.0.0:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/module-not-found-error/-/module-not-found-error-1.0.1.tgz#cf8b4ff4f29640674d6cdd02b0e3bc523c2bbdc0"
 
-monaco-editor@~0.8.x:
-  version "0.8.3"
-  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.8.3.tgz#523bdf2d1524db2c2dfc3cae0a7b6edc48d6dea6"
+monaco-editor@^0.10.0:
+  version "0.10.1"
+  resolved "https://registry.yarnpkg.com/monaco-editor/-/monaco-editor-0.10.1.tgz#8c96c4f15b6b5258bf92cbde93cad8a7e3007e14"
 
 ms@2.0.0:
   version "2.0.0"
@@ -5423,11 +5423,12 @@ react-live@^1.7.0:
     prop-types "^15.5.8"
     unescape "^0.2.0"
 
-"react-monaco-editor@git+https://github.com/jurajhrib/react-monaco-editor.git":
-  version "0.8.1"
-  resolved "git+https://github.com/jurajhrib/react-monaco-editor.git#031cb4fd8e311936c2f58c21b62e150d7339343f"
+react-monaco-editor@^0.11.0:
+  version "0.11.0"
+  resolved "https://registry.yarnpkg.com/react-monaco-editor/-/react-monaco-editor-0.11.0.tgz#d51e293411dbac5a11a989f6664f6ec623a9ed22"
   dependencies:
-    monaco-editor "~0.8.x"
+    monaco-editor "^0.10.0"
+    prop-types "^15.5.10"
 
 react-notification@^6.8.2:
   version "6.8.2"

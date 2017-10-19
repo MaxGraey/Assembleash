@@ -132,12 +132,12 @@ export default class Editor extends Component {
         }
 
         this.editor.getModel().updateOptions({
-            tabSize: this.props.mode === 'wast' ? 1 : 4
+            tabSize: this.props.mode === 'wast' ? 1 : 4,
         });
 
-        this.editor.updateOptions({
-            theme: 'vs-assembleash'
-        });
+        // this.editor.updateOptions({
+        //     theme: 'vs-assembleash'
+        // });
 
         this.editor.onDidChangeCursorPosition(e => {
             this.props.onPositionChange([e.position.lineNumber, e.position.column]);
@@ -183,6 +183,7 @@ export default class Editor extends Component {
                 language={ mode }
                 width={ width }
                 height={ height }
+                theme="vs-assembleash"
                 options={{
                     readOnly,
                     renderLineHighlight:  'gutter',
@@ -196,7 +197,7 @@ export default class Editor extends Component {
                         verticalHasArrows: false,
                         horizontalHasArrows: false,
                         verticalScrollbarSize:   10,
-		                horizontalScrollbarSize: 10,
+		                    horizontalScrollbarSize: 10,
                         verticalSliderSize: 8,
                         horizontalSliderSize: 8
                     },
@@ -210,6 +211,9 @@ export default class Editor extends Component {
                     roundedSelection: false,
                     fixedOverflowWidgets: true,
 
+                    minimap: {
+                      enabled: false
+                    },
                     folding: true,
                     renderIndentGuides: true
                 }}

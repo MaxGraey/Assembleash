@@ -6,8 +6,8 @@
     background: transparent !important;
 }
 
-.monaco-editor-background .margin-view-overlays {
-    background-color: rgba(0,0,0,0.17);
+.margin-view-overlays {
+    background-color: #252e37;
 }
 
 .margin-view-overlays .line-numbers {
