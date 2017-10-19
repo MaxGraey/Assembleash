@@ -58,6 +58,7 @@
 .monaco-editor .monaco-scrollable-element .scrollbar.vertical,
 .monaco-editor .monaco-scrollable-element .scrollbar.horizontal {
 	background: transparent;
+  visibility: hidden;
     /*display: none;*/
 }
 
