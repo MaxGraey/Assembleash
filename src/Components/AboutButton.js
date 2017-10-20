@@ -22,8 +22,8 @@ export default class AboutButton extends Component {
         const title = (
             <span>
                 <h5>About</h5>
-                <h4><strong>{ `${compiler} `}</strong></h4>
-                <Badge><strong>{ `${version}` }</strong></Badge>
+                <h4><strong>{ compiler + ' ' }</strong></h4>
+                <Badge><strong>{ version }</strong></Badge>
             </span>
         );
 
@@ -31,17 +31,17 @@ export default class AboutButton extends Component {
         const github = description ? description.github : '';
 
         return (
-        	<Popover
+            <Popover
                 id="popover-about"
                 title={ title }
                 style={{ minWidth: '280px' }}
             >
-        		<div className="label" style={{ padding: 0 }}>
+                <div className="label" style={{ padding: 0 }}>
                     <a href={ github } target="_blank" rel="noopener noreferrer">
                         <h5>Project on Github</h5>
                     </a>
                 </div>
-        	</Popover>
+            </Popover>
         );
     }
 
