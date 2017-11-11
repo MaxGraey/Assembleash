@@ -132,11 +132,6 @@ export function anyExists(array, value) {
 
 export function getCompilerVersion(compiler, callback = () => {}) {
     switch (compiler) {
-        case 'TurboScript':
-            if (window.turboscript)
-                callback(window.turboscript.default.version);
-            return;
-
         case 'AssemblyScript':
             if (window.assemblyscript)
                 callback(window.assemblyscript.version);
