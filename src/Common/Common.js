@@ -9,26 +9,6 @@ export const CompileMode = {
 export const CompileModes = Object.keys(CompileMode);
 
 export const CompilerDescriptions = {
-    'TurboScript': {
-        offline: true,
-        scripts: [
-            // 'https://rawgit.com/01alchemist/TurboScript/master/lib/turboscript.min.js'
-        ],
-        loaded: false,
-        github:  'https://github.com/01alchemist/TurboScript',
-        options: {
-            /*optimize: {
-                label:   'Optimize',
-                default: true
-            }*/
-        },
-        example:
-`export function fib(n: int32): int32 {
-    if (n <= 1) return 1;
-    return fib(n - 1) + fib(n - 2);
-}`
-    },
-
     'AssemblyScript': {
         offline: true,
         scripts: [

@@ -154,13 +154,6 @@ export default class EditorContainer extends Component {
                          });
                         break;
 
-                    case 'TurboScript':
-                        this.compileByTurboScript(inputCode, {
-                            longMode,
-                            optimize
-                        });
-                        break;
-
                     case 'Speedy.js':
                         this.compileBySpeedyJs(inputCode, {
                             unsafe,
@@ -273,69 +266,6 @@ export default class EditorContainer extends Component {
         });
     }
 
-    compileByTurboScript(code, options = {}) {
-        const turbo = window.turboscript;
-
-        if (!turbo) throw new Error('Turboscript not loaded');
-
-        const result = turbo.compileString(code, {
-            target:   turbo.CompileTarget.WEBASSEMBLY,
-            silent:   true,
-            logError: true,
-            longMode: options.longMode || false,
-            optimize: options.optimize || true
-        });
-
-        if (!result.success) {
-            this.setState({
-                compileSuccess: false,
-                compileFailure: true
-            });
-            setImmediate(() => {
-                let diagnostic = result.log.first;
-                let errorMessage;
-                this._errorCount = 0;
-
-                while (diagnostic != null) {
-                    const location = diagnostic.range.source.indexToLineColumn(diagnostic.range.start);
-                    errorMessage = `module.ts(${location.line + 1}, ${location.column + 1}): `;
-                    errorMessage += diagnostic.kind === turbo.DiagnosticKind.ERROR ? "error. " : "warning. ";
-                    errorMessage += diagnostic.message + "\n";
-
-                    if (this._errorCount <= MaxPrintingErrors) {
-                        this.addNotification(errorMessage);
-                        let annotations = this.state.annotations;
-                        this.setState({
-                            annotations: annotations.add({row: location.line + 1, type: "error", text: errorMessage})
-                        });
-                    }
-
-                    this._errorCount++;
-                    diagnostic = diagnostic.next;
-                }
-
-                if (this._errorCount > MaxPrintingErrors) {
-                    errorMessage = `Too many errors (${this._errorCount})`;
-                    console.error(errorMessage);
-                    this.addNotification(errorMessage);
-                }
-            });
-
-        } else {
-            setImmediate(() => {
-                this._errorCount = 0;
-                this.setState({
-                    compileSuccess: true,
-                    compileFailure: false,
-                    output: {
-                        text: result.wast,
-                        binary: result.wasm
-                    }
-                });
-            });
-        }
-    }
-
     compileBySpeedyJs(code, options) {
         CompilerDescriptions['Speedy.js'].compile(code, options)
         .then(response => {
@@ -440,7 +370,6 @@ export default class EditorContainer extends Component {
                         });
                     } else {
                         window.$script(description.scripts[0], () => {
-                            console.log(window.turboscript);
                             description.loaded = true;
                             this.onScriptLoad();
                         });

@@ -21,8 +21,12 @@
 
     <title>Assembleash Playground</title>
 
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
-    <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
+    <link rel="preconnect" href="//google-analytics.com/">
+    <link rel="preconnect" href="//rawgit.com/dcodeIO/binaryen.js/master/">
+    <link rel="preconnect" href="//rawgit.com/dcodeIO/AssemblyScript/master/dist/">
+
+    <link rel="preconnect manifest" href="%PUBLIC_URL%/manifest.json">
+    <link rel="preconnect shortcut icon" href="%PUBLIC_URL%/favicon.ico">
     <style>
         html, body {
             background: #2b353f
@@ -221,7 +225,6 @@
 
         [class^="icon-"], [class*=" icon-"] {
             font-family: 'icomoon' !important;
-            speak: none;
             font-style: normal;
             font-weight: normal;
             font-variant: normal;
@@ -270,10 +273,9 @@
             });
         }());
     </script>
-    <script src="https://www.google-analytics.com/analytics.js" async></script>
-    <script src="https://rawgit.com/01alchemist/TurboScript/master/lib/turboscript.min.js"></script>
     <script src="https://rawgit.com/dcodeIO/binaryen.js/master/index.js"></script>
     <script src="https://rawgit.com/dcodeIO/AssemblyScript/master/dist/assemblyscript.js"></script>
+    <script src="https://www.google-analytics.com/analytics.js" async></script>
     <!-- <script src="assemblyscript.js"></script> -->
   </body>
 </html>
