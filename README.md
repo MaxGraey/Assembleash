@@ -5,7 +5,8 @@
 Online playground for WebAssembly and Typescript-like languages.
 
 **Support languges:**
-- [TurboScript](https://maxgraey.github.io/Assembleash/#TurboScript)
+
+~~TurboScript (Not maintained anymore)~~
 - [AssemblyScript](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 - [Speedy.js](https://maxgraey.github.io/Assembleash/#Speedy.js)
 
