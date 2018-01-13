@@ -1,81 +1,70 @@
-import React, { Component } from 'react'
+import React, {
+  PureComponent
+} from 'react'
+
+import { ButtonGroup } from 'react-bootstrap'
 import PropTypes from 'prop-types'
-import {
-    ButtonGroup
-} from 'react-bootstrap'
 
-export default class RadioButtonGroup extends Component {
-	static propTypes = {
-		children:  PropTypes.node,
-		type:      PropTypes.oneOf(['checkbox', 'radio']),
-		value:     PropTypes.object,
-		onChange:  PropTypes.func,
-		valueLink: PropTypes.shape({
-            value: PropTypes.any,
-            requestChange: PropTypes.func.isRequired
-        })
-	}
+export default class RadioButtonGroup extends PureComponent {
 
-	static defaultProps = {
-		value:     {},
-		valueLink: null,
-		onChange:  () => {}
-	}
+  static propTypes = {
+    children:  PropTypes.node,
+    type:      PropTypes.oneOf(['checkbox', 'radio']),
+    value:     PropTypes.object,
+    onChange:  PropTypes.func,
+    valueLink: PropTypes.shape({
+      value:         PropTypes.any,
+      requestChange: PropTypes.func.isRequired
+    })
+  }
 
-	binding(props) {
-		let { onChange, value } = props;
-		return props.valueLink || {
-            requestChange: onChange,
-			value: value
-		}
-	}
+  static defaultProps = {
+    value:     {},
+    valueLink: null,
+    onChange:  () => {},
+  }
 
-	onClick(child) {
-		let { value, requestChange } = this.binding(this.props);
+  binding(props) {
+    const { onChange, value } = props;
+    return props.valueLink || {
+      requestChange: onChange,
+      value,
+    };
+  }
 
-		let keys = this.childKeys(),
-		    key  = child.props.eventKey;
+  onClick(child) {
+    const { value, requestChange } = this.binding(this.props);
 
-		if (this.props.type === 'radio') {
-			keys.forEach(k => {
-                value[k] = k === key;
-            });
-		} else {
-			keys.forEach(k => {
-                value[k] = (k === key) ? !value[k] : value[k]
-            });
-		}
-		requestChange(value);
-	}
+    let keys = React.Children.map(this.props.children, child => child.props.eventKey),
+        key  = child.props.eventKey;
 
-	childKeys() {
-		let keys = [];
-		React.Children.forEach(this.props.children, child => {
-			keys.push(child.props.eventKey);
-		});
-		return keys;
-	}
+    if (this.props.type === 'radio') {
+      keys.forEach(k => { value[k] = k === key });
+    } else {
+      keys.forEach(k => {
+        value[k] = (k === key) ? !value[k] : value[k]
+      });
+    }
+    requestChange(value);
+  }
 
-	renderChildren() {
-		return React.Children.map(this.props.children, child => {
-			let value  = this.binding(this.props).value || {};
-			let active = value[child.props.eventKey] || false;
+  renderChildren() {
+    const value = this.binding(this.props).value || {};
+    return React.Children.map(this.props.children, child => {
+      const active = value[child.props.eventKey] || false;
+      return React.cloneElement(child, {
+        onClick: () => this.onClick(child),
+        active
+      })
+    })
+  }
 
-			return React.cloneElement(child, {
-				onClick: () => this.onClick(child),
-                active
-			})
-		})
-	}
-
-	render() {
-		return (
-            <ButtonGroup
-                className={ this.props.className }
-                bsSize={ this.props.bsSize }
-            >
-			    { this.renderChildren() }
-            </ButtonGroup>
-        );
-	}
+  render() {
+    const { className, bsSize } = this.props;
+    return (
+      <ButtonGroup className={ className } bsSize={ bsSize }>
+        { this.renderChildren()}
+      </ButtonGroup>
+    );
+  }
 }

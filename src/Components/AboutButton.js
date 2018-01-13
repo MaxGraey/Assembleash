@@ -1,17 +1,16 @@
-import React, { Component } from 'react'
 import {
+    Badge,
     Button,
-    Popover,
-    OverlayTrigger,
     Glyphicon,
-    Badge
+    OverlayTrigger,
+    Popover,
 } from 'react-bootstrap';
+import React, { PureComponent } from 'react';
 
 // import FeatureProperty from './FeatureProperty'
 import { CompilerDescriptions } from '../Common/Common'
 
-
-export default class AboutButton extends Component {
+export default class AboutButton extends PureComponent {
     static defaultProps = {
         compiler: 'TurboScript',
         version: '0.0.0'

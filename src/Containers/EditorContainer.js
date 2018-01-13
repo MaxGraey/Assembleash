@@ -1,37 +1,36 @@
-
+import {
+    CompileMode,
+    CompilerDescriptions,
+    formatCode,
+    formatSize,
+    getCompilerVersion,
+    isRequreStdlib
+} from '../Common/Common'
 import React, { Component }  from "react"
+
+import Editor           from '../Components/Editor'
+import FileSaver             from 'file-saver'
+import FooterContainer  from './FooterContainer'
+import { NotificationStack } from 'react-notification'
+import { OrderedSet } from 'immutable'
 import PropTypes             from 'prop-types'
 import ReactDOM              from "react-dom"
 import SplitPane             from 'react-split-pane'
-import { NotificationStack } from 'react-notification'
-import { throttle }          from 'throttle-debounce'
-import FileSaver             from 'file-saver'
-
-//import wabt                  from 'wabt'
-//import $script               from 'scriptjs'
-
 import ToolbarContainer from './ToolbarContainer'
-import Editor           from '../Components/Editor'
-import FooterContainer  from './FooterContainer'
-
-import {
-    isRequreStdlib,
-    getCompilerVersion,
-    CompilerDescriptions,
-    CompileMode,
-    formatCode,
-    formatSize
-} from '../Common/Common'
-
-import { OrderedSet } from 'immutable'
+import { throttle }          from 'throttle-debounce'
 
 const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;
 const SplitGripWidth = 5;
 
+const Target = {
+  WASM32: 0,
+  WASM64: 1
+};
+
 export default class EditorContainer extends Component {
     static defaultProps = {
-        compiler: 'AssemblyScript'
+        compiler: 'AssemblyScript NEXT'
     }
 
     static propTypes = {
@@ -60,7 +59,6 @@ export default class EditorContainer extends Component {
              outputType:        'text',
 
              // settings
-             exportRuntime:     false,
              validate:          true,
              optimize:          true,
              longMode:          false,
@@ -126,7 +124,6 @@ export default class EditorContainer extends Component {
             longMode,
             validate,
             optimize,
-            exportRuntime,
             unsafe
         } = this.state;
 
@@ -143,11 +140,10 @@ export default class EditorContainer extends Component {
         setImmediate(() => {
             try {
                 switch (compiler) {
-                    case 'AssemblyScript':
+                    case 'AssemblyScript NEXT':
                         const stdlib = isRequreStdlib(inputCode);
                         this.compileByAssemblyScript(inputCode, {
-                             noRuntime: !stdlib,
-                             exportRuntime,
+                             noMemory: !stdlib,
                              longMode,
                              validate,
                              optimize
@@ -189,16 +185,14 @@ export default class EditorContainer extends Component {
         });
     }
 
-    compileByAssemblyScript(code, { noRuntime, exportRuntime, longMode, validate, optimize }) {
+    compileByAssemblyScript(code, { noMemory, longMode, validate, optimize }) {
         const as = window.assemblyscript;
 
-        const module = as.Compiler.compileString(
-            code, {
-                silent: true,
-                target: longMode ? 'wasm64' : 'wasm32',
-                noRuntime: noRuntime && !exportRuntime,
-                exportRuntime: exportRuntime ? ['malloc', 'free'] : false
-            }
+        const module = as.compile(
+          as.parseFile(code, 'index.ts', null, true), {
+            noMemory,
+            target: longMode ? Target.WASM64 : Target.WASM32
+          }
         );
 
         setImmediate(() => {
@@ -254,8 +248,8 @@ export default class EditorContainer extends Component {
                             compileFailure: false,
 
                             output: {
-                                text:   module.emitText(),
-                                binary: module.emitBinary()
+                                text:   module.toText(),
+                                binary: module.toBinary()
                             }
                         });
 

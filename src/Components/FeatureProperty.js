@@ -1,12 +1,12 @@
-import React, { Component } from "react"
 import {
+    Badge,
     Button,
-    OverlayTrigger,
     Glyphicon,
-    Badge
+    OverlayTrigger
 } from 'react-bootstrap';
+import React, { PureComponent } from "react"
 
-export default class FeatureProperty extends Component {
+export default class FeatureProperty extends PureComponent {
     render() {
         return (
             <span></span>

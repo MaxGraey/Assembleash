@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+
 import MonacoEditor from 'react-monaco-editor'
-import registerWastSyntax from '../Grammars/wast'
+import PropTypes from 'prop-types'
 import registerTheme from '../Grammars/theme.js'
+import registerWastSyntax from '../Grammars/wast'
 
 export default class Editor extends Component {
     static wastRegistered = false
@@ -90,12 +91,14 @@ export default class Editor extends Component {
             this.extraLibsRegistered = true;
 
             if (window.assemblyscript) {
-                const files = window.assemblyscript.library.files;
-                const names = Object.keys(files);
+                if (window.assemblyscript.library) {
+                    const files = window.assemblyscript.library.files;
+                    const names = Object.keys(files);
 
-                const typescript = this.monaco.languages.typescript;
-                for (let index = 0, len = names.length; index < len; index++)
-                    typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+                    const typescript = this.monaco.languages.typescript;
+                    for (let index = 0, len = names.length; index < len; index++)
+                        typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
+                }
             }
         }
     }
