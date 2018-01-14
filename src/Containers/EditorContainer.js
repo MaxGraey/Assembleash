@@ -1,23 +1,26 @@
+
+import React, { Component }  from 'react'
+import ReactDOM              from 'react-dom'
+import PropTypes             from 'prop-types'
+
+import FileSaver             from 'file-saver'
+import { NotificationStack } from 'react-notification'
+import { OrderedSet }        from 'immutable'
+import SplitPane             from 'react-split-pane'
+import { throttle }          from 'throttle-debounce'
+
+import Editor                from '../Components/Editor'
+import ToolbarContainer      from './ToolbarContainer'
+import FooterContainer       from './FooterContainer'
+
 import {
     CompileMode,
     CompilerDescriptions,
     formatCode,
     formatSize,
     getCompilerVersion,
-    isRequreStdlib
+    isRequreStdlib,
 } from '../Common/Common'
-import React, { Component }  from "react"
-
-import Editor           from '../Components/Editor'
-import FileSaver             from 'file-saver'
-import FooterContainer  from './FooterContainer'
-import { NotificationStack } from 'react-notification'
-import { OrderedSet } from 'immutable'
-import PropTypes             from 'prop-types'
-import ReactDOM              from "react-dom"
-import SplitPane             from 'react-split-pane'
-import ToolbarContainer from './ToolbarContainer'
-import { throttle }          from 'throttle-debounce'
 
 const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;
@@ -235,7 +238,7 @@ export default class EditorContainer extends Component {
                             this.setState({
                                 // compileSuccess: false,
                                 // compileFailure: true,
-                                compileStatus: 'success',
+                                compileStatus: 'failure',
                                 additionalStatusMessage: notValid
                             });
                             return;
