@@ -109,18 +109,12 @@ export function isRequreStdlib(code) {
 }
 
 export function anyExists(array, value) {
-  if (Array.isArray(value)) {
-    for (let j = 0, lj = array.length; j < lj; j++) {
-      let current = array[j];
-      for (let i = 0, li = value.length; i < li; i++)
-        if (current === value[i]) return true;
-    }
-  } else {
-    for (let i = 0, len = array.length; i < len; i++)
-      if (array[i] === value) return true;
-  }
+  const findFunc =
+    Array.isArray(value)
+    ? v => value.indexOf(v) >= 0
+    : v => value === v;
 
-  return false;
+  return array.some(findFunc);
 }
 
 export function getCompilerVersion(compiler, callback = () => {}) {
