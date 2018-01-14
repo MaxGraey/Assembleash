@@ -6,17 +6,17 @@ import PropTypes     from 'prop-types';
 export default class BusySignal extends Component {
 
   static propTypes = {
-    state: PropTypes.oneOf(['busy', 'success', 'failure'])
+    state: PropTypes.oneOf(['pending', 'success', 'failure'])
   }
 
   static defaultProps = {
-    state: 'busy'
+    state: 'pending'
   }
 
   _renderSpinner() {
     const state = this.props.state;
     return (
-      state === 'busy'
+      state === 'pending'
       ? (<div className='busy-signal-spinner busy-success-color'>
         <div className='busy-signal-mask'>
           <div className='busy-signal-maskedCircle' />
@@ -28,7 +28,7 @@ export default class BusySignal extends Component {
 
   _renderDot() {
     return (
-      this.props.state === 'busy'
+      this.props.state === 'pending'
         ? <div className='busy-signal-symbol busy-success-color'>•</div>
         : null
     );
@@ -37,12 +37,8 @@ export default class BusySignal extends Component {
   _renderReadyState() {
     const state   = this.props.state;
     const success = state === 'success';
-    const failure = state === 'failure';
-
-    if (success || failure)
-      return (
-        <Glyphicon glyph={ success ? 'ok' : 'remove' } className={ `busy-${ state }-color` } />
-      );
+    if (success || state === 'failure')
+      return <Glyphicon glyph={ success ? 'ok' : 'remove' } className={ `busy-${ state }-color` } />;
 
     return null;
   }

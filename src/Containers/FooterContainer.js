@@ -18,7 +18,7 @@ export default class FooterContainer extends Component {
     }
 
     static defaultProps = {
-        busyState: 'busy',
+        busyState: 'pending',
         downloadDisabled: true,
         errorMessage: null,
         cursorPosition: [0, 0],
@@ -43,7 +43,7 @@ export default class FooterContainer extends Component {
         let statusBarMessage = '';
         let messageClass = 'busy-success-color';
 
-        if (busyState === 'busy') {
+        if (busyState === 'pending') {
             statusBarMessage = 'Processing...';
         } else if (busyState === 'success') {
             statusBarMessage = 'Compiled successfully';

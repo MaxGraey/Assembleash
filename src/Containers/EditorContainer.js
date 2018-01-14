@@ -135,11 +135,7 @@ export default class EditorContainer extends Component {
 
         if (this.toolbar && this.toolbar.compileButton) {
             this.toolbar.compileButton.startCompile();
-            this.setState({
-                // compileSuccess: false,
-                // compileFailure: false
-                compileStatus: 'compiling'
-            });
+            this.setState({ compileStatus: 'compiling' });
         }
 
         setImmediate(() => {
@@ -168,12 +164,7 @@ export default class EditorContainer extends Component {
 
             } catch (e) {
 
-                this.setState({
-                    // compileSuccess: false,
-                    // compileFailure: true
-                    compileStatus: 'failure'
-                });
-
+                this.setState({ compileStatus: 'failure' });
                 this._errorCount = 1;
 
                 const message = '<' + compiler + '> internal error: ';
@@ -203,11 +194,7 @@ export default class EditorContainer extends Component {
 
         setImmediate(() => {
             if (!module) {
-                this.setState({
-                    // compileSuccess: false,
-                    // compileFailure: true
-                    compileStatus: 'success'
-                });
+                this.setState({ compileStatus: 'success' });
 
                 const diagnostics = as.Compiler.lastDiagnostics;
                 this._errorCount = diagnostics.length;
@@ -236,9 +223,7 @@ export default class EditorContainer extends Component {
                             this.addNotification(notValid);
                             this._errorCount = 1;
                             this.setState({
-                                // compileSuccess: false,
-                                // compileFailure: true,
-                                compileStatus: 'failure',
+                                compileStatus:           'failure',
                                 additionalStatusMessage: notValid
                             });
                             return;
@@ -252,8 +237,6 @@ export default class EditorContainer extends Component {
 
                     setImmediate(() => {
                         this.setState({
-                            // compileSuccess: true,
-                            // compileFailure: false,
                             compileStatus: 'success',
 
                             output: {
@@ -277,11 +260,7 @@ export default class EditorContainer extends Component {
             if (response.length) {
                 const output = response[0];
                 if (output.exitStatus !== 0) {
-                    this.setState({
-                        // compileSuccess: false,
-                        // compileFailure: true
-                        compileStatus: 'failure',
-                    });
+                    this.setState({ compileStatus: 'failure' });
 
                     // compiled failure
                     const diagnostics = output.diagnostics;
@@ -307,8 +286,6 @@ export default class EditorContainer extends Component {
 
                     // compiled successfully
                     this.setState({
-                        // compileSuccess: true,
-                        // compileFailure: false,
                         compileStatus: 'success',
 
                         output: {
@@ -320,12 +297,7 @@ export default class EditorContainer extends Component {
             }
         })
         .catch(error => {
-            this.setState({
-                // compileSuccess: false,
-                // compileFailure: true
-                compileStatus: 'failure',
-            });
-
+            this.setState({ compileStatus: 'failure' });
             this._errorCount = 1;
 
             const message = '<' + this.state.compiler + '> Service not response';
@@ -519,8 +491,6 @@ export default class EditorContainer extends Component {
             compiler,
 
             compilerReady,
-            // compileSuccess,
-            // compileFailure,
             compileStatus,
             notifications,
             annotations,
@@ -562,19 +532,18 @@ export default class EditorContainer extends Component {
             }) }
         />) : null;
 
-        const canBinaryDownload = compilerReady && compileStatus === 'success' && output.binary;
+        const canBinaryDownload = (
+          compilerReady &&
+          compileStatus === 'success' &&
+          output.binary
+        );
 
-        let busyState = 'busy';
+        let busyState = 'pending';
         if (compilerReady) {
-            // TODO change this to compileStatus
-            // if (!compileSuccess && compileFailure) {
-            //     busyState = 'failure';
-            // } else if (compileSuccess && !compileFailure) {
-            //     busyState = 'success';
-            // }
             switch (compileStatus) {
               case 'success': busyState = 'success'; break;
               case 'failure': busyState = 'failure'; break;
+              default: break;
             }
         }
 
