@@ -1,6 +1,7 @@
-import React from "react"
+import React from 'react';
 import { Tooltip } from 'react-bootstrap';
+import moize from 'moize';
 
-export default function tooltip(text = '') {
-    return <Tooltip id="tooltip"><h4>{ text }</h4></Tooltip>;
-}
+export default moize.react(
+  (desc = '') => <Tooltip id='tooltip'><h4>{ desc }</h4></Tooltip>
+);

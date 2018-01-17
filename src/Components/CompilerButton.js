@@ -14,51 +14,54 @@ import { CompilerList } from '../Common/Common'
 export default class CompilerButton extends Component {
     static defaultProps = {
         compiler: CompilerList[0],
-        onSelect: (compiler) => {}
+        onSelect: () => {},
     }
 
     static propTypes = {
         compiler: PropTypes.string,
-        onSelect: PropTypes.func
+        onSelect: PropTypes.func,
+    }
+
+    static styles = {
+        button: {
+            minWidth: '238px',
+        },
+
+        menuItem: {
+            minWidth: '238px',
+            textAlign: 'center',
+        }
     }
 
     constructor(props) {
         super(props);
         this.state = {
-            compiler: props.compiler
+            compiler: props.compiler,
         };
     }
 
     onSelect = eventKey => {
-        let compiler = CompilerList[eventKey];
-        this.setState({ compiler });
-        this.props.onSelect(compiler);
-    }
-
-    component() {
-        return (
-            <ProgressBar active now={45} />
-        );
+        const compiler = CompilerList[eventKey];
+        this.setState({ compiler }, () => {
+            this.props.onSelect(compiler);
+        });
     }
 
     render() {
-        const { compiler } = this.state;
-
+        const { styles } = this.constructor;
         return (
             <OverlayTrigger
                 rootClose
                 placement='bottom'
-                trigger={['hover']}
+                trigger={[ 'hover' ]}
                 overlay={ tooltip('Choose Compiler') }
             >
                 <DropdownButton
                     id='compilers'
                     bsStyle='info'
                     bsSize='large'
-                    title={ compiler }
-                    style={{
-                        minWidth: '210px'
-                    }}
+                    title={ this.state.compiler }
+                    style={ styles.button }
                     onSelect={ this.onSelect }
                 >
                 {
@@ -66,12 +69,9 @@ export default class CompilerButton extends Component {
                         <MenuItem
                             key={ index }
                             eventKey={ index }
-                            href={ '#' + value }
+                            href={ `#${ value }` }
                             bsStyle='info'
-                            style={{
-                                minWidth:  '210px',
-                                textAlign: 'center'
-                            }}>
+                            style={ styles.menuItem }>
                             <h4>{ value }</h4>
                         </MenuItem>
                     )
