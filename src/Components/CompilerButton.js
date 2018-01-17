@@ -5,7 +5,6 @@ import {
     MenuItem,
     OverlayTrigger,
     DropdownButton,
-    ProgressBar
 } from 'react-bootstrap';
 
 import tooltip from './Tooltip'
