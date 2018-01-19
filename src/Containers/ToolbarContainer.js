@@ -57,7 +57,7 @@ export default class ToolbarContainer extends Component {
         }
     }
 
-    getRef = self => {
+    getCompileButtonRef = self => {
       this.compileButton = self;
     }
 
@@ -84,19 +84,22 @@ export default class ToolbarContainer extends Component {
                             onCompilerChange(compiler);
                         }}
                     />
-                    <AboutButton compiler={ compiler } version={ version }/>
+                    <AboutButton compiler={ compiler } version={ version } />
                 </ButtonGroup>
 
                 <CompileButton
-                    ref={ this.getRef }
+                    ref={ this.getCompileButtonRef }
                     disabled={ compileDisabled }
                     onChange={ onCompileModeChange }
                     onClick={ onCompileClick }
                 />
 
                 <ButtonToolbar className="pull-right">
-                    <SettingsButton compiler={ compiler } onOptionChange={ onSettingsOptionChange }/>
-                    <OutputButtonGroup onSelect={ onOutputSelect }/>
+                    <SettingsButton
+                      compiler={ compiler }
+                      onOptionChange={ onSettingsOptionChange }
+                    />
+                    <OutputButtonGroup onSelect={ onOutputSelect } />
                 </ButtonToolbar>
 
                 <div className="logo pull-right">
