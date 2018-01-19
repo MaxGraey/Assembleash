@@ -1,26 +1,22 @@
-import React, { Component } from 'react'
-import {
-    Button,
-    OverlayTrigger,
-    Glyphicon
-} from 'react-bootstrap';
+import React, { Component } from 'react';
 
-import tooltip from './Tooltip'
-import RadioButtonGroup from './RadioButtonGroup'
+import Button         from 'react-bootstrap/lib/Button';
+import Glyphicon      from 'react-bootstrap/lib/Glyphicon';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+
+import tooltip          from './Tooltip';
+import RadioButtonGroup from './RadioButtonGroup';
 
 export default class OutputButtonGroup extends Component {
     static defaultProps = {
-        onSelect: () => {}
+        onSelect: () => {},
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            radio: {
-                text:   true,
-                binary: false
-            }
-        };
+    state = {
+        radio: {
+            text:   true,
+            binary: false,
+        },
     }
 
     onSelect = values => {
@@ -29,12 +25,9 @@ export default class OutputButtonGroup extends Component {
     }
 
     _getOutputType() {
-        if (this.state.radio.text)
-            return 'text';
-
-        if (this.state.radio.binary)
-            return 'binary';
-
+        const { text, binary } = this.state.radio;
+        if (text)   return 'text';
+        if (binary) return 'binary';
         return 'text';
     }
 
@@ -57,7 +50,7 @@ export default class OutputButtonGroup extends Component {
                         <Glyphicon glyph='align-left'/>
                     </Button>
                     <Button eventKey='binary' bsStyle='primary' style={{ paddingLeft: '1.12em', paddingRight: '1.12em' }}>
-                        <span className='icon-binary-code'></span>
+                        <span className='icon-binary-code'/>
                     </Button>
                 </RadioButtonGroup>
             </OverlayTrigger>

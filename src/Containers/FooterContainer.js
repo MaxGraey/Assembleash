@@ -1,15 +1,14 @@
 
-import React, { Component } from "react"
-import PropTypes from 'prop-types'
-import {
-    Button,
-    Glyphicon,
-    ButtonToolbar
-} from 'react-bootstrap';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
+
+import Button        from 'react-bootstrap/lib/Button';
+import ButtonToolbar from 'react-bootstrap/lib/ButtonToolbar';
+import Glyphicon     from 'react-bootstrap/lib/Glyphicon';
 
 import BusySignal from '../Components/BusySignal';
 
-export default class FooterContainer extends Component {
+export default class FooterContainer extends PureComponent {
     static propTypes = {
         downloadDisabled:  PropTypes.bool,
         onDownloadPressed: PropTypes.func,

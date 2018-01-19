@@ -1,21 +1,18 @@
 
-import React, { Component } from "react"
-import PropTypes from 'prop-types'
-import {
-    ButtonToolbar,
-    ButtonGroup,
-    OverlayTrigger
-} from 'react-bootstrap';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import tooltip from '../Components/Tooltip'
+import ButtonGroup    from 'react-bootstrap/lib/ButtonGroup';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import ButtonToolbar  from 'react-bootstrap/lib/ButtonToolbar';
 
-//const Logo = require('react-svg-loader!../logo.svg');
+import CompilerButton    from '../Components/CompilerButton';
+import AboutButton       from '../Components/AboutButton';
+import CompileButton     from '../Components/CompileButton';
+import SettingsButton    from '../Components/SettingsButton';
+import OutputButtonGroup from '../Components/OutputButtonGroup';
 
-import CompilerButton    from '../Components/CompilerButton'
-import AboutButton       from '../Components/AboutButton'
-import CompileButton     from '../Components/CompileButton'
-import SettingsButton    from '../Components/SettingsButton'
-import OutputButtonGroup from '../Components/OutputButtonGroup'
+import tooltip from '../Components/Tooltip';
 
 export default class ToolbarContainer extends Component {
     static propTypes = {
@@ -45,7 +42,7 @@ export default class ToolbarContainer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            compiler: props.compiler
+            compiler: props.compiler,
         }
     }
 
@@ -58,7 +55,7 @@ export default class ToolbarContainer extends Component {
             onCompilerChange,
             onCompileModeChange,
             onCompileClick,
-            onOutputSelect
+            onOutputSelect,
         } = this.props;
 
         return (

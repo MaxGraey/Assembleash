@@ -1,14 +1,13 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import {
-    MenuItem,
-    OverlayTrigger,
-    DropdownButton,
-} from 'react-bootstrap';
+import DropdownButton from 'react-bootstrap/lib/DropdownButton';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import MenuItem       from 'react-bootstrap/lib/MenuItem';
 
-import tooltip from './Tooltip'
-import { CompilerList } from '../Common/Common'
+import tooltip from './Tooltip';
+
+import { CompilerList } from '../Common/Common';
 
 export default class CompilerButton extends Component {
     static defaultProps = {

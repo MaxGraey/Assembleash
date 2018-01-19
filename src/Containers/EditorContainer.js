@@ -1,17 +1,17 @@
 
-import React, { Component }  from 'react'
-import ReactDOM              from 'react-dom'
-import PropTypes             from 'prop-types'
+import React, { Component }  from 'react';
+import ReactDOM              from 'react-dom';
+import PropTypes             from 'prop-types';
 
-import FileSaver             from 'file-saver'
-import { NotificationStack } from 'react-notification'
-import { OrderedSet }        from 'immutable'
-import SplitPane             from 'react-split-pane'
-import { throttle }          from 'throttle-debounce'
+import FileSaver             from 'file-saver';
+import { NotificationStack } from 'react-notification';
+import { OrderedSet }        from 'immutable';
+import SplitPane             from 'react-split-pane';
+import { throttle }          from 'throttle-debounce';
 
-import Editor                from '../Components/Editor'
-import ToolbarContainer      from './ToolbarContainer'
-import FooterContainer       from './FooterContainer'
+import Editor                from '../Components/Editor';
+import ToolbarContainer      from './ToolbarContainer';
+import FooterContainer       from './FooterContainer';
 
 import {
     CompileMode,
@@ -20,7 +20,7 @@ import {
     formatSize,
     getCompilerVersion,
     isRequreStdlib,
-} from '../Common/Common'
+} from '../Common/Common';
 
 const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;

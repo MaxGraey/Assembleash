@@ -1,63 +1,73 @@
-import React, { Component } from "react"
-import {
-    OverlayTrigger,
-    DropdownButton,
-    Glyphicon
-} from 'react-bootstrap';
+import React, { PureComponent } from 'react';
 
-import ToggledOption from './ToggledOption'
-import tooltip from './Tooltip'
+import DropdownButton from 'react-bootstrap/lib/DropdownButton';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import Glyphicon      from 'react-bootstrap/lib/Glyphicon';
 
-import { CompilerDescriptions, CompilerList } from '../Common/Common'
+import ToggledOption  from './ToggledOption';
+import tooltip        from './Tooltip';
 
-export default class SettingsButton extends Component {
+import { CompilerDescriptions, CompilerList } from '../Common/Common';
+
+export default class SettingsButton extends PureComponent {
 
     static defaultProps = {
-        compiler: CompilerList[1],
-        onOptionChange: () => {}
+        compiler:             CompilerList[1],
+        onOptionChange:       () => {},
+        overlayTriggers:      ['hover'],
+        dropdownTitleElement: <Glyphicon glyph='cog'/>,
+        dropdownStyle: {
+          paddingLeft:  '0.9em',
+          paddingRight: '0.9em',
+        },
     }
 
     render() {
-        const { compiler, onOptionChange } = this.props;
-        const options = CompilerDescriptions[compiler].options;
+        const {
+          compiler,
+          onOptionChange,
+          overlayTriggers,
+          dropdownTitleElement,
+          dropdownStyle,
+        } = this.props;
 
-        options.base64 = {
+        const options = {
+          ...CompilerDescriptions[compiler].options,
+          base64: {
             label:   'Base64',
-            default: false
+            default: false,
+          },
         };
 
         return (
             <OverlayTrigger
                 rootClose
-                placement="bottom"
-                trigger={[ "hover" ]}
+                placement='bottom'
+                trigger={ overlayTriggers }
                 overlay={ tooltip('Settings') }
             >
                 <DropdownButton
                     noCaret
                     pullRight
-                    disabled={ !options || !Object.keys(options).length }
-                    id="settings-button"
-                    className="pull-right"
-                    bsStyle="info"
-                    title={ <Glyphicon glyph="cog"/> }
-                    bsSize="large"
-                    style={{
-                        paddingLeft:  '0.9em',
-                        paddingRight: '0.9em'
-                    }}
+                    disabled={ !Object.keys(options).length }
+                    id='settings-button'
+                    className='pull-right'
+                    bsStyle='info'
+                    title={ dropdownTitleElement }
+                    style={ dropdownStyle }
+                    bsSize='large'
                 >
-                    { Object.keys(options).map((key, index) => {
-                        if (!options[key] || !options[key].label)
+                    { Object.keys(options).map(key => {
+                        const option = options[key];
+                        if (!option || !option.label)
                             return null;
 
-                        const defaultActive = options[key].default || false;
                         return (
                             <ToggledOption
                                 key={ key }
-                                defaultActive={ defaultActive }
+                                defaultActive={ !!option.default }
                                 name={ `option-${key}` }
-                                label={ options[key].label }
+                                label={ option.label }
                                 onChange={ value => onOptionChange(key, value) }
                             />
                         );

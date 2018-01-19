@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import MonacoEditor from 'react-monaco-editor'
-import PropTypes from 'prop-types'
-import registerTheme from '../Grammars/theme.js'
-import registerWastSyntax from '../Grammars/wast'
+import MonacoEditor       from 'react-monaco-editor';
+import registerTheme      from '../Grammars/theme';
+import registerWastSyntax from '../Grammars/wast';
 
 export default class Editor extends Component {
     static wastRegistered = false

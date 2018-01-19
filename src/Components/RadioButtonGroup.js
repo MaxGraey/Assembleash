@@ -1,9 +1,7 @@
-import React, {
-  PureComponent
-} from 'react'
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 
-import { ButtonGroup } from 'react-bootstrap'
-import PropTypes from 'prop-types'
+import ButtonGroup from 'react-bootstrap/lib/ButtonGroup';
 
 export default class RadioButtonGroup extends PureComponent {
 
@@ -14,8 +12,8 @@ export default class RadioButtonGroup extends PureComponent {
     onChange:  PropTypes.func,
     valueLink: PropTypes.shape({
       value:         PropTypes.any,
-      requestChange: PropTypes.func.isRequired
-    })
+      requestChange: PropTypes.func.isRequired,
+    }),
   }
 
   static defaultProps = {
@@ -42,28 +40,28 @@ export default class RadioButtonGroup extends PureComponent {
       keys.forEach(k => { value[k] = k === key });
     } else {
       keys.forEach(k => {
-        value[k] = (k === key) ? !value[k] : value[k]
+        value[k] = (k === key) ? !value[k] : value[k];
       });
     }
     requestChange(value);
   }
 
-  renderChildren() {
+  renderButtons() {
     const value = this.binding(this.props).value || {};
     return React.Children.map(this.props.children, child => {
       const active = value[child.props.eventKey] || false;
       return React.cloneElement(child, {
         onClick: () => this.onClick(child),
-        active
+        active,
       })
-    })
+    });
   }
 
   render() {
     const { className, bsSize } = this.props;
     return (
       <ButtonGroup className={ className } bsSize={ bsSize }>
-        { this.renderChildren()}
+        { this.renderButtons() }
       </ButtonGroup>
     );
   }

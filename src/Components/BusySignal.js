@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { Glyphicon } from 'react-bootstrap';
-import PropTypes     from 'prop-types';
+import Glyphicon from 'react-bootstrap/lib/Glyphicon';
 
 export default class BusySignal extends Component {
 

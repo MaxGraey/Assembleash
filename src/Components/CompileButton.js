@@ -1,15 +1,14 @@
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
-import {
-    OverlayTrigger,
-    MenuItem,
-    Glyphicon,
-    SplitButton
-} from 'react-bootstrap';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 
-import { CompileMode, CompileModes } from '../Common/Common'
+import SplitButton    from 'react-bootstrap/lib/SplitButton';
+import Glyphicon      from 'react-bootstrap/lib/Glyphicon';
+import OverlayTrigger from 'react-bootstrap/lib/OverlayTrigger';
+import MenuItem       from 'react-bootstrap/lib/MenuItem';
 
-import tooltip from './Tooltip'
+import tooltip from './Tooltip';
+
+import { CompileMode, CompileModes } from '../Common/Common';
 
 export default class CompileButton extends Component {
     static propTypes = {
