@@ -24,6 +24,8 @@ export default class FooterContainer extends PureComponent {
         onDownloadPressed: () => {},
     }
 
+    formatCursorPosition = pos => `${ pos[0] }:${ pos[1] }`
+
     render() {
         const {
             binarySize,
@@ -32,26 +34,25 @@ export default class FooterContainer extends PureComponent {
             busyState,
             cursorPosition,
             errorCount,
-            errorMessage
+            errorMessage,
         } = this.props;
 
         const sizeUnits = binarySize.split(' ');
         const size = sizeUnits[0] ? sizeUnits[0] : '';
         const unit = sizeUnits[1] ? sizeUnits[1] : '';
 
-        let statusBarMessage = '';
-        let messageClass = 'busy-success-color';
+        let statusBarMessage = '',
+            messageClass     = 'busy-success-color';
 
-        if (busyState === 'pending') {
-            statusBarMessage = 'Processing...';
-        } else if (busyState === 'success') {
-            statusBarMessage = 'Compiled successfully';
-        } else if (busyState === 'failure') {
-            messageClass = 'busy-failure-color';
-            statusBarMessage = `(${ errorCount }) Error${ errorCount > 1 ? 's' : '' }`;
-            if (errorMessage) {
-                statusBarMessage += ': ' + errorMessage;
-            }
+        switch (busyState) {
+            case 'pending': statusBarMessage = 'Processing...';         break;
+            case 'success': statusBarMessage = 'Compiled successfully'; break;
+            case 'failure':
+                messageClass     = 'busy-failure-color';
+                statusBarMessage = `(${ errorCount }) Error${ errorCount > 1 ? 's' : '' }`;
+                if (errorMessage) statusBarMessage += ': ' + errorMessage;
+            break;
+            default: break;
         }
 
         return (
@@ -96,15 +97,20 @@ export default class FooterContainer extends PureComponent {
                     }}
                 >
                     <h4 style={{
-                        fontSize: '1.8rem',
+                        fontSize:   '1.8rem',
                         fontWeight: 100,
-                        color: '#aaa'
+                        color:      '#aaa',
                     }}>
-                        { cursorPosition[0] + ':' + cursorPosition[1] }
+                        { this.formatCursorPosition(cursorPosition) }
                     </h4>
                 </label>
 
-                <div className="pull-left" style={{ marginLeft: '-12pt' }}>
+                <div
+                    className="pull-left"
+                    style={{
+                        marginLeft: '-12pt',
+                    }}
+                >
                     <BusySignal
                         className="pull-left"
                         state={ busyState }
@@ -114,7 +120,7 @@ export default class FooterContainer extends PureComponent {
                         style={{
                             marginLeft: '30pt',
                             float:      'left',
-                            paddingTop: '3pt'
+                            paddingTop: '3pt',
                         }}
                     >
                         <h4
