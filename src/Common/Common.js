@@ -32,7 +32,7 @@ export const CompilerDescriptions = {
 
     example:
 `export function fib(n: i32): i32 {
-  if (n <= 1) return 1;
+  if (n <= 1) return n;
   return fib(n - 1) + fib(n - 2);
 }`
   },
@@ -78,7 +78,7 @@ export const CompilerDescriptions = {
     example: `
 function fibSync(n: int): int {
   "use speedyjs";
-  if (n <= 1) return 1;
+  if (n <= 1) return n;
   return fibSync(n - 1) + fibSync(n - 2);
 }
 

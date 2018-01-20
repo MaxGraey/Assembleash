@@ -38,8 +38,8 @@ export default class FooterContainer extends PureComponent {
         } = this.props;
 
         const sizeUnits = binarySize.split(' ');
-        const size = sizeUnits[0] ? sizeUnits[0] : '';
-        const unit = sizeUnits[1] ? sizeUnits[1] : '';
+        const size = sizeUnits[0] || '';
+        const unit = sizeUnits[1] || '';
 
         let statusBarMessage = '',
             messageClass     = 'busy-success-color';
