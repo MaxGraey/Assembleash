@@ -13,10 +13,10 @@ import { CompilerDescriptions } from '../Common/Common'
 export default class AboutButton extends PureComponent {
     static defaultProps = {
         compiler: 'TurboScript',
-        version: '0.0.0'
+        version:  '0.0.0',
     }
 
-    getPopover() {
+    _renderOverlay() {
         const { compiler, version } = this.props;
         const title = (
             <span>
@@ -26,8 +26,8 @@ export default class AboutButton extends PureComponent {
             </span>
         );
 
-        const description = CompilerDescriptions[compiler];
-        const github = description ? description.github : '';
+        const description = CompilerDescriptions[compiler] || {};
+        const github      = description.github || '';
 
         return (
             <Popover
@@ -50,7 +50,7 @@ export default class AboutButton extends PureComponent {
                 rootClose
                 placement="bottom"
                 trigger="click"
-                overlay={ this.getPopover() }
+                overlay={ this._renderOverlay() }
             >
                 <Button bsSize='large' bsStyle='info'>
                     <Glyphicon

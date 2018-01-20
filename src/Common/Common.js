@@ -16,22 +16,22 @@ export const CompilerDescriptions = {
     options: {
       longMode: {
         label:   'Use 64 bits',
-        default: false
+        default: false,
       },
 
       validate: {
         label:   'Validate',
-        default: true
+        default: true,
       },
 
       optimize: {
         label:   'Optimize',
-        default: true
+        default: true,
       }
     },
 
-    example:
-`export function fib(n: i32): i32 {
+    example:`
+export function fib(n: i32): i32 {
   if (n <= 1) return n;
   return fib(n - 1) + fib(n - 2);
 }`
@@ -50,8 +50,8 @@ export const CompilerDescriptions = {
 
       optimize: {
         label:   'Optimize',
-        default: true
-      }
+        default: true,
+      },
     },
 
     version: () => requestCommand(
@@ -60,13 +60,11 @@ export const CompilerDescriptions = {
 
     compile: (source, options) => {
       const requestBody = {
-        files: [
-          {
-            source,
-            fileName: 'module.ts'
-          }
-        ],
-        tsconfig: options
+        files: [{
+          source,
+          fileName: 'module.ts',
+        }],
+        tsconfig: options,
       };
 
       return requestCommand(
@@ -98,7 +96,7 @@ const LibStdKeywords = [
   'free',
   'memcpy',
   'memset',
-  'memcmp'
+  'memcmp',
 ];
 
 const LibStdKeywordsRegex = new RegExp(LibStdKeywords.join("|"), "gm");
@@ -119,18 +117,15 @@ export function anyExists(array, value) {
 
 export function getCompilerVersion(compiler, callback = () => {}) {
   switch (compiler) {
-    /*case 'AssemblyScript':
-      if (window.assemblyscript)
-        callback(window.assemblyscript.version);
-      break;*/
 
     case 'AssemblyScript NEXT':
       if (window.assemblyscript)
-        callback(window.assemblyscript.version);
+        callback(window.assemblyscript.version || '0.5.0');
       break;
 
     case 'Speedy.js':
-      CompilerDescriptions['Speedy.js'].version()
+      CompilerDescriptions['Speedy.js']
+        .version()
         .then(version => callback(version['speedyjs-compiler']))
         .catch(err => callback('0.0.0'));
       break;
@@ -200,12 +195,14 @@ function checkResponseStatus(response) {
 export function requestCommand(url, config = null) {
   const headers = config ? {
     'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    'Content-Type': 'application/json',
   } : void 0;
 
   return fetch(url, {
     headers,
     method: config ? 'POST' : 'GET',
     body:   config ? JSON.stringify(config) : void 0,
-  }).then(checkResponseStatus).then(response => response.json());
+  })
+  .then(checkResponseStatus)
+  .then(response => response.json());
 }
