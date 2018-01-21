@@ -1,4 +1,4 @@
-import Base64 from './Base64'
+import Base64 from './Base64';
 
 export const CompileMode = {
   Auto:   0,
@@ -8,9 +8,9 @@ export const CompileMode = {
 export const CompileModes = Object.keys(CompileMode);
 
 export const CompilerDescriptions = {
-  'AssemblyScript NEXT': {
+  'AssemblyScript': {
     offline: true,
-    loaded: false,
+    loaded:  false,
     github: 'https://github.com/AssemblyScript/assemblyscript',
 
     options: {

@@ -63,16 +63,16 @@ export default class CompilerButton extends Component {
                     onSelect={ this.onSelect }
                 >
                 {
-                    CompilerList.map((value, index) =>
+                    CompilerList.map((value, index) => (
                         <MenuItem
-                            key={ index }
+                            key={ value }
                             eventKey={ index }
                             href={ `#${ value }` }
                             bsStyle='info'
                             style={ styles.menuItem }>
                             <h4>{ value }</h4>
                         </MenuItem>
-                    )
+                    ))
                 }
                 </DropdownButton>
             </OverlayTrigger>

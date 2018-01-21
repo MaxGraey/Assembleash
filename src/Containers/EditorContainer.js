@@ -33,7 +33,7 @@ const Target = {
 
 export default class EditorContainer extends Component {
     static defaultProps = {
-        compiler: 'AssemblyScript NEXT'
+        compiler: 'AssemblyScript'
     }
 
     static propTypes = {
@@ -141,7 +141,7 @@ export default class EditorContainer extends Component {
         setImmediate(() => {
             try {
                 switch (compiler) {
-                    case 'AssemblyScript NEXT':
+                    case 'AssemblyScript':
                         const stdlib = isRequreStdlib(inputCode);
                         this.compileByAssemblyScript(inputCode, {
                              noMemory: !stdlib,
