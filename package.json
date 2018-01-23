@@ -23,15 +23,12 @@
     "react": "^16.2.0",
     "react-bootstrap": "^0.32.0",
     "react-dom": "^16.2.0",
-    "react-live": "^1.7.0",
     "react-monaco-editor": "^0.13.0",
     "react-notification": "^6.8.2",
     "react-split-pane": "^0.1.74",
     "react-switch-button": "^2.3.3",
     "react-toggle": "^4.0.2",
-    "scriptjs": "^2.5.8",
-    "throttle-debounce": "^1.0.1",
-    "wabt": "^0.0.13"
+    "throttle-debounce": "^1.0.1"
   },
   "devDependencies": {
     "copy-webpack-plugin": "^4.3.1",
