@@ -185,12 +185,14 @@ export default class EditorContainer extends Component {
     compileByAssemblyScript(code, { noMemory, longMode, validate, optimize }) {
         const as = window.assemblyscript;
 
-        const module = as.compile(
-          as.parseFile(code, 'index.ts', null, true), {
-            noMemory,
-            target: longMode ? Target.WASM64 : Target.WASM32
-          }
-        );
+        const options = as.createOptions();
+
+        as.setTarget(options, +longMode);
+        as.setNoTreeShaking(options, false);
+        as.setNoAssert(options, false);
+        as.setNoMemory(options, noMemory);
+
+        const module = as.compile(as.parseFile(code, 'index.ts', null, true), options);
 
         setImmediate(() => {
             if (!module) {
