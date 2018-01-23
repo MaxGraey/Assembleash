@@ -26,11 +26,6 @@ const AutoCompilationDelay = 800; //ms
 const MaxPrintingErrors = 8;
 const SplitGripWidth = 5;
 
-const Target = {
-  WASM32: 0,
-  WASM64: 1
-};
-
 export default class EditorContainer extends Component {
     static defaultProps = {
         compiler: 'AssemblyScript'
