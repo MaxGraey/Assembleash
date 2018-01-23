@@ -216,42 +216,43 @@ export default class EditorContainer extends Component {
                     }
                 }*/
 
-            } else {
-                setImmediate(() => {
-                    if (validate) {
-                        if (!module.validate()) {
-                            let notValid = 'Code validation error';
-                            console.error(notValid);
-                            this.addNotification(notValid);
-                            this._errorCount = 1;
-                            this.setState({
-                                compileStatus:           'failure',
-                                additionalStatusMessage: notValid
-                            });
-                            module.dispose();
-                            return;
-                        }
-                    }
-
-                    if (optimize)
-                        module.optimize();
-
-                    this._errorCount = 0;
-
-                    setImmediate(() => {
-                        this.setState({
-                            compileStatus: 'success',
-
-                            output: {
-                                text:   module.toText(),
-                                binary: module.toBinary()
-                            }
-                        });
-
-                        module.dispose();
-                    });
-                });
+                return;
             }
+
+            setImmediate(() => {
+                if (validate) {
+                    if (!module.validate()) {
+                        let notValid = 'Code validation error';
+                        console.error(notValid);
+                        this.addNotification(notValid);
+                        this._errorCount = 1;
+                        this.setState({
+                            compileStatus:           'failure',
+                            additionalStatusMessage: notValid
+                        });
+                        module.dispose();
+                        return;
+                    }
+                }
+
+                if (optimize)
+                    module.optimize();
+
+                this._errorCount = 0;
+
+                setImmediate(() => {
+                    this.setState({
+                        compileStatus: 'success',
+
+                        output: {
+                            text:   module.toText(),
+                            binary: module.toBinary()
+                        }
+                    });
+
+                    module.dispose();
+                });
+            });
         });
     }
 
