@@ -187,10 +187,10 @@ export default class EditorContainer extends Component {
 
         const options = as.createOptions();
 
-        as.setTarget(options, +longMode);
+        as.setTarget(options,        +longMode);
         as.setNoTreeShaking(options, false);
-        as.setNoAssert(options, false);
-        as.setNoMemory(options, noMemory);
+        as.setNoAssert(options,      false);
+        as.setNoMemory(options,      noMemory);
 
         const module = as.compile(as.parseFile(code, 'index.ts', null, true), options);
 
@@ -198,8 +198,8 @@ export default class EditorContainer extends Component {
             if (!module) {
                 this.setState({ compileStatus: 'success' });
 
-                const diagnostics = as.Compiler.lastDiagnostics;
-                this._errorCount = diagnostics.length;
+                // const diagnostics = as.Compiler.lastDiagnostics;
+                // this._errorCount = diagnostics.length;
 
                 /* for (let i = 0; i < diagnostics.length; i++) {
                     let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
