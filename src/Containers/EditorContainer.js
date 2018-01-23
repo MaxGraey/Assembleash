@@ -228,6 +228,7 @@ export default class EditorContainer extends Component {
                                 compileStatus:           'failure',
                                 additionalStatusMessage: notValid
                             });
+                            module.dispose();
                             return;
                         }
                     }
