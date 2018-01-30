@@ -21,7 +21,7 @@
     "immutable": "^3.8.2",
     "moize": "^4.0.4",
     "react": "^16.2.0",
-    "react-bootstrap": "^0.32.0",
+    "react-bootstrap": "^0.32.1",
     "react-dom": "^16.2.0",
     "react-monaco-editor": "^0.13.0",
     "react-notification": "^6.8.2",
