@@ -236,13 +236,14 @@ export default class EditorContainer extends Component {
                 this._errorCount = 0;
 
                 setImmediate(() => {
+                    const text = module.toText();
+                    const {
+                      output: binary,
+                    } = module.toBinary();
+
                     this.setState({
                         compileStatus: 'success',
-
-                        output: {
-                            text:   module.toText(),
-                            binary: module.toBinary()
-                        }
+                        output: { text, binary },
                     });
 
                     module.dispose();
@@ -336,7 +337,7 @@ export default class EditorContainer extends Component {
 
         this.setState({
             compiler,
-            input: description.example.trim()
+            input: description.example.trim(),
         }, () => {
             if (description.offline) {
                 if (!description.loaded && description.scripts && description.scripts.length) {
@@ -353,17 +354,10 @@ export default class EditorContainer extends Component {
                     }
 
                 } else {
-                    // script already loaded
-                    this.setState({ compilerReady: true }, () => {
-                        getCompilerVersion(compiler, version => this.setState({ version }));
-                        this.updateCompilation();
-                    });
+                    this.onScriptLoad();
                 }
             } else {
-                this.setState({ compilerReady: true }, () => {
-                    getCompilerVersion(compiler, version => this.setState({ version }));
-                    this.updateCompilation();
-                });
+                this.onScriptLoad();
             }
         });
     }
@@ -378,7 +372,7 @@ export default class EditorContainer extends Component {
     onScriptError = () => {
         console.error('Script not load');
         this.setState({
-            compilerReady: false
+            compilerReady: false,
         });
     }
 
@@ -389,9 +383,8 @@ export default class EditorContainer extends Component {
     onCompileButtonClick = mode => {
         this._clearCompileTimeout();
 
-        if (mode === CompileMode.Auto || mode === CompileMode.Manual) {
+        if (mode === CompileMode.Auto || mode === CompileMode.Manual)
             this.updateCompilation();
-        }
     }
 
     onSettingsOptionChange = (key, value) => {
@@ -401,9 +394,9 @@ export default class EditorContainer extends Component {
 
     handleSize = throttle(8, size => {
         if (this.splitEditor) {
-            if (!this._cachedClientRect) {
+            if (!this._cachedClientRect)
                 this._cachedClientRect = ReactDOM.findDOMNode(this.splitEditor).getBoundingClientRect();
-            }
+
             const { width, height } = this._cachedClientRect;
             const pos = (size ? size / width : this.state.splitPosition);
             const primaryWidth = width * pos;
@@ -412,7 +405,7 @@ export default class EditorContainer extends Component {
                 inputEditorWidth:  Math.ceil(primaryWidth),
                 outputEditorWidth: Math.ceil(width - primaryWidth - SplitGripWidth),
                 editorsHeight:     height - 160,
-                splitPosition:     pos
+                splitPosition:     pos,
             });
 
             this.splitEditor.setSize(
@@ -448,9 +441,9 @@ export default class EditorContainer extends Component {
             paddingLeft:  '1.5rem',
             paddingRight: '0.6rem',
             fontSize:     '1.8rem',
-            color:        '#fff'
+            color:        '#fff',
           },
-      		onClick: this.removeAllNotifications
+      		onClick: this.removeAllNotifications,
       	})
       });
     }
@@ -461,7 +454,7 @@ export default class EditorContainer extends Component {
         if (matches && matches.length === 2) {
             var row = ((matches[1].split(','))[0] >>> 0);
             this.setState(({ annotations }) => ({
-              annotations: annotations.add({ row, type, text: message })
+                annotations: annotations.add({ row, type, text: message }),
             }));
         }
     }
@@ -473,14 +466,14 @@ export default class EditorContainer extends Component {
     removeNotification = index => {
         const { notifications } = this.state;
         return this.setState({
-            notifications: notifications.filter(n => n.key !== index)
+            notifications: notifications.filter(n => n.key !== index),
         })
     }
 
     removeAllNotifications = () => {
         return this.setState({
             notificationCount: 0,
-            notifications: OrderedSet()
+            notifications:     OrderedSet(),
         });
     }
 
@@ -505,7 +498,7 @@ export default class EditorContainer extends Component {
             outputType,
             base64,
 
-            inputCursorPosition
+            inputCursorPosition,
 
         } = this.state;
 
@@ -540,9 +533,9 @@ export default class EditorContainer extends Component {
         let busyState = 'pending';
         if (compilerReady) {
             switch (compileStatus) {
-              case 'success': busyState = 'success'; break;
-              case 'failure': busyState = 'failure'; break;
-              default: break;
+                case 'success': busyState = 'success'; break;
+                case 'failure': busyState = 'failure'; break;
+                default: break;
             }
         }
 
@@ -558,9 +551,8 @@ export default class EditorContainer extends Component {
                     onCompileModeChange={ mode => {
                         this._clearCompileTimeout();
                         this.setState({ compileMode: mode });
-                        if (mode === CompileMode.Auto) {
+                        if (mode === CompileMode.Auto)
                             this.updateCompilationWithDelay(AutoCompilationDelay);
-                        }
                     }}
                     onSettingsOptionChange={ this.onSettingsOptionChange }
                     onOutputSelect={ type => this.setState({ outputType: type }) }
@@ -573,7 +565,7 @@ export default class EditorContainer extends Component {
                     defaultSize={ splitPosition * 100 + '%' }
                     onChange={ this.onSplitPositionChange }
                     style={{
-                        margin: '12px'
+                        margin: '12px',
                     }}
                 >
                     <Editor
