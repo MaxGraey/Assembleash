@@ -191,14 +191,30 @@ export default class EditorContainer extends Component {
         const module = as.compile(parser, options);
 
         const checkDiagnostics = (parser) => {
-          let diagnostic;
+          let diagnostic, index = 0;
           let hasErrors = false;
 
           while ((diagnostic = as.nextDiagnostic(parser)) != null) {
-            console.error(as.formatDiagnostic(diagnostic, false, true));
+            let errorMessage = as.formatDiagnostic(diagnostic, false, true);
+
+            if (index <= MaxPrintingErrors) {
+              console.error(errorMessage);
+              this.addNotification(errorMessage);
+              this.addAnnotation(errorMessage);
+            } else {
+              errorMessage = 'Too many errors';
+              console.error(errorMessage);
+              this.addNotification(errorMessage);
+              hasErrors = true;
+              break;
+            }
+
             if (as.isError(diagnostic)) {
               hasErrors = true;
             }
+
+            index++;
+            this._errorCount = index;
           }
 
           return hasErrors;
@@ -469,10 +485,12 @@ export default class EditorContainer extends Component {
     }
 
     addAnnotation = (message, type = 'error') => {
-        const rowRegex = /\(([^)]+)\)/;
-        const matches = rowRegex.exec(message);
-        if (matches && matches.length === 2) {
-            var row = ((matches[1].split(','))[0] >>> 0);
+        const posRegex = /[\{\(\[]\s*(\d+)\s*,\s*(\d+)\s*[\]\)\}]$/;
+        const matches = posRegex.exec(message);
+        if (matches && matches.length === 3) {
+            var row = matches[1] >>> 0;
+            // var column = matches[2] >>> 0;
+
             this.setState(({ annotations }) => ({
                 annotations: annotations.add({ row, type, text: message }),
             }));
