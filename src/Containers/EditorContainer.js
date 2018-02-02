@@ -187,11 +187,31 @@ export default class EditorContainer extends Component {
         as.setNoAssert(options,      false);
         as.setNoMemory(options,      noMemory);
 
-        const module = as.compile(as.parseFile(code, 'index.ts', null, true), options);
+        const parser = as.parseFile(code, 'index.ts', null, true);
+        const module = as.compile(parser, options);
+
+        const checkDiagnostics = (parser) => {
+          let diagnostic;
+          let hasErrors = false;
+
+          while ((diagnostic = as.nextDiagnostic(parser)) != null) {
+            console.error(as.formatDiagnostic(diagnostic, false, true));
+            if (as.isError(diagnostic)) {
+              hasErrors = true;
+            }
+          }
+
+          return hasErrors;
+        }
 
         setImmediate(() => {
+            if (checkDiagnostics(parser)) {
+              this.setState({ compileStatus: 'failure' });
+              return;
+            }
+
             if (!module) {
-                this.setState({ compileStatus: 'success' });
+                this.setState({ compileStatus: 'failure' });
 
                 // const diagnostics = as.Compiler.lastDiagnostics;
                 // this._errorCount = diagnostics.length;
