@@ -221,33 +221,9 @@ export default class EditorContainer extends Component {
         }
 
         setImmediate(() => {
-            if (checkDiagnostics(parser)) {
+            if (!module || checkDiagnostics(parser)) {
               this.setState({ compileStatus: 'failure' });
               return;
-            }
-
-            if (!module) {
-                this.setState({ compileStatus: 'failure' });
-
-                // const diagnostics = as.Compiler.lastDiagnostics;
-                // this._errorCount = diagnostics.length;
-
-                /* for (let i = 0; i < diagnostics.length; i++) {
-                    let errorMessage = as.typescript.formatDiagnostics([diagnostics[i]]);
-
-                    if (i <= MaxPrintingErrors) {
-                        console.error(errorMessage);
-                        this.addNotification(errorMessage);
-                        this.addAnnotation(errorMessage);
-                    } else {
-                        errorMessage = `Too many errors (${diagnostics.length})`;
-                        console.error(errorMessage);
-                        this.addNotification(errorMessage);
-                        break;
-                    }
-                }*/
-
-                return;
             }
 
             setImmediate(() => {
@@ -485,7 +461,7 @@ export default class EditorContainer extends Component {
     }
 
     addAnnotation = (message, type = 'error') => {
-        const posRegex = /[\{\(\[]\s*(\d+)\s*,\s*(\d+)\s*[\]\)\}]$/;
+        const posRegex = /[{([]\s*(\d+)\s*,\s*(\d+)\s*[\])}]$/;
         const matches = posRegex.exec(message);
         if (matches && matches.length === 3) {
             var row = matches[1] >>> 0;
