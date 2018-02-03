@@ -144,7 +144,7 @@ export function formatCode(buffer, base64 = false) {
     return buffer;
 
   if (base64) {
-    let output = `const byteArray = decode('${Base64.encode(buffer)}');\n\n`;
+    let output = `const byteArray = decode('${ Base64.encode(buffer) }');\n\n`;
 
     output += 'function decode(input) {\n';
     output += '    if (typeof window !== "undefined" && atob in window) {\n';
@@ -161,16 +161,17 @@ export function formatCode(buffer, base64 = false) {
   // format binary data as array
   const last = buffer.length;
 
-  let output = 'new Uint8Array([\n    ';
+  let output = 'new Uint8Array([\n  ';
   for (let i = 0, len = buffer.length; i < len; i++) {
     const value = buffer[i];
-    let result = '0x' + ('00' + value.toString(16)).substr(-2);
+    // let result = '0x' + ('00' + value.toString(16)).substr(-2);
+    let result = value.toString();
 
     if (i !== last - 1)
       result += ', ';
 
-    if (((i + 1) % 10) === 0)
-      result += '\n    ';
+    if (((i + 1) & 15) === 0)
+      result += '\n  ';
 
     output += result;
   }
