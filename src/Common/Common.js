@@ -147,12 +147,12 @@ export function formatCode(buffer, base64 = false) {
     let output = `const byteArray = decode('${ Base64.encode(buffer) }');\n\n`;
 
     output += 'function decode(input) {\n';
-    output += '    if (typeof window !== "undefined" && atob in window) {\n';
-    output += '        return new Uint8Array(atob(input).split("").map(char => char.charCodeAt(0)));\n';
-    output += '    } else if (typeof Buffer !== "undefined") {\n';
-    output += '        return new Uint8Array(Buffer.from(input, "base64"));\n';
-    output += '    }\n';
-    output += '    return null;\n';
+    output += '  if (typeof window !== \'undefined\' && atob in window) {\n';
+    output += '    return new Uint8Array(atob(input).split(\'\').map(char => char.charCodeAt(0)));\n';
+    output += '  } else if (typeof Buffer !== \'undefined\') {\n';
+    output += '    return Buffer.from(input, \'base64\');\n';
+    output += '  }\n';
+    output += '  return null;\n';
     output += '}';
 
     return output;
