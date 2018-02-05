@@ -1,3 +1,9 @@
+#### 1.0.0-beta.7
+* Continue integration AssemblyScript NEXT
+* Minor improvements
+
+---
+
 #### 1.0.0-beta.6
 * Replace AssemblyScript by AssemblyScript NEXT (new architecture)
 * Reduce bundle by over 100kb
@@ -26,5 +32,5 @@
 
 ---
 
-#### 1.0.0
+#### 1.0.0-beta
 * Init
