@@ -91,14 +91,23 @@ export default class Editor extends Component {
             this.extraLibsRegistered = true;
 
             if (window.assemblyscript) {
-                if (window.assemblyscript.library) {
+              fetch('https://raw.githubusercontent.com/AssemblyScript/assemblyscript/master/std/assembly.d.ts')
+                .then(response => response.text())
+                .then(asDefinisionFile => {
+                  const ts = this.monaco.languages.typescript;
+                  ts.typescriptDefaults.addExtraLib(asDefinisionFile, 'assembly.d.ts');
+                })
+                .catch(e => console.error('Can\'t get assembly script definision file:', e));
+                /*if (window.assemblyscript.library) {
                     const files = window.assemblyscript.library.files;
                     const names = Object.keys(files);
 
                     const typescript = this.monaco.languages.typescript;
                     for (let index = 0, len = names.length; index < len; index++)
                         typescript.typescriptDefaults.addExtraLib(files[names[index]], names[index]);
-                }
+                }*/
+
+
             }
         }
     }
