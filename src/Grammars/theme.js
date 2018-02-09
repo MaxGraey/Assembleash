@@ -1,72 +1,73 @@
 
 export default function registerTheme(monaco) {
-    monaco.editor.defineTheme('vs-assembleash', {
-    	base:    'vs-dark',
-    	inherit: true,
+  let rules = {
+    'comment':                           '65737e',
+    'identifier':                        'c0c5ce',
+    'delimiter':                         'c0c5ce',
 
-    	rules: [
-    		{ token: 'comment', foreground: '65737e' },
-            // { token: 'number', foreground: 'ff0000' },
+    'variable.parameter.function':       'c0c5ce',
+    'punctuation.definition.variable':   'c0c5ce',
+    'punctuation.definition.parameters': 'c0c5ce',
+    'punctuation.definition.string':     'c0c5ce',
+    'punctuation.definition.array':      'c0c5ce',
+    'punctuation.separator.dot':         'f2777a',
 
-            { token: 'identifier', foreground: 'c0c5ce' },
+    'keyword':                           'cc99cc',
+    'keyword.operator':                  'f69057',
+    'keyword.call':                      '48c7e0',
+    'keyword.call_indirect':             '48c7e0',
+    'keyword.call_import':               '48c7e0',
 
-            { token: 'delimiter', foreground: 'c0c5ce' },
+    'variable':                          '6699cc',
+    'variable.other.dollar':             'bf616a',
 
-            { token: 'variable.parameter.function', foreground: 'c0c5ce'},
-            { token: 'punctuation.definition.string', foreground: 'c0c5ce'},
-            { token: 'punctuation.definition.variable', foreground: 'c0c5ce'},
-            { token: 'punctuation.definition.string', foreground: 'c0c5ce'},
-            { token: 'punctuation.definition.parameters', foreground: 'c0c5ce'},
-            { token: 'punctuation.definition.string', foreground: 'c0c5ce'},
-            { token: 'punctuation.definition.array', foreground: 'c0c5ce'},
-            { token: 'punctuation.separator.dot', foreground: 'f2777a' },
+    'entity.name.function':              '8fa1b3',
+    'meta.require':                      '8fa1b3',
+    'support.function.any-method':       '8fa1b3',
+    'variable.function':                 '8fa1b3',
 
-            { token: 'keyword', foreground: 'cc99cc' },
-            { token: 'keyword.operator', foreground: 'f69057' },
-            { token: 'keyword.call', foreground: '48c7e0' },
-            { token: 'keyword.call_indirect', foreground: '48c7e0' },
-            { token: 'keyword.call_import', foreground: '48c7e0' },
+    'support.class':                     'ebcb8b',
+    'entity.name.class':                 'ebcb8b',
+    'entity.name.type.class':            'ebcb8b',
 
-            { token: 'variable', foreground: '6699cc' },
-            { token: 'variable.other.dollar', foreground: 'bf616a' },
+    'meta.class':                        'eff1f5',
+    'keyword.other.special-method':      '8fa1b3',
 
-            { token: 'entity.name.function', foreground: '8fa1b3' },
-            { token: 'meta.require', foreground: '8fa1b3' },
-            { token: 'support.function.any-method', foreground: '8fa1b3' },
-            { token: 'variable.function', foreground: '8fa1b3' },
+    'storage':                           'cc99cc',
+    'support.function':                  '96b5b4',
 
-            { token: 'support.class', foreground: 'ebcb8b' },
-            { token: 'entity.name.class', foreground: 'ebcb8b' },
-            { token: 'entity.name.type.class', foreground: 'ebcb8b' },
+    'string':                            '81c56c',
+    'constant.other.symbol':             '81c56c',
+    'entity.other.inherited-class':      '81c56c',
 
-            { token: 'meta.class', foreground: 'eff1f5' },
-            { token: 'keyword.other.special-method', foreground: '8fa1b3' },
+    'number':                            'f2777a',
 
-            { token: 'storage', foreground: 'cc99cc' },
-            { token: 'support.function', foreground: '96b5b4' },
+    'entity.name.tag':                   'bf616a',
+    'entity.other.attribute-name':       'f2777a',
+    'meta.selector':                     'c0c5ce',
 
-            { token: 'string', foreground: '81c56c' },
-            { token: 'constant.other.symbol', foreground: '81c56c' },
-            { token: 'entity.other.inherited-class', foreground: '81c56c' },
+    'keyword.other.unit':                'f2777a',
+    'string.other.link':                 'bf616a',
 
-            { token: 'number', foreground: 'f2777a' },
+    'meta.link':                         'f2777a',
 
-            { token: 'entity.name.tag', foreground: 'bf616a' },
-            { token: 'entity.other.attribute-name', foreground: 'f2777a' },
-            { tonen: 'meta.selector', foreground: 'c0c5ce' },
+    'string.regexp':                     '96b5b4',
+    'constant.character.escape':         '96b5b4',
 
-            { token: 'keyword.other.unit', foreground: 'f2777a' },
-            { token: 'string.other.link', foreground: 'bf616a' },
+    'punctuation.section.embedded':      'ab7967',
+    'variable.interpolation':            'ab7967',
 
-            { token: 'meta.link', foreground: 'f2777a' },
+    'invalid.illegal':                   ['2b303b', 'bf616a'],
+  };
 
-            { token: 'string.regexp', foreground: '96b5b4' },
-            { token: 'constant.character.escape', foreground: '96b5b4' },
+  rules = Object.entries(rules).map(([token, props]) => {
+    const hasArray = Array.isArray(props);
+    return {
+      token,
+      foreground: hasArray ? props[0] : props,
+      background: hasArray ? props[1] : void 0,
+    }
+  });
 
-            { token: 'punctuation.section.embedded', foreground: 'ab7967' },
-            { token: 'variable.interpolation', foreground: 'ab7967' },
-
-            { token: 'invalid.illegal', background: 'bf616a', foreground: '2b303b' }
-    	]
-    });
+  monaco.editor.defineTheme('vs-assembleash', { base: 'vs-dark', inherit: true, rules });
 }
