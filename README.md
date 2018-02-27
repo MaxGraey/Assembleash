@@ -14,6 +14,9 @@ Online playground for WebAssembly and Typescript-like languages.
 
 ![screenshot](https://www.dropbox.com/s/36mexi7cjc7zvhg/assembleash-screenshot.jpg?raw=1)
 
+#### TODO
+- [ ] Migrate to reactstrap
+
 ### Contribute
 PRs accepted.
 
