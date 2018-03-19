@@ -4,7 +4,7 @@
 
 Online playground for WebAssembly and Typescript-like languages.
 
-**Support languges:**
+**Support languages:**
 
 - [AssemblyScript NEXT](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 - [Speedy.js](https://maxgraey.github.io/Assembleash/#Speedy.js)
