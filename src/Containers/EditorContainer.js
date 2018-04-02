@@ -229,7 +229,7 @@ export default class EditorContainer extends Component {
             // hardcoded for now
             module.runPasses([ "trap-mode-clamp" ]);
             module.setOptimizeLevel(3);
-            module.setShrinkLevel(2);
+            module.setShrinkLevel(0);
 
             setImmediate(() => {
                 if (validate) {
