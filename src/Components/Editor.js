@@ -91,7 +91,7 @@ export default class Editor extends Component {
             this.extraLibsRegistered = true;
 
             if (window.assemblyscript) {
-              fetch('https://raw.githubusercontent.com/AssemblyScript/assemblyscript/master/std/assembly.d.ts')
+              fetch('https://raw.githubusercontent.com/AssemblyScript/assemblyscript/master/std/assembly/index.d.ts')
                 .then(response => response.text())
                 .then(asDefinisionFile => {
                   const ts = this.monaco.languages.typescript;
