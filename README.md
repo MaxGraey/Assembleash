@@ -1,3 +1,7 @@
+Deprecated.
+---
+If you need online playground for AssemblyScript you should use [WebAssembly Studio](https://webassembly.studio)
+
 ### Try [Assembleash Playground](https://maxgraey.github.io/Assembleash/#AssemblyScript)
 
 [![](https://tokei.rs/b1/github/MaxGraey/Assembleash?style=flat-square)](https://github.com/MaxGraey/Assembleash)
