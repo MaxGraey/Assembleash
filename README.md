@@ -1,6 +1,5 @@
 Deprecated.
 ---
-If you need online playground for AssemblyScript you should use [WebAssembly Studio](https://webassembly.studio)
 
 ~~Try [Assembleash Playground](https://maxgraey.github.io/Assembleash/#AssemblyScript)~~
 
